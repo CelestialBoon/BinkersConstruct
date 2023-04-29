@@ -1,0 +1,17 @@
+item.bconstruct.blankPattern.name = Blank Pattern
+item.bconstruct.blankPattern.desc = Test Description
+
+item.bconstruct.rod.name = Tool Rod
+item.bconstruct.binding.name = Binding
+item.bconstruct.pickaxeHead.name = Pickaxe Head
+item.bconstruct.axeHead.name = Axe Head
+item.bconstruct.shovelHead.name = Shovel Head
+item.bconstruct.largeGuard.name = Large Guard
+item.bconstruct.swordBlade.name = Sword Blade
+item.bconstruct.repairKit.name = Repair Kit
+
+
+item.bconstruct.pickaxe.name = Pickaxe
+item.bconstruct.hatchet.name = Hatchet
+item.bconstruct.mattock.name = Mattock
+item.bconstruct.broadsword.name = Broadsword

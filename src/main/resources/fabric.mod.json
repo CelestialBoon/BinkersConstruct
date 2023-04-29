@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
+  "id": "bconstruct",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This mod aims to help new BTA modders.",
+  "name": "Binker's Construct",
+  "description": "An opinionated port of Tinker's Construct to BTA.",
   "authors": [
-    "Turnip Labs"
+    "Levistico"
   ],
   "contact": {
     "homepage": "",
@@ -18,11 +18,11 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-        "turniplabs.examplemod.ExampleMod"
+        "levistico.bconstruct.BConstruct"
     ]
   },
   "mixins": [
-      "examplemod.mixins.json"
+    "bconstruct.mixins.json"
   ],
 
   "depends": {

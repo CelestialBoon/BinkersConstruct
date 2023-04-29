@@ -1,0 +1,65 @@
+package levistico.bconstruct.recipes;
+
+import levistico.bconstruct.materials.BToolMaterial;
+import levistico.bconstruct.parts.*;
+import levistico.bconstruct.tools.BTool;
+import net.minecraft.src.InventoryCrafting;
+import net.minecraft.src.Item;
+import net.minecraft.src.ItemStack;
+import levistico.bconstruct.utils.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class BToolRecipe extends BRecipe {
+
+    public BToolRecipe(BTool resultTool) {
+        this.result = resultTool;
+    }
+
+    protected Pair<Boolean, ItemStack> tryCrafting(InventoryCrafting inv) {
+        BTool resultTool = (BTool) result;
+        Pair<Boolean, ItemStack> falseresult = new Pair<>(false, null);
+        List<BToolMaterial> materials = new ArrayList<>();
+        int i = 0;
+        for (EToolPart part: resultTool.composition) {
+            boolean isCorrect = false;
+            ItemStack itemStack = inv.getStackInSlot(i);
+            if (itemStack == null) return falseresult;
+            Item item = inv.getStackInSlot(i).getItem();
+            if(!(item instanceof BToolPart)) return falseresult;
+            else switch (part) {
+                case rod:
+                    isCorrect = item instanceof TPRod;
+                    break;
+                case axeHead:
+                    isCorrect = item instanceof TPAxeHead;
+                    break;
+                case binding:
+                    isCorrect = item instanceof TPBinding;
+                    break;
+                case largeGuard:
+                    isCorrect = item instanceof TPLargeGuard;
+                    break;
+                case pickaxeHead:
+                    isCorrect = item instanceof TPPickaxeHead;
+                    break;
+                case shovelHead:
+                    isCorrect = item instanceof TPShovelHead;
+                    break;
+                case swordBlade:
+                    isCorrect = item instanceof TPSwordBlade;
+                    break;
+            }
+            if(!isCorrect) return falseresult;
+            materials.add(BToolPart.getToolMaterial(itemStack));
+            i++;
+        }
+        ItemStack resultStack = new ItemStack(resultTool);
+        resultTool.constructBaseTags(resultStack.tag, materials);
+        return new Pair<>(true, resultStack);
+    }
+    public ItemStack[] onCraftResult(InventoryCrafting inv) {
+        return Utils.emptyInventoryCrafting(inv);
+    }
+}

@@ -1,0 +1,23 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "levistico.bconstruct.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "AccessorRenderEngine",
+    "MixinEntityPlayerMP",
+    "MixinEntityPlayerSP",
+    "MixinGuiContainer",
+    "MixinInventoryCrafting",
+    "MixinItemRenderer",
+    "MixinItemStack",
+    "MixinRenderEngine",
+    "MixinRenderItem",
+    "MixinTileEntity"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
