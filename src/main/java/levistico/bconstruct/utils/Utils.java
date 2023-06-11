@@ -14,7 +14,16 @@ public final class Utils {
         for(int i = 0; i < inv.getSizeInventory(); i++) {
             inv.setInventorySlotContents(i, null);
         }
-        return new ItemStack[inv.getSizeInventory()];
+//        return new ItemStack[inv.getSizeInventory()];
+        return null;
+    }
+
+    public static ItemStack[] decreaseAllInventoryBy(InventoryCrafting inv, int amount) {
+        for(int i = 0; i < inv.getSizeInventory(); i++) {
+            inv.decrStackSize(i, amount);
+        }
+//        return new ItemStack[inv.getSizeInventory()];
+        return null;
     }
 
     public static String translateItemName(Item item) {
@@ -49,7 +58,7 @@ public final class Utils {
         else return b;
     }
 
-    public static <T> void setGrow(ArrayList<T> array, int index, T element) {
+    public static <T> void setAt(ArrayList<T> array, int index, T element) {
         int newSize = index+1;
         if (array.size() < newSize) {
             for(int i = array.size(); i<newSize; i++) {

@@ -29,7 +29,7 @@ public final class BToolMaterial {
         this.partsFlag = partsFlag;
         this.color = Utils.colorFromString(hexColor);
 //        assert (eNumber == BToolMaterials.matArray.size());
-        Utils.setGrow(BToolMaterials.matArray, eNumber, this);
+        Utils.setAt(BToolMaterials.matArray, eNumber, this);
     }
 
 

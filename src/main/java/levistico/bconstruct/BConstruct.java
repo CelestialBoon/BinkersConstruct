@@ -1,14 +1,15 @@
 package levistico.bconstruct;
 
-import levistico.bconstruct.crafting.BlockCraftingStation;
-import levistico.bconstruct.crafting.BlockPartBuilder;
-import levistico.bconstruct.crafting.BlockToolStation;
+import levistico.bconstruct.gui.containers.BlockCraftingStation;
+import levistico.bconstruct.gui.containers.BlockPartBuilder;
+import levistico.bconstruct.gui.containers.BlockToolStation;
 import levistico.bconstruct.materials.BToolMaterials;
 import levistico.bconstruct.parts.BToolParts;
 import levistico.bconstruct.recipes.RecipeRepairKitRepair;
 import levistico.bconstruct.recipes.RecipeReplaceToolPart;
 import levistico.bconstruct.tools.BTools;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.src.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,8 @@ import turniplabs.halplibe.helper.RecipeHelper;
 
 
 public final class BConstruct implements ModInitializer {
+
+    public static final Minecraft mc = Minecraft.getMinecraft();
     public static final String MOD_ID = "bconstruct";
     public static String guiFolder;
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
@@ -54,6 +57,7 @@ public final class BConstruct implements ModInitializer {
 
         addRecipe(new RecipeRepairKitRepair());
         addRecipe(new RecipeReplaceToolPart());
+
     }
     @SuppressWarnings("unchecked")
     void addRecipe(IRecipe recipe) {

@@ -32,8 +32,8 @@ public class BToolParts {
 
     static BToolPart createToolPart(String modId, BToolPart toolPart, EToolPart enumToolPart, String translationKey, String partTexture) {
         toolPart.setItemName(HalpLibe.addModId(modId, translationKey));
-        Utils.setGrow(partArray, enumToolPart.ordinal(), toolPart);
-        Utils.setGrow(baseTextureArray, enumToolPart.ordinal(), partTexture);
+        Utils.setAt(partArray, enumToolPart.ordinal(), toolPart);
+        Utils.setAt(baseTextureArray, enumToolPart.ordinal(), partTexture);
         return toolPart;
     }
 }

@@ -1,14 +1,10 @@
 package levistico.bconstruct.mixin;
 
 
-import levistico.bconstruct.crafting.GUIUtils;
-import levistico.bconstruct.materials.BToolMaterial;
+import levistico.bconstruct.gui.GUIUtils;
 import levistico.bconstruct.parts.BToolPart;
-import levistico.bconstruct.parts.BToolParts;
 import levistico.bconstruct.tools.BTool;
-import levistico.bconstruct.utils.Utils;
 import net.minecraft.src.*;
-import net.minecraft.src.command.ChatColor;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,9 +13,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Mixin(value = GuiContainer.class, remap = false)
 public abstract class MixinGuiContainer extends GuiScreen {

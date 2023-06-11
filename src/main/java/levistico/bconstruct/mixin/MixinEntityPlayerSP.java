@@ -1,9 +1,9 @@
 package levistico.bconstruct.mixin;
 
-import levistico.bconstruct.crafting.GUICraftingStation;
-import levistico.bconstruct.crafting.GUIPartBuilder;
-import levistico.bconstruct.crafting.GUIToolStation;
-import levistico.bconstruct.crafting.CraftingTileEntity;
+import levistico.bconstruct.gui.containers.GUICraftingStation;
+import levistico.bconstruct.gui.containers.GUIPartBuilder;
+import levistico.bconstruct.gui.containers.GUIToolStation;
+import levistico.bconstruct.gui.containers.CraftingTileEntity;
 import levistico.bconstruct.mixinInterfaces.IBinkersEntityPlayerSP;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.*;

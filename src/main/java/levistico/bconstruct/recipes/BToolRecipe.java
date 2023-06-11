@@ -60,6 +60,6 @@ public class BToolRecipe extends BRecipe {
         return new Pair<>(true, resultStack);
     }
     public ItemStack[] onCraftResult(InventoryCrafting inv) {
-        return Utils.emptyInventoryCrafting(inv);
+        return Utils.decreaseAllInventoryBy(inv, 1);
     }
 }

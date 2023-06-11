@@ -1,6 +1,6 @@
 package levistico.bconstruct.mixin;
 
-import levistico.bconstruct.texture.GraphicsUtils;
+import levistico.bconstruct.gui.texture.TextureUtils;
 import net.minecraft.src.RenderEngine;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,9 +21,9 @@ public abstract class MixinRenderEngine {
 
     @Inject(method = "refreshTextures", at = @At("HEAD"))
     private void binkers_initTextures(CallbackInfo ci) {
-        GraphicsUtils.importGUITextures();
-        GraphicsUtils.generateToolPartsTexture();
-        GraphicsUtils.generateToolBitsTexture();
+        TextureUtils.importGUITextures();
+        TextureUtils.generateToolPartsTexture();
+        TextureUtils.generateToolBitsTexture();
 //        BToolParts.InitializeToolParts(MOD_ID);
 //        BTools.InitializeTools(MOD_ID);
     }

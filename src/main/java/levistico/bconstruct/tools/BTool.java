@@ -6,7 +6,8 @@ import levistico.bconstruct.mixin.AccessorNBTTagCompound;
 import levistico.bconstruct.parts.BToolParts;
 import levistico.bconstruct.parts.EToolPart;
 import levistico.bconstruct.parts.PartFlags;
-import levistico.bconstruct.texture.ITexturedPart;
+import levistico.bconstruct.properties.Properties;
+import levistico.bconstruct.gui.texture.ITexturedPart;
 import levistico.bconstruct.utils.Pair;
 import levistico.bconstruct.utils.Utils;
 import net.minecraft.src.*;
@@ -42,8 +43,6 @@ public abstract class BTool extends Item {
 
     public static final String IS_CUSTOM_NAME = "iscustomname";
     public static final String NAME = "name";
-
-    public static final String SILKTOUCH = "silktouch";
 
     public final String toolName;
     public final String toolFolder;
@@ -99,7 +98,7 @@ public abstract class BTool extends Item {
                 getTotalTags(itemstack).getInteger(DURABILITY),
                 itemstack.tag.getInteger(EXPERIENCE),
                 itemstack.tag.getInteger(LEVEL),
-                getProperties(getTotalTags(itemstack)).getInteger(SILKTOUCH)));
+                getPropertyTags(getTotalTags(itemstack)).getInteger(Properties.SILKTOUCH)));
         return itemstack;
     }
 
@@ -116,7 +115,7 @@ public abstract class BTool extends Item {
     public static NBTTagCompound getTotalTags(@NotNull ItemStack stack) {
         return stack.tag.getCompoundTag(TOTAL_STATS);
     }
-    public static NBTTagCompound getProperties(@NotNull NBTTagCompound tags) {
+    public static NBTTagCompound getPropertyTags(@NotNull NBTTagCompound tags) {
         return tags.getCompoundTag(PROPERTIES);
     }
 
@@ -178,7 +177,7 @@ public abstract class BTool extends Item {
         NBTTagCompound propertiesTag = new NBTTagCompound();
         baseTags.setCompoundTag(PROPERTIES, propertiesTag);
 
-        propertiesTag.setInteger(SILKTOUCH, setHeadMaterials.contains(BToolMaterials.gold) ? 1 : 0);
+        propertiesTag.setInteger(Properties.SILKTOUCH, setHeadMaterials.contains(BToolMaterials.gold) ? 1 : 0);
 
         calculateTotalTags(rootTags);
         return rootTags;
@@ -341,11 +340,14 @@ public abstract class BTool extends Item {
 
     @Override
     public boolean isSilkTouch() {
-        throw new RuntimeException("where is this called from?");
+        throw new RuntimeException("this should never be called");
     }
 
+    public static Integer getProperty(ItemStack stack, String s) {
+        return getPropertyTags(getTotalTags(stack)).getInteger(s);
+    }
     public static boolean isSilkTouch(ItemStack stack) {
-        return getProperties(getTotalTags(stack)).getInteger(SILKTOUCH) > 0;
+        return getProperty(stack, Properties.SILKTOUCH) > 0;
     }
     public int getBlockHitDelay() {
         return 4;
