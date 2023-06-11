@@ -27,6 +27,7 @@ public class BToolPart extends Item {
         this.weight = weight;
         this.isNeedsPattern = isNeedsPattern;
         this.baseTextureUV = baseTextureUV;
+        this.notInCreativeMenu = true;
     }
 
     public static BToolMaterial getToolMaterial(ItemStack stack) {

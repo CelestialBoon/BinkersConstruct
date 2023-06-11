@@ -187,17 +187,16 @@ public abstract class MixinRenderItem extends Render {
                     int ti = tpart.texturedPart.getIconIndex(BToolPart.getToolMaterial(itemstack).eNumber, false);
                     doRenderTexturedQuad(ti);
                     GL11.glPopMatrix();
-                    continue;
-                }
-
-                this.renderManager.renderEngine.bindTexture(GraphicsUtils.TOOL_BITS_TEXTURE_INDEX);
-                BTool tool = (BTool) itemstack.getItem();
-                boolean broken = BTool.isToolBroken(itemstack);
-                BToolMaterial[] materials = BTool.getMaterials(itemstack);
-                for(Integer npart : tool.renderOrder) {
-                    ITexturedPart part = tool.texturedParts.get(npart);
-                    int ti = part.getIconIndex(materials[npart].eNumber, broken);
-                    this.doRenderTexturedQuad(ti);
+                } else {
+                    this.renderManager.renderEngine.bindTexture(GraphicsUtils.TOOL_BITS_TEXTURE_INDEX);
+                    BTool tool = (BTool) itemstack.getItem();
+                    boolean broken = BTool.isToolBroken(itemstack);
+                    BToolMaterial[] materials = BTool.getMaterials(itemstack);
+                    for (Integer npart : tool.renderOrder) {
+                        ITexturedPart part = tool.texturedParts.get(npart);
+                        int ti = part.getIconIndex(materials[npart].eNumber, broken);
+                        this.doRenderTexturedQuad(ti);
+                    }
                 }
                 GL11.glPopMatrix();
             }

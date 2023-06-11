@@ -63,6 +63,7 @@ public abstract class BTool extends Item {
         this.baseTextureUV = baseTextureUV;
         this.maxStackSize = 1;
         this.setMaxDamage(1); //this is to enable the damage bar
+        this.notInCreativeMenu = true;
     }
 
     @Override
@@ -182,10 +183,9 @@ public abstract class BTool extends Item {
 
     public float getStrVsBlock(@NotNull ItemStack itemstack, Block block) {
         if(isToolBroken(itemstack)) return 0.1f;
-        if(Arrays.stream(this.materialsEffectiveAgainst).anyMatch(material -> material == block.blockMaterial)) {
+        else if(Arrays.stream(this.materialsEffectiveAgainst).anyMatch(material -> material == block.blockMaterial))
             return getBaseTags(itemstack).getFloat(EFFICIENCY);
-        }
-        return 1.0F;
+        else return 1.0F;
     }
 
     public boolean hitEntity(ItemStack itemstack, EntityLiving mob, EntityLiving player) {
@@ -195,8 +195,9 @@ public abstract class BTool extends Item {
 
     public boolean onBlockDestroyed(ItemStack itemstack, int i, int j, int k, int l, EntityLiving player) {
         Block block = Block.blocksList[i];
-        if (!(block != null && block.getHardness() > 0.0F)) return true;
-        stressTool(1, itemstack, player);
+        if (block != null && block.getHardness() > 0.0F) {
+            stressTool(1, itemstack, player);
+        }
         return true;
     }
 
@@ -253,12 +254,12 @@ public abstract class BTool extends Item {
 
     public boolean canHarvestBlock(ItemStack itemstack, Block block) {
         if (getBaseTags(itemstack).getBoolean(SILKTOUCH)) return true;
-        return Arrays.stream(materialsEffectiveAgainst).anyMatch(material -> material == block.blockMaterial);
+        else return Arrays.stream(materialsEffectiveAgainst).anyMatch(material -> material == block.blockMaterial);
     }
 
     public int getDamageVsEntity(ItemStack itemstack, Entity noUse) {
         if(isToolBroken(itemstack)) return 1;
-        return getBaseTags(itemstack).getInteger(MOBDAMAGE);
+        else return getBaseTags(itemstack).getInteger(MOBDAMAGE);
     }
 
     public boolean isFull3D() {

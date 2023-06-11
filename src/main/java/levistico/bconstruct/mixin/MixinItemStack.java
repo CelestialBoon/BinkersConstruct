@@ -23,7 +23,7 @@ public class MixinItemStack {
     public int getDamageVsEntity(Entity entity) {
         Item item = Item.itemsList[this.itemID];
         if(item instanceof BTool) return ((BTool)item).getDamageVsEntity((ItemStack)(Object)this, entity);
-        return item.getDamageVsEntity(entity);
+        else return item.getDamageVsEntity(entity);
     }
     /**
      * @author Levistico
@@ -33,7 +33,7 @@ public class MixinItemStack {
     public boolean canHarvestBlock(Block block) {
         Item item = Item.itemsList[this.itemID];
         if(item instanceof BTool) return ((BTool)item).canHarvestBlock((ItemStack)(Object)this, block);
-        return item.canHarvestBlock(block);
+        else return item.canHarvestBlock(block);
     }
 
     /**
@@ -44,6 +44,6 @@ public class MixinItemStack {
     public int getMaxDamage() {
         Item item = Item.itemsList[this.itemID];
         if(item instanceof BTool) return ((BTool)item).getMaxDurability((ItemStack)(Object)this);
-        return item.getMaxDamage();
+        else return item.getMaxDamage();
     }
 }

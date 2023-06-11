@@ -30,6 +30,6 @@ public class ToolPickaxe extends BTool {
         if (isSilkTouch(itemstack)) return true;
         Integer miningLevel = ItemToolPickaxe.miningLevels.get(block);
         if (miningLevel != null) return getMiningLevel(itemstack) >= miningLevel;
-        return super.canHarvestBlock(itemstack, block);
+        else return super.canHarvestBlock(itemstack, block);
     }
 }
