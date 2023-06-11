@@ -2,10 +2,9 @@ package levistico.bconstruct.mixin;
 
 import levistico.bconstruct.materials.BToolMaterial;
 import levistico.bconstruct.parts.BToolPart;
-import levistico.bconstruct.texture.GraphicsUtils;
+import levistico.bconstruct.gui.texture.TextureUtils;
 import levistico.bconstruct.tools.BTool;
-import levistico.bconstruct.texture.ITexturedPart;
-import net.minecraft.client.Minecraft;
+import levistico.bconstruct.gui.texture.ITexturedPart;
 import net.minecraft.src.*;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Final;
@@ -14,6 +13,8 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.Random;
+
+import static levistico.bconstruct.BConstruct.mc;
 
 @Mixin(value = RenderItem.class, remap = false)
 public abstract class MixinRenderItem extends Render {
@@ -27,7 +28,6 @@ public abstract class MixinRenderItem extends Render {
     public abstract void renderTexturedQuad(int x, int y, int tileX, int tileY, int tileWidth, int tileHeight);
     @Shadow
     public abstract void doRenderItem(EntityItem entityitem, double d, double d1, double d2, float f, float f1);
-    private Minecraft mc = Minecraft.getMinecraft();
 
     /**
      * @author Levistico
@@ -69,13 +69,13 @@ public abstract class MixinRenderItem extends Render {
         }
 //      int k = item.getIconIndex(itemstack);
         if(item instanceof BToolPart) {
-            renderengine.bindTexture(GraphicsUtils.TOOL_PARTS_TEXTURE_INDEX);
+            renderengine.bindTexture(TextureUtils.TOOL_PARTS_TEXTURE_INDEX);
 //            BConstruct.LOGGER.info("rendering tool parts at texture: " + renderengine.getTexture(GBitsUtil.TOOL_PARTS_TEXTURE));
             BToolPart tpart = (BToolPart) item;
             int ti = tpart.texturedPart.getIconIndex(BToolPart.getToolMaterial(itemstack).eNumber, false);
             this.renderTexturedQuad(i, j, ti % net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth, ti / net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth, tileWidth, tileWidth);
         } else {
-            renderengine.bindTexture(GraphicsUtils.TOOL_BITS_TEXTURE_INDEX);
+            renderengine.bindTexture(TextureUtils.TOOL_BITS_TEXTURE_INDEX);
 //            BConstruct.LOGGER.info("rendering tool bits at texture: " + renderengine.getTexture(GBitsUtil.TOOL_BITS_TEXTURE));
             BTool tool = (BTool) item;
             boolean broken = BTool.isToolBroken(itemstack);
@@ -182,13 +182,13 @@ public abstract class MixinRenderItem extends Render {
                 GL11.glRotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 
                 if(itemstack.getItem() instanceof BToolPart) {
-                    this.renderManager.renderEngine.bindTexture(GraphicsUtils.TOOL_PARTS_TEXTURE_INDEX);
+                    this.renderManager.renderEngine.bindTexture(TextureUtils.TOOL_PARTS_TEXTURE_INDEX);
                     BToolPart tpart = (BToolPart) itemstack.getItem();
                     int ti = tpart.texturedPart.getIconIndex(BToolPart.getToolMaterial(itemstack).eNumber, false);
                     doRenderTexturedQuad(ti);
                     GL11.glPopMatrix();
                 } else {
-                    this.renderManager.renderEngine.bindTexture(GraphicsUtils.TOOL_BITS_TEXTURE_INDEX);
+                    this.renderManager.renderEngine.bindTexture(TextureUtils.TOOL_BITS_TEXTURE_INDEX);
                     BTool tool = (BTool) itemstack.getItem();
                     boolean broken = BTool.isToolBroken(itemstack);
                     BToolMaterial[] materials = BTool.getMaterials(itemstack);

@@ -1,9 +1,8 @@
 package levistico.bconstruct.parts;
 
-import bta.ModLoader;
 import levistico.bconstruct.materials.BToolMaterial;
 import levistico.bconstruct.materials.BToolMaterials;
-import levistico.bconstruct.texture.TexturedToolPart;
+import levistico.bconstruct.gui.texture.TexturedToolPart;
 import levistico.bconstruct.utils.Pair;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;

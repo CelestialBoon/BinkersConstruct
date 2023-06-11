@@ -1,8 +1,8 @@
 package levistico.bconstruct.tools;
 
 import levistico.bconstruct.parts.EToolPart;
-import levistico.bconstruct.texture.TexturedToolBitBreakable;
-import levistico.bconstruct.texture.TexturedToolBitReliable;
+import levistico.bconstruct.gui.texture.TexturedToolBitBreakable;
+import levistico.bconstruct.gui.texture.TexturedToolBitReliable;
 import levistico.bconstruct.utils.Pair;
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityLiving;

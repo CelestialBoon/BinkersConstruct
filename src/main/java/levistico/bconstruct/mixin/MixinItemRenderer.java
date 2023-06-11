@@ -2,8 +2,8 @@ package levistico.bconstruct.mixin;
 
 import levistico.bconstruct.materials.BToolMaterial;
 import levistico.bconstruct.parts.BToolPart;
-import levistico.bconstruct.texture.GraphicsUtils;
-import levistico.bconstruct.texture.ITexturedPart;
+import levistico.bconstruct.gui.texture.TextureUtils;
+import levistico.bconstruct.gui.texture.ITexturedPart;
 import levistico.bconstruct.tools.BTool;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.*;
@@ -46,12 +46,12 @@ public class MixinItemRenderer {
         }
 
         if(itemstack.getItem() instanceof BToolPart) {
-            GL11.glBindTexture(3553, GraphicsUtils.TOOL_PARTS_TEXTURE_INDEX);
+            GL11.glBindTexture(3553, TextureUtils.TOOL_PARTS_TEXTURE_INDEX);
             BToolPart tpart = (BToolPart) itemstack.getItem();
             int ti = tpart.texturedPart.getIconIndex(BToolPart.getToolMaterial(itemstack).eNumber, false);
             doRenderItem(ti, handheldTransform);
         } else {
-            GL11.glBindTexture(3553, GraphicsUtils.TOOL_BITS_TEXTURE_INDEX);
+            GL11.glBindTexture(3553, TextureUtils.TOOL_BITS_TEXTURE_INDEX);
             BTool tool = (BTool) itemstack.getItem();
             boolean broken = BTool.isToolBroken(itemstack);
             BToolMaterial[] materials = BTool.getMaterials(itemstack);
