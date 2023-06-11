@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 
 public class BToolMaterials {
-    static public ArrayList<BToolMaterial> matArray = new ArrayList<>(); //TODO is this a good idea, to just have a fixed number of the things?
+    static public ArrayList<BToolMaterial> matArray = new ArrayList<>();
     static public HashMap<Item, BToolMaterial> partBuilderItemMap = new HashMap<Item, BToolMaterial>();
 
     //    public static final ToolMaterial wood = (new ToolMaterial()).setDurability(64).setEfficiency(2.0F, 4.0F).setMiningLevel(0);
@@ -21,22 +21,22 @@ public class BToolMaterials {
 //    public static final ToolMaterial steel = (new ToolMaterial()).setDurability(4608).setEfficiency(7.0F, 14.0F).setMiningLevel(3);
 //    public static final ToolMaterial diamond = (new ToolMaterial()).setDurability(1536).setEfficiency(14.0F, 45.0F).setMiningLevel(3).setDamage(4).setBlockHitDelay(4);
 //    public static final ToolMaterial gold = (new ToolMaterial()).setDurability(64).setEfficiency(4.0F, 8.0F).setMiningLevel(0).setSilkTouch(true);
-    //TODO string, paper, slime, nether, etc.
+    //TODO paper, slime, nether, etc.
     public static final BToolMaterial wood = new BToolMaterial("Wood","#876627", EToolMaterial.wood.ordinal(), 64, 2f, 1, 0, PartFlags.EVERYTHING);
-    public static final BToolMaterial cactus = new BToolMaterial("Cactus", "#FFFFFF", EToolMaterial.cactus.ordinal(), 50, 2f, 3, 0, PartFlags.HEAD+PartFlags.OTHER);
+    public static final BToolMaterial cactus = new BToolMaterial("Cactus", "#0D6418", EToolMaterial.cactus.ordinal(), 50, 2f, 3, 0, PartFlags.HEAD+PartFlags.OTHER);
     public static final BToolMaterial bone = new BToolMaterial("Bone", "#E8E5D2", EToolMaterial.bone.ordinal(),70, 3f, 3, 0, PartFlags.EVERYTHING);
     public static final BToolMaterial stone = new BToolMaterial("Stone", "#B1AFAD", EToolMaterial.stone.ordinal(),128, 3f, 2, 1, PartFlags.EVERYTHING);
     public static final BToolMaterial flint = new BToolMaterial("Flint", "#3D3C3C", EToolMaterial.flint.ordinal(),100, 3.5f, 4, 1, PartFlags.EVERYTHING);
-    public static final BToolMaterial quartz = new BToolMaterial("Quartz", "#FFFFFF", EToolMaterial.quartz.ordinal(),200, 5f, 4, 1, PartFlags.EVERYTHING);
+    public static final BToolMaterial quartz = new BToolMaterial("Quartz", "#F9DDDC", EToolMaterial.quartz.ordinal(),200, 5f, 4, 1, PartFlags.EVERYTHING);
     public static final BToolMaterial gold = new BToolMaterial("Gold", "#FDF55F", EToolMaterial.gold.ordinal(),64, 4f, 1, 1, PartFlags.EVERYTHING);
     public static final BToolMaterial iron = new BToolMaterial("Iron","#D8D8D8", EToolMaterial.iron.ordinal(),256, 6f, 3, 2, PartFlags.EVERYTHING);
-    public static final BToolMaterial diamond = new BToolMaterial("Diamond", "#FFFFFF", EToolMaterial.diamond.ordinal(),1536, 14f, 4, 3, PartFlags.EVERYTHING);
+    public static final BToolMaterial diamond = new BToolMaterial("Diamond", "#8CF4E2", EToolMaterial.diamond.ordinal(),1536, 14f, 4, 3, PartFlags.EVERYTHING);
     public static final BToolMaterial obsidian = new BToolMaterial("Obsidian", "#3B2754", EToolMaterial.obsidian.ordinal(),200, 10f, 5, 3, PartFlags.EVERYTHING);
     public static final BToolMaterial steel = new BToolMaterial("Steel", "#959595", EToolMaterial.steel.ordinal(),4608, 7f, 4, 3, PartFlags.EVERYTHING);
-    public static final BToolMaterial string = new BToolMaterial("String", "#FFFFFF", EToolMaterial.string.ordinal(),4608, 7f, 4, 3, PartFlags.BINDING);
+    public static final BToolMaterial string = new BToolMaterial("String", "#FFFFFF", EToolMaterial.string.ordinal(),25, 7f, 4, 3, PartFlags.BINDING);
 //    public static final BToolMaterial vine = new BToolMaterial("Vine", "#959595", EToolMaterial.vine.ordinal(),4608, 7f, 4, 3, PartFlags.BINDING);
-    public static final BToolMaterial leather = new BToolMaterial("Leather", "#C65C35", EToolMaterial.leather.ordinal(),4608, 7f, 4, 3, PartFlags.BINDING);
-    public static final BToolMaterial chain = new BToolMaterial("Chain", "#3E4453", EToolMaterial.chain.ordinal(),4608, 7f, 4, 3, PartFlags.BINDING);
+    public static final BToolMaterial leather = new BToolMaterial("Leather", "#C65C35", EToolMaterial.leather.ordinal(),50, 7f, 4, 3, PartFlags.BINDING);
+    public static final BToolMaterial chain = new BToolMaterial("Chain", "#3E4453", EToolMaterial.chain.ordinal(),100, 7f, 4, 3, PartFlags.BINDING);
 
 
 //    static public final Fraction ONE_NINTH = Fraction.getFraction(1, 9);

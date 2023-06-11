@@ -2,6 +2,7 @@ package levistico.bconstruct.tools;
 
 import levistico.bconstruct.materials.BToolMaterial;
 import levistico.bconstruct.materials.BToolMaterials;
+import levistico.bconstruct.mixin.AccessorNBTTagCompound;
 import levistico.bconstruct.parts.BToolParts;
 import levistico.bconstruct.parts.EToolPart;
 import levistico.bconstruct.parts.PartFlags;
@@ -24,23 +25,25 @@ import java.util.stream.Collectors;
 
 public abstract class BTool extends Item {
 
+    public static final String MATERIALS = "bic_materials";
     public static final String BASE_STATS = "bic_base";
     public static final String UPGRADES = "bic_upgrades";
-    public static final String CURRENT_STATS = "bic_total";
+    public static final String TOTAL_STATS = "bic_total";
+    public static final String PROPERTIES = "properties";
 
-    public static final String SILKTOUCH = "silktouch";
     public static final String MOBDAMAGE = "mobdamage";
     public static final String EFFICIENCY = "efficiency";
     public static final String MININGLEVEL = "mininglevel";
     public static final String DURABILITY = "durability";
+
     public static final String EXPERIENCE = "experience";
     public static final String LEVEL = "level";
     public static final String BROKEN = "broken";
-    public static final String MATERIAL = "mat";
-    public static final String NUM_MATERIALS = "num_materials";
+
     public static final String IS_CUSTOM_NAME = "iscustomname";
     public static final String NAME = "name";
 
+    public static final String SILKTOUCH = "silktouch";
 
     public final String toolName;
     public final String toolFolder;
@@ -78,28 +81,45 @@ public abstract class BTool extends Item {
 
     public ItemStack onItemRightClick(@NotNull ItemStack itemstack, World world, EntityPlayer entityplayer) {
         StringBuilder sb = new StringBuilder("Composition: ");
-        NBTTagCompound bTags = getBaseTags(itemstack);
-        for(int i = 0; i< bTags.getInteger(NUM_MATERIALS); i++) {
+
+        BToolMaterial[] materials = getMaterials(itemstack);
+        for(int i = 0; i< materials.length; i++) {
             sb.append(String.format("Material%d:", i));
-            sb.append(BToolMaterials.matArray.get(bTags.getInteger(MATERIAL+i)).getName());
+            sb.append(materials[i].getName());
             sb.append(", ");
         }
+
         entityplayer.addChatMessage(sb.toString());
 
-        entityplayer.addChatMessage(String.format("Mining level: %d, Efficiency: %.1f, Damage: %d, Durability: %d, MaxDurability: %d, Experience:%d, Level:%d",
-                getBaseTags(itemstack).getInteger(MININGLEVEL),
-                getBaseTags(itemstack).getFloat(EFFICIENCY),
-                getBaseTags(itemstack).getInteger(MOBDAMAGE),
+        entityplayer.addChatMessage(String.format("Mining level: %d, Efficiency: %.1f, Damage: %d, Durability: %d, MaxDurability: %d, Experience:%d, Level:%d, Silktouch:%d",
+                getTotalTags(itemstack).getInteger(MININGLEVEL),
+                getTotalTags(itemstack).getFloat(EFFICIENCY),
+                getTotalTags(itemstack).getInteger(MOBDAMAGE),
                 itemstack.getMetadata(),
-                getBaseTags(itemstack).getInteger(DURABILITY),
+                getTotalTags(itemstack).getInteger(DURABILITY),
                 itemstack.tag.getInteger(EXPERIENCE),
-                itemstack.tag.getInteger(LEVEL)));
+                itemstack.tag.getInteger(LEVEL),
+                getProperties(getTotalTags(itemstack)).getInteger(SILKTOUCH)));
         return itemstack;
+    }
+
+    public static NBTTagList getMaterialTags(@NotNull ItemStack stack) {
+        return stack.tag.getTagList(MATERIALS);
     }
 
     public static NBTTagCompound getBaseTags(@NotNull ItemStack stack) {
         return stack.tag.getCompoundTag(BASE_STATS);
     }
+    public static NBTTagCompound getUpgradeTags(@NotNull ItemStack stack) {
+        return stack.tag.getCompoundTag(UPGRADES);
+    }
+    public static NBTTagCompound getTotalTags(@NotNull ItemStack stack) {
+        return stack.tag.getCompoundTag(TOTAL_STATS);
+    }
+    public static NBTTagCompound getProperties(@NotNull NBTTagCompound tags) {
+        return tags.getCompoundTag(PROPERTIES);
+    }
+
 
     public int getPartFlag(int i) {
         return BToolParts.partArray.get(composition.get(i).ordinal()).partFlag;
@@ -109,25 +129,38 @@ public abstract class BTool extends Item {
                                             List<BToolMaterial> materials) {
         rootTags.setBoolean(BROKEN, false);
 
-        NBTTagCompound baseTags = new NBTTagCompound();
-        rootTags.setCompoundTag(BASE_STATS, baseTags);
+        ///////////////////////MATERIALS/////////////////////////
+        NBTTagList materialsTag = new NBTTagList();
+        rootTags.setTag(MATERIALS, materialsTag);
 
         List<BToolMaterial> listHeadMaterials = new ArrayList<>();
+        List<BToolMaterial> listBindingMaterials = new ArrayList<>();
+        List<BToolMaterial> listHandleMaterials = new ArrayList<>();
         Set<BToolMaterial> setHeadMaterials = new LinkedHashSet<>();
-        baseTags.setInteger(NUM_MATERIALS, materials.size());
         for(int i = 0; i < materials.size(); i++) {
-            if(getPartFlag(i) == PartFlags.HEAD) {
-                setHeadMaterials.add(materials.get(i));
-                listHeadMaterials.add(materials.get(i));
+            switch (getPartFlag(i)) {
+                case PartFlags.HEAD:
+                    setHeadMaterials.add(materials.get(i));
+                    listHeadMaterials.add(materials.get(i));
+                    break;
+                case PartFlags.BINDING:
+                    listBindingMaterials.add(materials.get(i));
+                    break;
+                case PartFlags.HANDLE:
+                    listHandleMaterials.add(materials.get(i));
+                    break;
             }
-            baseTags.setInteger(MATERIAL+i, materials.get(i).eNumber);
+            materialsTag.setTag(new NBTTagInt(materials.get(i).eNumber));
         }
 
+        ///////////////////////NAME/////////////////////////
         if(! rootTags.getBoolean(IS_CUSTOM_NAME)) {
             rootTags.setString(NAME, String.format("%s %s", StringUtils.join(setHeadMaterials.stream().map(BToolMaterial::getName).collect(Collectors.toList()), '-'), toolName));
         }
 
-        baseTags.setBoolean(SILKTOUCH, setHeadMaterials.contains(BToolMaterials.gold)); //TODO
+        ///////////////////////BASE STATS/////////////////////////
+        NBTTagCompound baseTags = new NBTTagCompound();
+        rootTags.setCompoundTag(BASE_STATS, baseTags);
 
         baseTags.setInteger(MININGLEVEL, listHeadMaterials.stream().map(BToolMaterial::getMiningLevel).max(Integer::compareTo).orElse(0));
 
@@ -138,53 +171,93 @@ public abstract class BTool extends Item {
         baseTags.setFloat(EFFICIENCY, baseEfficiencyMultiplier * baseEfficiency);
 
         //TODO include handles etc. in durability calculation and all the extra stuff
-        Integer baseDurability = getBaseDurability(listHeadMaterials);
+        Integer baseDurability = getBaseDurability(listHeadMaterials, listBindingMaterials, listHandleMaterials);
         baseTags.setInteger(DURABILITY,  (int)(baseDurabilityMultiplier * baseDurability));
+
+        ///////////////////////BASE PROPERTIES/////////////////////////
+        NBTTagCompound propertiesTag = new NBTTagCompound();
+        baseTags.setCompoundTag(PROPERTIES, propertiesTag);
+
+        propertiesTag.setInteger(SILKTOUCH, setHeadMaterials.contains(BToolMaterials.gold) ? 1 : 0);
+
+        calculateTotalTags(rootTags);
         return rootTags;
     }
 
-    private static Integer getBaseDurability(List<BToolMaterial> headMaterials) { //TODO expand (that differs (is overridden) for some complicated tools, but that's for later)
+    public NBTTagCompound calculateTotalTags(@NotNull NBTTagCompound rootTags) {
+        NBTTagCompound baseTags = rootTags.getCompoundTag(BASE_STATS);
+        NBTTagCompound totalTags = new NBTTagCompound();
+        rootTags.setCompoundTag(TOTAL_STATS, totalTags);
+
+        ///////////////////////PROPERTIES/////////////////////////
+        NBTTagCompound baseProperties = rootTags.getCompoundTag(BASE_STATS).getCompoundTag(PROPERTIES);
+        NBTTagCompound upgradeProperties = rootTags.getCompoundTag(UPGRADES).getCompoundTag(PROPERTIES);
+
+        NBTTagCompound totalProperties = new NBTTagCompound();
+        totalTags.setCompoundTag(PROPERTIES, totalProperties);
+
+        Set<String> propertiesKeys = ((AccessorNBTTagCompound)(Object)baseProperties).getTagMap().keySet();
+        propertiesKeys.addAll(((AccessorNBTTagCompound)(Object)upgradeProperties).getTagMap().keySet());
+
+        for(String key : propertiesKeys) {
+            totalProperties.setInteger(key, baseProperties.getInteger(key) + upgradeProperties.getInteger(key));
+        }
+
+        ///////////////////////TOTAL STATS/////////////////////////
+        //TODO
+        totalTags.setInteger(MININGLEVEL, baseTags.getInteger(MININGLEVEL));
+
+        totalTags.setInteger(MOBDAMAGE, baseTags.getInteger(MOBDAMAGE));
+
+        totalTags.setFloat(EFFICIENCY, baseTags.getFloat(EFFICIENCY));
+
+        totalTags.setInteger(DURABILITY,  baseTags.getInteger(DURABILITY));
+
+        return rootTags;
+    }
+
+    private static Integer getBaseDurability(List<BToolMaterial> headMaterials, List<BToolMaterial> listBindingMaterials, List<BToolMaterial> listHandleMaterials) { //TODO expand (that differs (is overridden) for some complicated tools, but that's for later)
         return Utils.sumInt(headMaterials.stream().map(BToolMaterial::getDurability));
     }
     public static boolean isToolBroken(@NotNull ItemStack itemstack) {
         return itemstack.tag.getBoolean(BROKEN);
     }
     public static int getMaxDurability(@NotNull ItemStack stack) {
-        return getBaseTags(stack).getInteger(DURABILITY);
+        return getTotalTags(stack).getInteger(DURABILITY);
     }
     public static int getMiningLevel(@NotNull ItemStack stack) {
-        return getBaseTags(stack).getInteger(MININGLEVEL);
+        return getTotalTags(stack).getInteger(MININGLEVEL);
     }
     public static float getEfficiency(@NotNull ItemStack stack) {
-        return getBaseTags(stack).getFloat(EFFICIENCY);
+        return getTotalTags(stack).getFloat(EFFICIENCY);
     }
     public static int getMobDamage(@NotNull ItemStack stack) {
-        return getBaseTags(stack).getInteger(MOBDAMAGE);
+        return getTotalTags(stack).getInteger(MOBDAMAGE);
     }
     public static BToolMaterial[] getMaterials(@NotNull ItemStack stack) {
-        int numMats = getBaseTags(stack).getInteger(NUM_MATERIALS);
+        NBTTagList materialTags = getMaterialTags(stack);
+        int numMats = materialTags.tagCount();
         BToolMaterial[] materials = new BToolMaterial[numMats];
         for(int i = 0; i < numMats; i++) {
-            materials[i] = BToolMaterials.matArray.get(getBaseTags(stack).getInteger(MATERIAL + i));
+            materials[i] = BToolMaterials.matArray.get(((NBTTagInt)materialTags.tagAt(i)).intValue);
         }
         return materials;
     }
     public Set<BToolMaterial> getRepairMaterials(ItemStack stack) {
-        int numMats = getBaseTags(stack).getInteger(NUM_MATERIALS);
-        Set<BToolMaterial> materials = new HashSet<>();
+        BToolMaterial[] materials = getMaterials(stack);
 
-        for(int i = 0; i < numMats; i++) {
-            if(BToolParts.partArray.get(composition.get(i).ordinal()).partFlag == PartFlags.HEAD) {
-                materials.add(BToolMaterials.matArray.get(getBaseTags(stack).getInteger(MATERIAL + i)));
-            }
+        Set<BToolMaterial> materialSet = new HashSet<>();
+        for(BToolMaterial mat : materials) {
+            materialSet.add(mat);
         }
-        return materials;
+
+        return materialSet;
     }
 
     public float getStrVsBlock(@NotNull ItemStack itemstack, Block block) {
         if(isToolBroken(itemstack)) return 0.1f;
         else if(Arrays.stream(this.materialsEffectiveAgainst).anyMatch(material -> material == block.blockMaterial))
-            return getBaseTags(itemstack).getFloat(EFFICIENCY);
+            return getTotalTags(itemstack).getFloat(EFFICIENCY);
         else return 1.0F;
     }
 
@@ -225,12 +298,12 @@ public abstract class BTool extends Item {
         }
         int level = tags.getInteger(LEVEL);
         for(int j = level+1; j <= newLevel; j++) {
-            //level up sequence!
+            //TODO level up sequence!
             //play ding
             //send text message
-            player.addChatMessage(String.format("Level up! Your %s has reached level %d!", itemStack.getItemName(), j));
+//            player.addChatMessage(String.format("Level up! Your %s has reached level %d!", itemStack.getItemName(), j));
             tags.setInteger(LEVEL, j);
-            //levels in turn will award other things
+            //levels in turn will award other things, like extra upgrade slots
         }
     }
 
@@ -253,26 +326,31 @@ public abstract class BTool extends Item {
     }
 
     public boolean canHarvestBlock(ItemStack itemstack, Block block) {
-        if (getBaseTags(itemstack).getBoolean(SILKTOUCH)) return true;
+        if (isSilkTouch(itemstack)) return true;
         else return Arrays.stream(materialsEffectiveAgainst).anyMatch(material -> material == block.blockMaterial);
     }
 
     public int getDamageVsEntity(ItemStack itemstack, Entity noUse) {
         if(isToolBroken(itemstack)) return 1;
-        else return getBaseTags(itemstack).getInteger(MOBDAMAGE);
+        else return getTotalTags(itemstack).getInteger(MOBDAMAGE);
     }
 
     public boolean isFull3D() {
         return true;
     }
-    public boolean isSilkTouch(ItemStack stack) {
-        return getBaseTags(stack).getBoolean(SILKTOUCH);
+
+    @Override
+    public boolean isSilkTouch() {
+        throw new RuntimeException("where is this called from?");
+    }
+
+    public static boolean isSilkTouch(ItemStack stack) {
+        return getProperties(getTotalTags(stack)).getInteger(SILKTOUCH) > 0;
     }
     public int getBlockHitDelay() {
         return 4;
         //TODO maybe find a way to dynamically use itemstack
-        //in PlayerController (to override-inject by mixin)
+        //in PlayerController (to redirect by mixin)
         //this.blockHitDelay = stack.getItem().getBlockHitDelay();
     }
-
 }

@@ -45,8 +45,6 @@ public abstract class MixinGuiContainer extends GuiScreen {
     @Shadow
     public abstract void drawTooltip(String string, int x, int y, int offsetX, int offsetY, boolean multiLine);
 
-
-
     @Inject(method = "drawScreen(IIF)V", cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD, at = @At(value = "INVOKE", target = "Lnet/minecraft/src/StringTranslate;getInstance()Lnet/minecraft/src/StringTranslate;"))
     private void injected(int x, int y, float renderPartialTicks, CallbackInfo ci, int centerX, int centerY, Slot slot, InventoryPlayer inventoryplayer) {
         //here we already know the slot is good from that if before the inject

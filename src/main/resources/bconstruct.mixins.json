@@ -4,7 +4,9 @@
   "package": "levistico.bconstruct.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "AccessorNBTTagCompound",
     "AccessorRenderEngine",
+    "MixinBlock",
     "MixinEntityPlayerMP",
     "MixinEntityPlayerSP",
     "MixinGuiContainer",
