@@ -29,23 +29,28 @@ public class ToolMattock extends BTool {
     @Override
     public float getStrVsBlock(ItemStack itemstack, Block block) {
         if(isToolBroken(itemstack)) return 0.1f;
-        else if(Arrays.stream(axeMaterials).anyMatch(material -> material == block.blockMaterial)) {
+        if(Arrays.stream(axeMaterials).anyMatch(material -> material == block.blockMaterial)) {
             return getMaterials(itemstack)[0].getEfficiency();
-        } else if(Arrays.stream(shovelMaterials).anyMatch(material -> material == block.blockMaterial)) {
+        }
+        if(Arrays.stream(shovelMaterials).anyMatch(material -> material == block.blockMaterial)) {
             return getMaterials(itemstack)[1].getEfficiency();
-        } else return 1.0F;
+        }
+        return 1.0F;
     }
 
     @Override
     public boolean onBlockDestroyed(ItemStack itemstack, int id, int x, int y, int z, EntityLiving entityliving) {
-        if (entityliving != null && !entityliving.worldObj.isMultiplayerAndNotHost && id == Block.tallgrass.blockID) {
-            if (this.isSilkTouch()) {
-                entityliving.worldObj.dropItem(x, y, z, new ItemStack(Item.itemsList[id]));
-            } else if (entityliving.worldObj.rand.nextInt(5) == 0) {
-                entityliving.worldObj.dropItem(x, y, z, new ItemStack(Item.seedsWheat));
-            }
+        if (!(entityliving != null && !entityliving.worldObj.isMultiplayerAndNotHost && id == Block.tallgrass.blockID)) {
+            return super.onBlockDestroyed(itemstack, id, x, y, z, entityliving);
         }
-
+        if (this.isSilkTouch()) {
+            entityliving.worldObj.dropItem(x, y, z, new ItemStack(Item.itemsList[id]));
+            return super.onBlockDestroyed(itemstack, id, x, y, z, entityliving);
+        }
+        if (entityliving.worldObj.rand.nextInt(5) == 0) {
+            entityliving.worldObj.dropItem(x, y, z, new ItemStack(Item.seedsWheat));
+            return super.onBlockDestroyed(itemstack, id, x, y, z, entityliving);
+        }
         return super.onBlockDestroyed(itemstack, id, x, y, z, entityliving);
     }
 
@@ -54,18 +59,14 @@ public class ToolMattock extends BTool {
         if(isToolBroken(itemstack)) return false;
         int i1 = world.getBlockId(i, j, k);
         int j1 = world.getBlockId(i, j + 1, k);
-        if (l != 0 && j1 == 0 && (i1 == Block.grass.blockID || i1 == Block.dirt.blockID || i1 == Block.pathDirt.blockID || i1 == Block.grassRetro.blockID)) {
-            Block block = Block.farmlandDirt;
-            world.playSoundEffect((double)((float)i + 0.5F), (double)((float)j + 0.5F), (double)((float)k + 0.5F), block.stepSound.func_1145_d(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
-            if (world.isMultiplayerAndNotHost) {
-                return true;
-            } else {
-                world.setBlockWithNotify(i, j, k, block.blockID);
-                stressTool(1, itemstack, entityplayer);
-                return true;
-            }
-        } else {
+        if (!(l != 0 && j1 == 0 && (i1 == Block.grass.blockID || i1 == Block.dirt.blockID || i1 == Block.pathDirt.blockID || i1 == Block.grassRetro.blockID))) {
             return false;
         }
+        Block block = Block.farmlandDirt;
+        world.playSoundEffect((double)((float)i + 0.5F), (double)((float)j + 0.5F), (double)((float)k + 0.5F), block.stepSound.func_1145_d(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+        if (world.isMultiplayerAndNotHost) return true;
+        world.setBlockWithNotify(i, j, k, block.blockID);
+        stressTool(1, itemstack, entityplayer);
+        return true;
     }
 }

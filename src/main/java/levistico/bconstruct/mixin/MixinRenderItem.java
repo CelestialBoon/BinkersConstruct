@@ -186,18 +186,19 @@ public abstract class MixinRenderItem extends Render {
                     BToolPart tpart = (BToolPart) itemstack.getItem();
                     int ti = tpart.texturedPart.getIconIndex(BToolPart.getToolMaterial(itemstack).eNumber, false);
                     doRenderTexturedQuad(ti);
-                } else {
-                    this.renderManager.renderEngine.bindTexture(GraphicsUtils.TOOL_BITS_TEXTURE_INDEX);
-                    BTool tool = (BTool) itemstack.getItem();
-                    boolean broken = BTool.isToolBroken(itemstack);
-                    BToolMaterial[] materials = BTool.getMaterials(itemstack);
-                    for(Integer npart : tool.renderOrder) {
-                        ITexturedPart part = tool.texturedParts.get(npart);
-                        int ti = part.getIconIndex(materials[npart].eNumber, broken);
-                        this.doRenderTexturedQuad(ti);
-                    }
+                    GL11.glPopMatrix();
+                    continue;
                 }
 
+                this.renderManager.renderEngine.bindTexture(GraphicsUtils.TOOL_BITS_TEXTURE_INDEX);
+                BTool tool = (BTool) itemstack.getItem();
+                boolean broken = BTool.isToolBroken(itemstack);
+                BToolMaterial[] materials = BTool.getMaterials(itemstack);
+                for(Integer npart : tool.renderOrder) {
+                    ITexturedPart part = tool.texturedParts.get(npart);
+                    int ti = part.getIconIndex(materials[npart].eNumber, broken);
+                    this.doRenderTexturedQuad(ti);
+                }
                 GL11.glPopMatrix();
             }
         }
@@ -208,17 +209,17 @@ public abstract class MixinRenderItem extends Render {
     private void doRenderTexturedQuad(int i) {
         Tessellator tessellator = Tessellator.instance;
         int tileWidth = TextureFX.tileWidthItems;
-        float f6 = (float)(i % net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + 0) / (float)(net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+        float f6 = (float)(i % net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth) / (float)(net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
         float f8 = (float)(i % net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-        float f10 = (float)(i / net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + 0) / (float)(net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+        float f10 = (float)(i / net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth) / (float)(net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
         float f11 = (float)(i / net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
 
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, 1.0F, 0.0F);
-        tessellator.addVertexWithUV(-0.5, -0.25, 0.0, (double)f6, (double)f11);
-        tessellator.addVertexWithUV(0.5, -0.25, 0.0, (double)f8, (double)f11);
-        tessellator.addVertexWithUV(0.5, 0.75, 0.0, (double)f8, (double)f10);
-        tessellator.addVertexWithUV(-0.5, 0.75, 0.0, (double)f6, (double)f10);
+        tessellator.addVertexWithUV(-0.5, -0.25, 0.0, f6, f11);
+        tessellator.addVertexWithUV(0.5, -0.25, 0.0, f8, f11);
+        tessellator.addVertexWithUV(0.5, 0.75, 0.0, f8, f10);
+        tessellator.addVertexWithUV(-0.5, 0.75, 0.0, f6, f10);
         tessellator.draw();
     }
 }

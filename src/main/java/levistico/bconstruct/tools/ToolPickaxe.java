@@ -27,15 +27,9 @@ public class ToolPickaxe extends BTool {
 
     @Override
     public boolean canHarvestBlock(ItemStack itemstack, Block block) {
-        if (isSilkTouch(itemstack)) {
-            return true;
-        } else {
-            Integer miningLevel = ItemToolPickaxe.miningLevels.get(block);
-            if (miningLevel != null) {
-                return getMiningLevel(itemstack) >= miningLevel;
-            } else {
-                return super.canHarvestBlock(itemstack, block);
-            }
-        }
+        if (isSilkTouch(itemstack)) return true;
+        Integer miningLevel = ItemToolPickaxe.miningLevels.get(block);
+        if (miningLevel != null) return getMiningLevel(itemstack) >= miningLevel;
+        return super.canHarvestBlock(itemstack, block);
     }
 }

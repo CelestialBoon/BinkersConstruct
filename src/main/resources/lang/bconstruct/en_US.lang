@@ -15,3 +15,7 @@ item.bconstruct.pickaxe.name = Pickaxe
 item.bconstruct.hatchet.name = Hatchet
 item.bconstruct.mattock.name = Mattock
 item.bconstruct.broadsword.name = Broadsword
+
+tile.bconstruct.partBuilder.name = Part Builder
+tile.bconstruct.craftingstation.name = Crafting Station
+tile.bconstruct.toolStation.name = Tool Station

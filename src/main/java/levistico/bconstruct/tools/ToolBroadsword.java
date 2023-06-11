@@ -31,9 +31,8 @@ public final class ToolBroadsword extends BTool {
     @Override
     public boolean onBlockDestroyed(ItemStack itemstack, int i, int j, int k, int l, EntityLiving player) {
         Block block = Block.blocksList[i];
-        if (block != null && block.getHardness() > 0.0F) {
-            stressTool(2, itemstack, player);
-        }
+        if (!(block != null && block.getHardness() > 0.0F)) return true;
+        stressTool(2, itemstack, player);
         return true;
     }
 

@@ -22,9 +22,8 @@ public class MixinItemStack {
     @Overwrite()
     public int getDamageVsEntity(Entity entity) {
         Item item = Item.itemsList[this.itemID];
-        if(item instanceof BTool) {
-            return ((BTool)item).getDamageVsEntity((ItemStack)(Object)this, entity);
-        } else return item.getDamageVsEntity(entity);
+        if(item instanceof BTool) return ((BTool)item).getDamageVsEntity((ItemStack)(Object)this, entity);
+        return item.getDamageVsEntity(entity);
     }
     /**
      * @author Levistico
@@ -33,9 +32,8 @@ public class MixinItemStack {
     @Overwrite()
     public boolean canHarvestBlock(Block block) {
         Item item = Item.itemsList[this.itemID];
-        if(item instanceof BTool) {
-            return ((BTool)item).canHarvestBlock((ItemStack)(Object)this, block);
-        } else return item.canHarvestBlock(block);
+        if(item instanceof BTool) return ((BTool)item).canHarvestBlock((ItemStack)(Object)this, block);
+        return item.canHarvestBlock(block);
     }
 
     /**
@@ -45,8 +43,7 @@ public class MixinItemStack {
     @Overwrite()
     public int getMaxDamage() {
         Item item = Item.itemsList[this.itemID];
-        if(item instanceof BTool) {
-            return ((BTool)item).getMaxDurability((ItemStack)(Object)this);
-        } else return item.getMaxDamage();
+        if(item instanceof BTool) return ((BTool)item).getMaxDurability((ItemStack)(Object)this);
+        return item.getMaxDamage();
     }
 }
