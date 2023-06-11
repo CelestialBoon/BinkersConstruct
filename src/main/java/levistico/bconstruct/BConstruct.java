@@ -7,15 +7,19 @@ import levistico.bconstruct.materials.BToolMaterials;
 import levistico.bconstruct.parts.BToolParts;
 import levistico.bconstruct.recipes.RecipeRepairKitRepair;
 import levistico.bconstruct.recipes.RecipeReplaceToolPart;
+import levistico.bconstruct.smeltery.BlockSmelteryController;
+import levistico.bconstruct.smeltery.TileEntitySmelteryController;
 import levistico.bconstruct.tools.BTools;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import turniplabs.halplibe.helper.BlockHelper;
-import turniplabs.halplibe.helper.ItemHelper;
-import turniplabs.halplibe.helper.RecipeHelper;
+import sunsetsatellite.sunsetutils.util.NBTEditCommand;
+import sunsetsatellite.sunsetutils.util.multiblocks.Multiblock;
+import sunsetsatellite.sunsetutils.util.multiblocks.RenderMultiblock;
+import sunsetsatellite.sunsetutils.util.multiblocks.StructureCommand;
+import turniplabs.halplibe.helper.*;
 
 
 public final class BConstruct implements ModInitializer {
@@ -38,17 +42,29 @@ public final class BConstruct implements ModInitializer {
     public static final Block toolStation = BlockHelper.createBlock(MOD_ID, new BlockToolStation(blockIdInc++), "toolStation", "toolstation_top.png", "toolstation_bottom.png", "toolstation_side.png", Block.soundWoodFootstep, 2.5f, 15f, 0.0f);
 
     //TODO smelter blocks
-//    public static final Block searedBricks = BlockHelper.createBlock(MOD_ID, new Block(blockIdInc++), "searedBricks", "searedBricks.png", 0.1f, 0.1f, 0.0f)
+    public static final Block searedBricks = BlockHelper.createBlock(MOD_ID, new Block(blockIdInc++,Material.rock), "searedBricks", "searedbrick.png", Block.soundStoneFootstep ,2.5f, 15f, 0.0f);
+    public static final Block smelteryController = BlockHelper.createBlock(MOD_ID,new BlockSmelteryController(blockIdInc++), "smelteryController", "searedbrick.png","searedbrick.png","smeltery_inactive.png","searedbrick.png","searedbrick.png","searedbrick.png", Block.soundStoneFootstep,2.5f,15f,0.0f);
+    public static final Block smelteryDrain = BlockHelper.createBlock(MOD_ID,new Block(blockIdInc++,Material.rock), "smelteryDrain", "drain_side.png","drain_side.png","drain_out.png","drain_side.png","drain_basin.png","drain_side.png", Block.soundStoneFootstep,2.5f,15f,0.0f);
+    public static final Block searedTank = BlockHelper.createBlock(MOD_ID,new Block(blockIdInc++,Material.rock), "searedTank", "seared_tank_top.png","seared_tank_side.png","seared_tank_side.png","seared_tank_side.png","seared_tank_side.png","seared_tank_side.png", Block.soundStoneFootstep,2.5f,15f,0.0f);
 
+    public static final Multiblock smelteryMultiblock = new Multiblock(MOD_ID,new Class[]{BConstruct.class},"smeltery","smeltery",false);
 
     @Override
     public void onInitialize() {
+        Multiblock.multiblocks.put("smeltery",smelteryMultiblock);
+
+        CommandHelper.createCommand(new NBTEditCommand());
+        CommandHelper.createCommand(new StructureCommand("structure","struct"));
+
         BToolMaterials.InitializeMaterialMaps();
         BToolParts.InitializeToolParts(MOD_ID);
         BTools.InitializeTools(MOD_ID);
 
         guiFolder = String.format("/assets/%s/gui/", MOD_ID);
         LOGGER.info("Binkers initialized.");
+
+        EntityHelper.createTileEntity(TileEntitySmelteryController.class,"smeltery");
+        EntityHelper.createSpecialTileEntity(TileEntitySmelteryController.class, new RenderMultiblock(),"smeltery");
 
         RecipeHelper.Crafting.createShapelessRecipe(craftingStation, 1, new Object[] {new ItemStack(Block.workbench, 1)});
         RecipeHelper.Crafting.createRecipe(partBuilder, 1, new Object[] {"P", "W", 'P', blankPattern, 'W', Block.logOak});

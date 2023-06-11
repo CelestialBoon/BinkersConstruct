@@ -19,3 +19,10 @@ item.bconstruct.broadsword.name = Broadsword
 tile.bconstruct.partBuilder.name = Part Builder
 tile.bconstruct.craftingstation.name = Crafting Station
 tile.bconstruct.toolStation.name = Tool Station
+
+tile.bconstruct.searedBricks.name = Seared Bricks
+tile.bconstruct.smelteryController.name = Smeltery Controller
+tile.bconstruct.smelteryDrain.name = Smeltery Drain
+tile.bconstruct.searedTank.name = Seared Tank
+
+
