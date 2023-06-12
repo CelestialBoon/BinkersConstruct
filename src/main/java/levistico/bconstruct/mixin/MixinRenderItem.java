@@ -1,5 +1,6 @@
 package levistico.bconstruct.mixin;
 
+import levistico.bconstruct.gui.GUIUtils;
 import levistico.bconstruct.materials.BToolMaterial;
 import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.gui.texture.TextureUtils;
@@ -124,7 +125,7 @@ public abstract class MixinRenderItem extends Render {
         }
 
         GL11.glTranslatef((float)d, (float)d1 + f2, (float)d2);
-        GL11.glEnable(32826);
+        GL11.glEnable(GUIUtils.GL_BLOCK_ITEM_MAGIC_NUMBER);
 
 //        int tileWidth;
 //        float f6;
@@ -201,7 +202,7 @@ public abstract class MixinRenderItem extends Render {
                 GL11.glPopMatrix();
             }
         }
-        GL11.glDisable(32826);
+        GL11.glDisable(GUIUtils.GL_BLOCK_ITEM_MAGIC_NUMBER);
         GL11.glPopMatrix();
     }
 

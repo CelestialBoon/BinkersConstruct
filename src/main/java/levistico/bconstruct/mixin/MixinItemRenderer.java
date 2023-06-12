@@ -1,5 +1,6 @@
 package levistico.bconstruct.mixin;
 
+import levistico.bconstruct.gui.GUIUtils;
 import levistico.bconstruct.materials.BToolMaterial;
 import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.gui.texture.TextureUtils;
@@ -35,7 +36,7 @@ public class MixinItemRenderer {
 
         float f5 = 0.0F;
         float f6 = 0.3F;
-        GL11.glEnable(32826);
+        GL11.glEnable(GUIUtils.GL_BLOCK_ITEM_MAGIC_NUMBER);
         if (handheldTransform) {
             GL11.glTranslatef(-f5, -f6, 0.0F);
             float thickness = 1.5F;
@@ -62,7 +63,7 @@ public class MixinItemRenderer {
             }
         }
 
-        GL11.glDisable(32826);
+        GL11.glDisable(GUIUtils.GL_BLOCK_ITEM_MAGIC_NUMBER);
 
         GL11.glPopMatrix();
         ci.cancel();

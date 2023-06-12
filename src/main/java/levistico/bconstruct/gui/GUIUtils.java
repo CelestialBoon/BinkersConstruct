@@ -1,5 +1,6 @@
 package levistico.bconstruct.gui;
 
+import levistico.bconstruct.gui.texture.TextureUtils;
 import levistico.bconstruct.materials.BToolMaterial;
 import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.parts.BToolParts;
@@ -11,13 +12,18 @@ import net.minecraft.src.command.ChatColor;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES;
+
 public class GUIUtils {
 
-    public static boolean isMouseOverSlot(Slot slot, int mouseRelativeX, int mouseRelativeY) {
+    public static final int GL_BLOCK_ITEM_MAGIC_NUMBER = 32826;
+    public static RenderItem itemRenderer = new RenderItem();
+
+    public static boolean isMouseOverSlot(Slot slot, int relativeMouseX, int relativeMouseY) {
         if (slot instanceof BSlotActivatable && !((BSlotActivatable)slot).isActive) return false;
 
-        return mouseRelativeX >= slot.xDisplayPosition - 1 && mouseRelativeX < slot.xDisplayPosition + 16 + 1
-                && mouseRelativeY >= slot.yDisplayPosition - 1 && mouseRelativeY < slot.yDisplayPosition + 16 + 1;
+        return relativeMouseX >= slot.xDisplayPosition - 1 && relativeMouseX < slot.xDisplayPosition + 16 + 1
+                && relativeMouseY >= slot.yDisplayPosition - 1 && relativeMouseY < slot.yDisplayPosition + 16 + 1;
     }
 
     public static StringBuilder getToolPartTooltip(StringBuilder text,ItemStack stack) {
@@ -82,16 +88,26 @@ public class GUIUtils {
 //                .append(ChatFormat.underline)
                 .append(mat.getName()).append(" ").append(Utils.translateItemName(part)).append("\n");
     }
-    public static void drawGUITexture(int x, int y, float zLevel, int u, int v) {
-        u *= 18;
-        v *= 18;
-        float div = (float) 1 / (18*14);
+
+    public static void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, int tileWidth, int tileHeight, float factor, float zLevel) {
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(x + 0, y + 18, zLevel, (float)(u + 0) * div, (float)(v + 18) * div);
-        tessellator.addVertexWithUV(x + 18, y + 18, zLevel, (float)(u + 18) * div, (float)(v + 18) * div);
-        tessellator.addVertexWithUV(x + 18, y + 0, zLevel, (float)(u + 18) * div, (float)(v + 0) * div);
-        tessellator.addVertexWithUV(x + 0, y + 0, zLevel, (float)(u + 0) * div, (float)(v + 0) * div);
+        tessellator.addVertexWithUV(x, y + height, zLevel, (float)(u) * factor, (float)(v + tileHeight) * factor);
+        tessellator.addVertexWithUV(x + width, y + height, zLevel, (float)(u + tileWidth) * factor, (float)(v + tileHeight) * factor);
+        tessellator.addVertexWithUV(x + width, y, zLevel, (float)(u + tileWidth) * factor, (float)(v) * factor);
+        tessellator.addVertexWithUV(x, y, zLevel, (float)(u) * factor, (float)(v) * factor);
         tessellator.draw();
     }
+
+    public static void drawRegularGUITexture(int x, int y, int k, float zLevel) {
+        drawTexturedModalRect(x, y, k % TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthItems,
+                k / TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthItems, 16, 16,
+                TextureFX.tileWidthItems, TextureFX.tileWidthItems, TextureUtils.REGULAR_TEXTURE_FACTOR, zLevel);
+    }
+
+    public static void drawLargeGUITexture(int x, int y, int u, int v, float zLevel) {
+        drawTexturedModalRect(x, y, u*18, v*18,18, 18, 18, 18,TextureUtils.LARGE_TEXTURE_FACTOR, zLevel);
+    }
+
+
 }

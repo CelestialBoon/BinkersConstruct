@@ -1,6 +1,7 @@
 package levistico.bconstruct.mixin;
 
 import net.minecraft.src.FontRenderer;
+import net.minecraft.src.GuiButton;
 import net.minecraft.src.GuiScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
@@ -9,4 +10,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface AccessorGuiScreen {
     @Accessor
     FontRenderer getFontRenderer();
+
+    @Accessor void setSelectedButton(GuiButton button);
 }

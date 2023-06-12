@@ -11,6 +11,7 @@ import levistico.bconstruct.tools.BTool;
 import levistico.bconstruct.tools.BTools;
 import levistico.bconstruct.tools.EToolBit;
 import levistico.bconstruct.utils.Utils;
+import net.minecraft.src.TextureFX;
 import net.minecraft.src.helper.Color;
 import net.minecraft.src.helper.Textures;
 import turniplabs.halplibe.util.TextureHandler;
@@ -48,10 +49,14 @@ public class TextureUtils {
 
     public static int GUI_ICONS_INDEX;
     public static int GUI_BASE_CRAFTING_INDEX;
-    public static int GUI_INVENTORY_INDEX;
+//    public static int GUI_INVENTORY_INDEX;
 
     public static int TOOL_PARTS_TEXTURE_INDEX;
     public static int TOOL_BITS_TEXTURE_INDEX;
+
+    public static final float LARGE_TEXTURE_FACTOR = (float) 1 / (18*14);
+    public static final float REGULAR_TEXTURE_FACTOR = (float) 1.0F / (float)(TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthItems);
+    public static final int MC_ITEMS_TEXTURE_INDEX = BConstruct.mc.renderEngine.getTexture("/gui/items.png");
 
     //TODO eventually there's gonna be too many bits for the required square 32x32 image, and we're gonna have to split it into multiple images,
     // and have some functions that deal with alla that (including some smart splitting so that the same bits don't get split across different images)
@@ -62,11 +67,8 @@ public class TextureUtils {
         BufferedImage texture = Textures.readImage(TextureHandler.class.getResourceAsStream(guiFolder + "icons.png"));
         GUI_ICONS_INDEX = mc.renderEngine.allocateAndSetupTexture(texture);
 
-        texture = Textures.readImage(TextureHandler.class.getResourceAsStream(guiFolder + "crafting_base.png"));
+        texture = Textures.readImage(TextureHandler.class.getResourceAsStream(guiFolder + "bcrafting.png"));
         GUI_BASE_CRAFTING_INDEX = mc.renderEngine.allocateAndSetupTexture(texture);
-
-        texture = Textures.readImage(TextureHandler.class.getResourceAsStream(guiFolder + "inventory.png"));
-        GUI_INVENTORY_INDEX = mc.renderEngine.allocateAndSetupTexture(texture);
     }
 
     public static void generateToolPartsTexture() {

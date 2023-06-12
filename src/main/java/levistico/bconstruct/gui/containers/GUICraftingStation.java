@@ -1,21 +1,21 @@
 package levistico.bconstruct.gui.containers;
 
+import levistico.bconstruct.crafting.ContainerCraftingStation;
+import levistico.bconstruct.crafting.CraftingTileEntity;
+import levistico.bconstruct.gui.panels.IPanel;
+import levistico.bconstruct.gui.panels.PanelCrafting;
+import levistico.bconstruct.gui.panels.PanelPlayerInventory;
 import net.minecraft.src.*;
 import org.lwjgl.opengl.GL11;
 
-public final class GUICraftingStation extends GuiContainer {
+public final class GUICraftingStation extends GUIContainerWithPanels {
     public GUICraftingStation(InventoryPlayer inventoryplayer, CraftingTileEntity tileEntity) {
         super(new ContainerCraftingStation(inventoryplayer, tileEntity));
-    }
-
-    public void onGuiClosed() {
-        super.onGuiClosed();
-        this.inventorySlots.onCraftGuiClosed(this.mc.thePlayer);
-    }
-
-    protected void drawGuiContainerForegroundLayer() {
-        this.fontRenderer.drawString("Crafting", 28, 6, 4210752);
-        this.fontRenderer.drawString("Inventory", 8, this.ySize - 96 + 2, 4210752);
+        ContainerCraftingStation container = (ContainerCraftingStation) this.inventorySlots;
+        IPanel craftingPanel = new PanelCrafting(this, "Crafting", zLevel, container.craftingSlots, container.resultSlot);
+        IPanel inventoryPanel = new PanelPlayerInventory(this, zLevel, container.lowerSlots);
+        panels.add(craftingPanel);
+        panels.add(inventoryPanel);
     }
 
     protected void drawGuiContainerBackgroundLayer(float f) {

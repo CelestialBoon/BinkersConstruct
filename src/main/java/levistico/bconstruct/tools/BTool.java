@@ -203,7 +203,7 @@ public abstract class BTool extends Item {
         }
 
         ///////////////////////TOTAL STATS/////////////////////////
-        //TODO
+        //TODO multiply total stats with multipliers
         totalTags.setInteger(MININGLEVEL, baseTags.getInteger(MININGLEVEL));
 
         totalTags.setInteger(MOBDAMAGE, baseTags.getInteger(MOBDAMAGE));

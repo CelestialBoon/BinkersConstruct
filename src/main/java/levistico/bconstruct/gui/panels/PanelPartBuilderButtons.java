@@ -5,8 +5,8 @@ import levistico.bconstruct.gui.containers.GUIContainerWithPanels;
 
 import java.util.List;
 
-public class PanelToolStationButtons extends BPanelWithButtons {
-    public PanelToolStationButtons(GUIContainerWithPanels guiContainer, float zLevel, List<BGuiButton> buttons) {
+public class PanelPartBuilderButtons extends BPanelWithButtons {
+    public PanelPartBuilderButtons(GUIContainerWithPanels guiContainer, float zLevel, List<BGuiButton> buttons) {
         super(guiContainer, 100, 166, zLevel, buttons);
         centerOffsetX = -(100 + 176) /2;
     }

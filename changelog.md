@@ -1,8 +1,12 @@
+v0.0.4 (not complete)
+- GUI refactored
+	
+
 v0.0.3
 - properties online
 - new tag structure
 - fix remaining material colors
-- fix missing table names (thanks
+- fix missing table names (thanks ApolloInTheHouse)
 
 v0.0.2
 - Fixed creative inventory crash

@@ -1,10 +1,10 @@
 package levistico.bconstruct.mixin;
 
 
-import levistico.bconstruct.gui.containers.ContainerCraftingStation;
-import levistico.bconstruct.gui.containers.ContainerPartBuilder;
-import levistico.bconstruct.gui.containers.ContainerToolStation;
-import levistico.bconstruct.gui.containers.CraftingTileEntity;
+import levistico.bconstruct.crafting.ContainerCraftingStation;
+import levistico.bconstruct.crafting.ContainerPartBuilder;
+import levistico.bconstruct.crafting.ContainerToolStation;
+import levistico.bconstruct.crafting.CraftingTileEntity;
 import levistico.bconstruct.mixinInterfaces.IBinkersEntityPlayerMP;
 import levistico.bconstruct.utils.InventoryType;
 import net.minecraft.src.*;
