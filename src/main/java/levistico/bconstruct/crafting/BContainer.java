@@ -1,9 +1,8 @@
 package levistico.bconstruct.crafting;
 
-import levistico.bconstruct.BConstruct;
 import levistico.bconstruct.gui.BSlotActivatable;
 import levistico.bconstruct.gui.BSlotCrafting;
-import levistico.bconstruct.mixin.MixinInventoryCrafting;
+import levistico.bconstruct.mixin.AccessorInventoryCrafting;
 import levistico.bconstruct.utils.Utils;
 import net.minecraft.src.*;
 
@@ -20,7 +19,7 @@ public abstract class BContainer extends Container implements IOnCraftResult {
 
     public BContainer(InventoryPlayer inventoryplayer, CraftingTileEntity tileEntity) {
         tileEntity.eventHandler = this;
-        ((MixinInventoryCrafting)tileEntity.inventoryCrafting).setEventHandler(this);
+        ((AccessorInventoryCrafting)tileEntity.inventoryCrafting).setEventHandler(this);
         this.tileEntity = tileEntity;
         this.inventoryPlayer = inventoryplayer;
 

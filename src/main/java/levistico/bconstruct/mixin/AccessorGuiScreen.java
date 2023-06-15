@@ -5,11 +5,11 @@ import net.minecraft.src.GuiButton;
 import net.minecraft.src.GuiScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
-
+/*
 @Mixin(value = GuiScreen.class, remap = false)
 public interface AccessorGuiScreen {
     @Accessor
     FontRenderer getFontRenderer();
 
     @Accessor void setSelectedButton(GuiButton button);
-}
+}*/

@@ -24,6 +24,7 @@ public abstract class MixinRenderEngine {
         TextureUtils.importGUITextures();
         TextureUtils.generateToolPartsTexture();
         TextureUtils.generateToolBitsTexture();
+        TextureUtils.initializeSlimeTextures();
 //        BToolParts.InitializeToolParts(MOD_ID);
 //        BTools.InitializeTools(MOD_ID);
     }

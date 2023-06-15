@@ -5,7 +5,6 @@ import levistico.bconstruct.crafting.BContainer;
 import levistico.bconstruct.gui.BSlotActivatable;
 import levistico.bconstruct.gui.GUIUtils;
 import levistico.bconstruct.gui.panels.IPanel;
-import levistico.bconstruct.mixin.AccessorGuiScreen;
 import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.gui.texture.TextureUtils;
 import levistico.bconstruct.tools.BTool;
