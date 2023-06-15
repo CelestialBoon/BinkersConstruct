@@ -11,6 +11,7 @@ import levistico.bconstruct.tools.BTool;
 import levistico.bconstruct.tools.BTools;
 import levistico.bconstruct.tools.EToolBit;
 import levistico.bconstruct.utils.Utils;
+import net.minecraft.src.GLAllocation;
 import net.minecraft.src.TextureFX;
 import net.minecraft.src.helper.Color;
 import net.minecraft.src.helper.Textures;
@@ -197,6 +198,17 @@ public class TextureUtils {
         }
     }
 
+    public static void initializeSlimeTextures() {
+        for(int i = 1; i<=2; i++) {
+            String location = String.format("/assets/%s/item/slime_%d.png", BConstruct.MOD_ID, i);
+            String name = String.format("/armor/slime_%d.png", i);
+            final int j = GLAllocation.generateTexture();
+            BufferedImage texture = Textures.readImage(TextureHandler.class.getResourceAsStream(location));
+            mc.renderEngine.setupTexture(texture, j);
+            mc.renderEngine.getTextureMap().put(name, j);
+        }
+    }
+
     /*public static void generateToolBaseTexture() {
         int resolution = 16;
         BufferedImage guiTexture = ((AccessorRenderEngine)mc.renderEngine).getTextureNameToImageMap().get(GraphicsUtils.GUI_TEXTURE_INDEX);
@@ -242,4 +254,6 @@ public class TextureUtils {
         Utils.setAt(bitsLocation, EToolBit.Broadsword_Guard.ordinal(), "sword/guard");
         Utils.setAt(bitsLocation, EToolBit.Broadsword_Handle.ordinal(), "sword/handle");
     }
+
+
 }

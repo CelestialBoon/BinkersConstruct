@@ -20,12 +20,10 @@ public abstract class MixinRenderEngine {
     private Map<String, Integer> textureMap = new HashMap<>();
 
     @Inject(method = "refreshTextures", at = @At("HEAD"))
-    private void binkers_initTextures(CallbackInfo ci) {
+    private void initTextures(CallbackInfo ci) {
         TextureUtils.importGUITextures();
         TextureUtils.generateToolPartsTexture();
         TextureUtils.generateToolBitsTexture();
-//        BToolParts.InitializeToolParts(MOD_ID);
-//        BTools.InitializeTools(MOD_ID);
+        TextureUtils.initializeSlimeTextures();
     }
-
 }

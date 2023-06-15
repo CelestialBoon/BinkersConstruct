@@ -1,15 +1,17 @@
 package levistico.bconstruct.utils;
 
-import net.minecraft.src.InventoryCrafting;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.StringTranslate;
+import net.minecraft.src.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
 public final class Utils {
+
+    public static final float degToRad = 3.141593F / 180.0F;
+    public static float yawFactor(float pitchSin) {
+        return MathHelper.sqrt_float(1- pitchSin*pitchSin);
+    }
     public static ItemStack[] emptyInventoryCrafting (InventoryCrafting inv) {
         for(int i = 0; i < inv.getSizeInventory(); i++) {
             inv.setInventorySlotContents(i, null);
