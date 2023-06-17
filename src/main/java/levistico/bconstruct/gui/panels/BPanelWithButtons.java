@@ -15,8 +15,8 @@ public abstract class BPanelWithButtons extends BasePanel {
         this.buttons = buttons;
     }
 
-    public void mouseClicked(int screenWidth, int screenHeight, int mouseX, int mouseY, int mouseButton) {
-        clickButtons(getInternalMouseX(screenWidth, mouseX), getInternalMouseY(screenHeight, mouseY), mouseButton);
+    public void mouseClicked(int mouseX, int mouseY, int relativeMouseX, int relativeMouseY, int mouseButton) {
+        clickButtons(relativeMouseX, relativeMouseY, mouseButton);
     }
 
     void drawButtons(int topX, int topY, int mouseRelX, int mouseRelY) {
@@ -38,11 +38,7 @@ public abstract class BPanelWithButtons extends BasePanel {
         }
     }
 
-    public void drawTooltip(int screenWidth, int screenHeight, int mouseX, int mouseY) {
-        int topX = getTopX(screenWidth);
-        int topY = getTopY(screenHeight);
-        int relativeMouseX = getInternalMouseX(screenWidth, mouseX);
-        int relativeMouseY = getInternalMouseY(screenHeight, mouseY);
+    public void drawTooltip(int topX, int topY, int relativeMouseX, int relativeMouseY) {
         buttons.stream().filter(b -> b.isHovered(relativeMouseX, relativeMouseY)).findAny().ifPresent(b -> {
             if(! Utils.isStringEmpty(b.displayString))
                 guiContainer.drawTooltip(b.displayString, topX, topY, 0, -15, false);

@@ -20,6 +20,7 @@ import net.minecraft.src.input.controller.ControllerInventoryHandler;
 import net.minecraft.src.material.ArmorMaterial;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import turniplabs.halplibe.helper.ArmorHelper;
 import turniplabs.halplibe.helper.BlockHelper;
 import turniplabs.halplibe.helper.ItemHelper;
 import turniplabs.halplibe.helper.RecipeHelper;
@@ -39,23 +40,20 @@ public final class BConstruct implements ModInitializer {
     public static int itemIdInc = 140;
     public static final Item blankPattern = ItemHelper.createItem(MOD_ID, new Item(itemIdInc++), "blankPattern", "pattern_blank.png");
 
-    public static final ArmorMaterial slimeArmorMaterial = new ArmorMaterial("slime", 1, 100); //TODO renderIndex 6
-    public static String[] armorFilenamePrefix = {"cloth", "chain", "iron", "diamond", "gold", "steel", "slime"};
+    public static final ArmorMaterial slimeArmorMaterial = ArmorHelper.createArmorMaterial("slime", 100,  0,0,0,200);
     public static Item slimeBoots;
     public static Item slimeSling;
-
-    //TODO smelter items (including stuff like ladles/cans)
 
     public static int blockIdInc = 900;
     public static final Block craftingStation = BlockHelper.createBlock(MOD_ID, new BlockCraftingStation(blockIdInc++), "craftingstation", "craftingstation_top.png", "craftingstation_bottom.png", "craftingstation_side.png", Block.soundWoodFootstep, 2.5f, 15f, 0.0f);
     public static final Block partBuilder = BlockHelper.createBlock(MOD_ID, new BlockPartBuilder(blockIdInc++), "partBuilder", "partbuilder_oak_top.png", "partbuilder_oak_bottom.png", "partbuilder_oak_side.png", Block.soundWoodFootstep, 2.5f, 15f, 0.0f);
     public static final Block toolStation = BlockHelper.createBlock(MOD_ID, new BlockToolStation(blockIdInc++), "toolStation", "toolstation_top.png", "toolstation_bottom.png", "toolstation_side.png", Block.soundWoodFootstep, 2.5f, 15f, 0.0f);
 
-    //TODO smelter blocks
-    //TODO slime block
-//    public static final Block searedBricks = BlockHelper.createBlock(MOD_ID, new Block(blockIdInc++), "searedBricks", "searedBricks.png", 0.1f, 0.1f, 0.0f)
 
-
+    @SuppressWarnings("unchecked")
+    void addRecipe(IRecipe recipe) {
+        craftingManager.getRecipeList().add(recipe);
+    }
     @Override
     public void onInitialize() {
         BToolMaterials.InitializeMaterialMaps();
@@ -64,8 +62,12 @@ public final class BConstruct implements ModInitializer {
 
         slimeBoots = ItemHelper.createItem(MOD_ID, new ItemArmor(itemIdInc++, slimeArmorMaterial, 3), "slimeBoots", "slime_boots.png");
         slimeSling = ItemHelper.createItem(MOD_ID, new SlimeSling(itemIdInc++).setMaxStackSize(1), "slimeSling", "slime_sling.png");
-        ArmorMaterial.setProtectionValuePercent(slimeArmorMaterial, DamageType.FALL, 200);
         ((AccessorItem)slimeBoots).setMaxDamage(0);
+
+        //TODO smelter items (including stuff like ladles/cans)
+        //TODO smelter blocks
+        //TODO slime block
+        //    public static final Block searedBricks = BlockHelper.createBlock(MOD_ID, new Block(blockIdInc++), "searedBricks", "searedBricks.png", 0.1f, 0.1f, 0.0f)
 
         guiFolder = String.format("/assets/%s/gui/", MOD_ID);
         LOGGER.info("Binkers initialized.");
@@ -79,9 +81,5 @@ public final class BConstruct implements ModInitializer {
 
         addRecipe(new RecipeRepairKitRepair());
         addRecipe(new RecipeReplaceToolPart());
-    }
-    @SuppressWarnings("unchecked")
-    void addRecipe(IRecipe recipe) {
-        craftingManager.getRecipeList().add(recipe);
     }
 }

@@ -37,6 +37,34 @@ public abstract class BasePanel implements IPanel {
         GL11.glPopMatrix();
     }
 
+    public BasePanel setOffsetX(int offsetX) {
+        this.centerOffsetX = offsetX;
+        return this;
+    }
+    public BasePanel setOffsetY(int offsetY) {
+        this.centerOffsetY = offsetY;
+        return this;
+    }
+
+    public void tryDrawTooltip(int screenWidth, int screenHeight, int mouseX, int mouseY) {
+        int topX = getTopX(screenWidth);
+        int topY = getTopY(screenHeight);
+        if(isMouseHere(topX, topY, mouseX, mouseY)) {
+            drawTooltip(mouseX, mouseY, getInternalMouseX(screenWidth, mouseX), getInternalMouseY(screenHeight, mouseY));
+        }
+    }
+
+    public void tryMouseClicked(int screenWidth, int screenHeight, int mouseX, int mouseY, int button) {
+        int topX = getTopX(screenWidth);
+        int topY = getTopY(screenHeight);
+        if(isMouseHere(topX, topY, mouseX, mouseY)) {
+            mouseClicked(mouseX, mouseY, getInternalMouseX(screenWidth, mouseX), getInternalMouseY(screenHeight, mouseY), button);
+        }
+    }
+
+    protected abstract void drawTooltip(int mouseX, int mouseY, int relativeMouseX, int relativeMouseY);
+    protected abstract void mouseClicked(int mouseX, int mouseY, int relativeMouseX, int relativeMouseY, int mouseButton);
+
     int getTopX(int screenWidth) {
         return (screenWidth - width)/2 + centerOffsetX;
     }
@@ -48,5 +76,9 @@ public abstract class BasePanel implements IPanel {
     }
     int getInternalMouseY(int screenHeight, int mouseY) {
         return mouseY - getTopY(screenHeight);
+    }
+
+    boolean isMouseHere(int topX, int topY, int mouseX, int mouseY) {
+        return mouseX >= topX && mouseX <= topX + width && mouseY >= topY && mouseY <= topY + height;
     }
 }

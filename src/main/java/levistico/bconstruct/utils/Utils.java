@@ -12,6 +12,11 @@ public final class Utils {
     public static float yawFactor(float pitchSin) {
         return MathHelper.sqrt_float(1- pitchSin*pitchSin);
     }
+
+    public static int clamp(int min, int value, int max) {
+        if(value<min) return min;
+        else return Math.min(value, max);
+    }
     public static ItemStack[] emptyInventoryCrafting (InventoryCrafting inv) {
         for(int i = 0; i < inv.getSizeInventory(); i++) {
             inv.setInventorySlotContents(i, null);

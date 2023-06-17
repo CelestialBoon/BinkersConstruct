@@ -38,19 +38,15 @@ public class PanelPlayerInventory extends BPanelWithSlots {
     }
 
     @Override
-    public void drawTooltip(int screenWidth, int screenHeight, int mouseX, int mouseY) {
-        int mouseRelX = getInternalMouseX(screenWidth, mouseX);
-        int mouseRelY = getInternalMouseY(screenHeight, mouseY);
-        slots.stream().filter(slot -> GUIUtils.isMouseOverSlot(slot, mouseRelX, mouseRelY) && slot.hasStack()).forEach(slot -> {
+    public void drawTooltip(int mouseX, int mouseY, int relativeMouseX, int relativeMouseY) {
+        slots.stream().filter(slot -> GUIUtils.isMouseOverSlot(slot, relativeMouseX, relativeMouseY) && slot.hasStack()).forEach(slot -> {
             guiContainer.drawItemTooltip(slot.getStack(), mouseX, mouseY, slot.discovered, slot instanceof SlotCrafting);
         });
     }
 
     @Override
-    public void mouseClicked(int screenWidth, int screenHeight, int mouseX, int mouseY, int button) {
-        int relativeMouseX = getInternalMouseX(screenWidth, mouseX);
-        int relativeMouseY = getInternalMouseY(screenHeight, mouseY);
-        super.inventoryMouseClicked(relativeMouseX, relativeMouseY, button);
+    public void mouseClicked(int mouseX, int mouseY, int relativeMouseX, int relativeMouseY, int mouseButton) {
+        super.inventoryMouseClicked(relativeMouseX, relativeMouseY, mouseButton);
     }
 
     @Override

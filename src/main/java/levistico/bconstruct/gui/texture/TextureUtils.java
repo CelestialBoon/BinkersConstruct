@@ -50,8 +50,6 @@ public class TextureUtils {
 
     public static int GUI_ICONS_INDEX;
     public static int GUI_BASE_CRAFTING_INDEX;
-//    public static int GUI_INVENTORY_INDEX;
-
     public static int TOOL_PARTS_TEXTURE_INDEX;
     public static int TOOL_BITS_TEXTURE_INDEX;
 
@@ -200,32 +198,13 @@ public class TextureUtils {
 
     public static void initializeSlimeTextures() {
         for(int i = 1; i<=2; i++) {
-            String location = String.format("/assets/%s/item/slime_%d.png", BConstruct.MOD_ID, i);
+            String location = String.format("%s/slime_%d.png", baseFolder, i);
             String name = String.format("/armor/slime_%d.png", i);
-            final int j = GLAllocation.generateTexture();
             BufferedImage texture = Textures.readImage(TextureHandler.class.getResourceAsStream(location));
-            mc.renderEngine.setupTexture(texture, j);
+            int j = mc.renderEngine.allocateAndSetupTexture(texture);
             mc.renderEngine.getTextureMap().put(name, j);
         }
     }
-
-    /*public static void generateToolBaseTexture() {
-        int resolution = 16;
-        BufferedImage guiTexture = ((AccessorRenderEngine)mc.renderEngine).getTextureNameToImageMap().get(GraphicsUtils.GUI_TEXTURE_INDEX);
-        for(BTool tool: BTools.toolList) {
-            String path = String.format("%s/tool/%s/base.png", baseFolder, tool.toolFolder);
-            BufferedImage baseImage = Textures.readImage(TextureHandler.class.getResourceAsStream(path));
-
-            int tpx = guiCounter % TEXTURE_ATLAS_WIDTH_TILES;
-            int tpy = guiCounter / TEXTURE_ATLAS_WIDTH_TILES;
-            int tpsx = tpx * resolution;
-            int tpsy = tpy * resolution;
-            int[] rgbArray = new int[resolution * resolution];
-            guiTexture.setRGB(tpsx, tpsy, resolution, resolution, baseImage.getRGB(0, 0, resolution, resolution, rgbArray, 0, resolution), 0, resolution);
-            tool.baseTextureIndex = new Pair<>(tpx, tpy);
-            guiCounter++;
-        }
-    }*/
 
 /*
     public static List<Integer> generateEffects(String toolName) {
