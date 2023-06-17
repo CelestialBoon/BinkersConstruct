@@ -1,6 +1,5 @@
-package levistico.bconstruct.gui.containers;
+package levistico.bconstruct.crafting;
 
-import levistico.bconstruct.gui.containers.DummyContainer;
 import net.minecraft.src.*;
 
 public final class CraftingTileEntity extends TileEntity {

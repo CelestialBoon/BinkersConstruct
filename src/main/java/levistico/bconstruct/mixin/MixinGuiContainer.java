@@ -14,6 +14,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+
 @Mixin(value = GuiContainer.class, remap = false)
 public abstract class MixinGuiContainer extends GuiScreen {
 
@@ -50,7 +52,7 @@ public abstract class MixinGuiContainer extends GuiScreen {
             if (str.length() > 0) {
                 this.drawTooltip(str, x, y, 8, -8, multiLine);
             }
-            GL11.glEnable(2929);
+            GL11.glEnable(GL_DEPTH_TEST);
             ci.cancel();
         } else if (stack.getItem() instanceof BTool) {
             //do things here
@@ -62,7 +64,7 @@ public abstract class MixinGuiContainer extends GuiScreen {
             if (str.length() > 0) {
                 this.drawTooltip(str, x, y, 8, -8, multiLine);
             }
-            GL11.glEnable(2929);
+            GL11.glEnable(GL_DEPTH_TEST);
             ci.cancel();
         }
     }

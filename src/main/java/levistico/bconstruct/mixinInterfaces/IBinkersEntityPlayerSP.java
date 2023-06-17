@@ -1,6 +1,6 @@
 package levistico.bconstruct.mixinInterfaces;
 
-import levistico.bconstruct.gui.containers.CraftingTileEntity;
+import levistico.bconstruct.crafting.CraftingTileEntity;
 
 public interface IBinkersEntityPlayerSP {
     public void displayGUICraftingStation(CraftingTileEntity tileEntity);

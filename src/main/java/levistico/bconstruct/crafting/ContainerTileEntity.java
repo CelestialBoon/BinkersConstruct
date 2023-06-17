@@ -1,4 +1,4 @@
-package levistico.bconstruct.gui.containers;
+package levistico.bconstruct.crafting;
 
 import net.minecraft.src.*;
 

@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(value = InventoryCrafting.class, remap = false)
-public interface MixinInventoryCrafting {
+public interface AccessorInventoryCrafting {
     @Accessor("eventHandler")
     void setEventHandler(Container eventHandler);
 }

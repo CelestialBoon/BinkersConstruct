@@ -1,8 +1,8 @@
-package levistico.bconstruct.gui.containers;
+package levistico.bconstruct.crafting;
 
 import net.minecraft.src.*;
 
-public final class ContainerCraftingStation extends ContainerCrafting {
+public final class ContainerCraftingStation extends BContainer {
     public ContainerCraftingStation(InventoryPlayer inventoryplayer, CraftingTileEntity tileEntity) {
         super(inventoryplayer, tileEntity);
     }
@@ -10,10 +10,5 @@ public final class ContainerCraftingStation extends ContainerCrafting {
     @Override
     public void onCraftMatrixChanged(IInventory iinventory) {
         this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(this.tileEntity.inventoryCrafting));
-    }
-
-    @Override
-    public ItemStack onCraftResult() {
-        return null;
     }
 }

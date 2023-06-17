@@ -1,15 +1,12 @@
-package levistico.bconstruct.gui.containers;
+package levistico.bconstruct.crafting;
 
 import levistico.bconstruct.mixinInterfaces.IBinkersEntityPlayerMP;
 import levistico.bconstruct.mixinInterfaces.IBinkersEntityPlayerSP;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.EntityPlayerMP;
-import net.minecraft.src.Material;
-import net.minecraft.src.World;
+import net.minecraft.src.*;
 
-public final class BlockToolStation extends BlockCraftingTable {
+public final class BlockCraftingStation extends BlockCraftingTable {
 
-    public BlockToolStation(int i) {
+    public BlockCraftingStation(int i) {
         super(i, Material.wood);
     }
 
@@ -18,10 +15,10 @@ public final class BlockToolStation extends BlockCraftingTable {
         if (world.isMultiplayerAndNotHost) {
         } else if(player instanceof EntityPlayerMP) {
             //Multiplayer
-            ((IBinkersEntityPlayerMP)player).displayGUIToolStation(tileEntity);
+            ((IBinkersEntityPlayerMP)player).displayGUICraftingStation(tileEntity);
         } else {
             //Singleplayer
-            ((IBinkersEntityPlayerSP)player).displayGUIToolStation(tileEntity);
+            ((IBinkersEntityPlayerSP)player).displayGUICraftingStation(tileEntity);
         }
         return true;
     }

@@ -1,30 +1,27 @@
-package levistico.bconstruct.gui.containers;
+package levistico.bconstruct.crafting;
 
-import levistico.bconstruct.crafting.IOnCraftResult;
 import levistico.bconstruct.gui.BSlotActivatable;
 import levistico.bconstruct.gui.BSlotCrafting;
-import levistico.bconstruct.mixin.MixinInventoryCrafting;
-import levistico.bconstruct.recipes.BToolRecipe;
-import levistico.bconstruct.tools.BTool;
-import levistico.bconstruct.tools.BTools;
+import levistico.bconstruct.mixin.AccessorInventoryCrafting;
 import levistico.bconstruct.utils.Utils;
 import net.minecraft.src.*;
-import org.lwjgl.openal.Util;
 
 import java.util.ArrayList;
 
-public abstract class ContainerCrafting extends Container implements IOnCraftResult {
+public abstract class BContainer extends Container implements IOnCraftResult {
     public CraftingTileEntity tileEntity;
     public IInventory craftResult = new InventoryCraftResult();
-    public Integer maxSlot = 10;
-    BSlotCrafting resultSlot;
-    ArrayList<BSlotActivatable> craftingSlots = new ArrayList<>();
-    ArrayList<Slot> lowerSlots = new ArrayList<>();
+    Integer maxSlot = 9;
+    public BSlotCrafting resultSlot;
+    public ArrayList<BSlotActivatable> craftingSlots = new ArrayList<>();
+    public ArrayList<Slot> lowerSlots = new ArrayList<>();
+    public InventoryPlayer inventoryPlayer;
 
-    public ContainerCrafting(InventoryPlayer inventoryplayer, CraftingTileEntity tileEntity) {
+    public BContainer(InventoryPlayer inventoryplayer, CraftingTileEntity tileEntity) {
         tileEntity.eventHandler = this;
-        ((MixinInventoryCrafting)tileEntity.inventoryCrafting).setEventHandler(this);
+        ((AccessorInventoryCrafting)tileEntity.inventoryCrafting).setEventHandler(this);
         this.tileEntity = tileEntity;
+        this.inventoryPlayer = inventoryplayer;
 
         int j1;
         int l1;
@@ -44,18 +41,34 @@ public abstract class ContainerCrafting extends Container implements IOnCraftRes
             this.addSlot(slot);
         }
 
-        resultSlot = new BSlotCrafting(this, inventoryplayer.player, this.craftResult, 0, 124, 35);
+        resultSlot = new BSlotCrafting(this, 0, inventoryplayer.player, this.craftResult, 124, 35);
         this.addSlot(resultSlot);
 
         for(j1 = 0; j1 < 3; ++j1) { //crafting slots
             for(l1 = 0; l1 < 3; ++l1) {
-                BSlotActivatable craftSlot = new BSlotActivatable(this.tileEntity.inventoryCrafting, l1 + j1 * 3, true, 30 + l1 * 18, 35 + j1 * 18);
+                BSlotActivatable craftSlot = new BSlotActivatable(this.tileEntity.inventoryCrafting, l1 + j1 * 3, true, 30 + l1 * 18, 17 + j1 * 18);
                 craftingSlots.add(craftSlot);
                 this.addSlot(craftSlot);
             }
         }
 
         this.onCraftMatrixChanged(this.tileEntity.inventoryCrafting);
+    }
+
+    void resizeCraftingSlots(Integer newmax) {
+        if(newmax > maxSlot) {
+            //open slots
+            for(int j = maxSlot; j < newmax; j++) {
+                craftingSlots.get(j).isActive = true;
+            }
+        } else if (maxSlot > newmax) {
+            //return items and close slots
+            for(int j = maxSlot; j > newmax; j--) {
+                quickMoveItems(j, inventoryPlayer.player, true, true);
+                craftingSlots.get(j-1).isActive = false;
+            }
+        }
+        maxSlot = newmax;
     }
 
     public abstract void onCraftMatrixChanged(IInventory iinventory);
@@ -144,5 +157,9 @@ public abstract class ContainerCrafting extends Container implements IOnCraftRes
 
     public boolean isUsableByPlayer(EntityPlayer entityplayer) {
         return tileEntity.inventoryCrafting.canInteractWith(entityplayer);
+    }
+
+    public void onCraftResult(ItemStack stack, EntityPlayer player) { //default crafting behaviour, to be occasionally overridden
+        Utils.decreaseAllInventoryBy(tileEntity.inventoryCrafting, 1);
     }
 }

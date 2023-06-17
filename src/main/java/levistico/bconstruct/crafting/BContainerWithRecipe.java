@@ -1,6 +1,5 @@
-package levistico.bconstruct.gui.containers;
+package levistico.bconstruct.crafting;
 
-import levistico.bconstruct.crafting.IOnCraftResult;
 import levistico.bconstruct.gui.panels.IPanel;
 import levistico.bconstruct.recipes.BRecipe;
 import net.minecraft.src.*;
@@ -8,17 +7,14 @@ import net.minecraft.src.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ContainerCraftingWithPanels extends ContainerCrafting implements IOnCraftResult {
-
-    //TODO handle hand and hand actions
+public abstract class BContainerWithRecipe extends BContainer {
     public BRecipe recipe;
-    public List<IPanel> panels = new ArrayList<>();
 
-    public ContainerCraftingWithPanels(InventoryPlayer inventoryplayer, CraftingTileEntity tileEntity) {
+    public BContainerWithRecipe(InventoryPlayer inventoryplayer, CraftingTileEntity tileEntity) {
         super(inventoryplayer, tileEntity);
     }
 
-    public abstract BRecipe getRecipe() ;
+    public abstract BRecipe getRecipe();
 
     public void onCraftMatrixChanged() {
         onCraftMatrixChanged(null);
@@ -28,10 +24,8 @@ public abstract class ContainerCraftingWithPanels extends ContainerCrafting impl
         this.craftResult.setInventorySlotContents(0, getRecipe().getCraftingResult(tileEntity.inventoryCrafting));
     }
 
-    public ItemStack onCraftResult() {
+    @Override
+    public void onCraftResult(ItemStack stack, EntityPlayer player) {
         recipe.onCraftResult(tileEntity.inventoryCrafting);
-        return new ItemStack(Block.marble);
     }
-
-
 }

@@ -1,5 +1,11 @@
 item.bconstruct.blankPattern.name = Blank Pattern
-item.bconstruct.blankPattern.desc = Test Description
+item.bconstruct.blankPattern.desc = Your basic resource for crafting tool parts at the Part Station.
+
+item.bconstruct.slimeBoots.name = Slime Boots
+item.bconstruct.slimeBoots.desc = Bouncy!
+
+item.bconstruct.slimeSling.name = Slimesling
+item.bconstruct.slimeSling.desc = Change, aim, launch yourself!
 
 item.bconstruct.rod.name = Tool Rod
 item.bconstruct.binding.name = Binding
@@ -9,7 +15,6 @@ item.bconstruct.shovelHead.name = Shovel Head
 item.bconstruct.largeGuard.name = Large Guard
 item.bconstruct.swordBlade.name = Sword Blade
 item.bconstruct.repairKit.name = Repair Kit
-
 
 item.bconstruct.pickaxe.name = Pickaxe
 item.bconstruct.hatchet.name = Hatchet
