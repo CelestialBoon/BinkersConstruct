@@ -1,5 +1,6 @@
 package levistico.bconstruct.crafting;
 
+import levistico.bconstruct.BConstruct;
 import levistico.bconstruct.gui.BSlotActivatable;
 import levistico.bconstruct.gui.BSlotCrafting;
 import levistico.bconstruct.mixin.AccessorInventoryCrafting;
@@ -26,6 +27,17 @@ public abstract class BContainer extends Container implements IOnCraftResult {
         int j1;
         int l1;
 
+        resultSlot = new BSlotCrafting(this, 0, inventoryplayer.player, this.craftResult, 124, 35);
+        this.addSlot(resultSlot);
+
+        for(j1 = 0; j1 < 3; ++j1) { //crafting slots
+            for(l1 = 0; l1 < 3; ++l1) {
+                BSlotActivatable craftSlot = new BSlotActivatable(this.tileEntity.inventoryCrafting, l1 + j1 * 3, true, 30 + l1 * 18, 17 + j1 * 18);
+                craftingSlots.add(craftSlot);
+                this.addSlot(craftSlot);
+            }
+        }
+
         for(j1 = 0; j1 < 3; ++j1) { //inventory slots
             for(l1 = 0; l1 < 9; ++l1) {
                 int id = l1 + j1 * 9 + 9;
@@ -39,17 +51,6 @@ public abstract class BContainer extends Container implements IOnCraftResult {
             Slot slot = new Slot(inventoryplayer, j1, 8 + j1 * 18, 59);
             Utils.setAt(lowerSlots, j1, slot);
             this.addSlot(slot);
-        }
-
-        resultSlot = new BSlotCrafting(this, 0, inventoryplayer.player, this.craftResult, 124, 35);
-        this.addSlot(resultSlot);
-
-        for(j1 = 0; j1 < 3; ++j1) { //crafting slots
-            for(l1 = 0; l1 < 3; ++l1) {
-                BSlotActivatable craftSlot = new BSlotActivatable(this.tileEntity.inventoryCrafting, l1 + j1 * 3, true, 30 + l1 * 18, 17 + j1 * 18);
-                craftingSlots.add(craftSlot);
-                this.addSlot(craftSlot);
-            }
         }
 
         this.onCraftMatrixChanged(this.tileEntity.inventoryCrafting);
@@ -134,11 +135,9 @@ public abstract class BContainer extends Container implements IOnCraftResult {
                 }
 
             } else {
-                if (slotID >= 10 && slotID < 37) {
-                    this.onStackMergeShiftClick(item, 1, maxSlot, false);
-                } else if (slotID >= 37 && slotID < 46) {
-                    this.onStackMergeShiftClick(item, 1, maxSlot, false);
-                } else {
+                if (slotID >= 10 && slotID < 46) { // base inventory+hotbar
+                    this.onStackMergeShiftClick(item, 1, maxSlot+1, false);
+                } else { //from crafting slots
                     this.onStackMergeShiftClick(item, 10, 46, false);
                 }
 
