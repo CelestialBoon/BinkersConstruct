@@ -51,7 +51,7 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
         GL11.glDisable(GL_DEPTH_TEST);
         if(inventoryplayer.getHeldItemStack() == null) {
             for(IPanel panel : panels) {
-                panel.drawTooltip(this.width, this.height, mouseX, mouseY);
+                panel.tryDrawTooltip(this.width, this.height, mouseX, mouseY);
             }
         }
     }
@@ -74,7 +74,7 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
         }*/
 
         for(IPanel panel : panels) {
-            panel.mouseClicked(this.width, this.height, x, y, button);
+            panel.tryMouseClicked(this.width, this.height, x, y, button);
         }
     }
 
@@ -203,10 +203,14 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
 
         String str = text.toString();
         if (str.length() > 0) {
-            drawTooltip(str, mouseX, mouseY, 8, -8, true);
+            drawTooltipAtMouse(str, mouseX, mouseY);
         }
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float renderPartialTicksApparently) {}
+
+    public void drawTooltipAtMouse(String text, int mouseX, int mouseY) {
+        this.drawTooltip(text, mouseX, mouseY, 8, -8, true);
+    }
 }

@@ -1,5 +1,6 @@
 package levistico.bconstruct.mixin;
 
+import levistico.bconstruct.BConstruct;
 import levistico.bconstruct.gui.texture.TextureUtils;
 import net.minecraft.src.RenderEngine;
 
@@ -20,7 +21,7 @@ public abstract class MixinRenderEngine {
     private Map<String, Integer> textureMap = new HashMap<>();
 
     @Inject(method = "refreshTextures", at = @At("HEAD"))
-    private void binkers_initTextures(CallbackInfo ci) {
+    private void initTexturesHead(CallbackInfo ci) {
         TextureUtils.importGUITextures();
         TextureUtils.generateToolPartsTexture();
         TextureUtils.generateToolBitsTexture();
@@ -28,5 +29,8 @@ public abstract class MixinRenderEngine {
 //        BToolParts.InitializeToolParts(MOD_ID);
 //        BTools.InitializeTools(MOD_ID);
     }
-
+    @Inject(method = "refreshTextures", at = @At("TAIL"))
+    private void initTexturesTail(CallbackInfo ci) {
+        TextureUtils.initializeSlimeTextures();
+    }
 }

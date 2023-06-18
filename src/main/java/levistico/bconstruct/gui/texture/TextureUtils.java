@@ -50,8 +50,6 @@ public class TextureUtils {
 
     public static int GUI_ICONS_INDEX;
     public static int GUI_BASE_CRAFTING_INDEX;
-//    public static int GUI_INVENTORY_INDEX;
-
     public static int TOOL_PARTS_TEXTURE_INDEX;
     public static int TOOL_BITS_TEXTURE_INDEX;
 
@@ -224,8 +222,15 @@ public class TextureUtils {
             guiTexture.setRGB(tpsx, tpsy, resolution, resolution, baseImage.getRGB(0, 0, resolution, resolution, rgbArray, 0, resolution), 0, resolution);
             tool.baseTextureIndex = new Pair<>(tpx, tpy);
             guiCounter++;
+=======
+            String location = String.format("%s/slime_%d.png", baseFolder, i);
+            String name = String.format("/armor/slime_%d.png", i);
+            BufferedImage texture = Textures.readImage(TextureHandler.class.getResourceAsStream(location));
+            int j = mc.renderEngine.allocateAndSetupTexture(texture);
+            mc.renderEngine.getTextureMap().put(name, j);
+>>>>>>> origin/smeltery
         }
-    }*/
+    }
 
 /*
     public static List<Integer> generateEffects(String toolName) {

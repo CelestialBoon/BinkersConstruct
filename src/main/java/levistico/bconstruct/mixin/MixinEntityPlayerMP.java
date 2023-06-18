@@ -12,7 +12,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(value = EntityPlayerMP.class, remap = false)
-public class MixinEntityPlayerMP implements IBinkersEntityPlayerMP {
+public abstract class MixinEntityPlayerMP extends EntityPlayer implements ICrafting, IBinkersEntityPlayerMP {
+
+    private MixinEntityPlayerMP(World world) {
+        super(world);
+    }
 
     @Shadow
     private void getNextWindowId() {}
@@ -27,9 +31,9 @@ public class MixinEntityPlayerMP implements IBinkersEntityPlayerMP {
         NetServerHandler var10000 = this.playerNetServerHandler;
         NetServerHandler.logger.info(((EntityPlayerMP)(Object)this).username + " interacted with crafting table at (" + ((EntityPlayerMP)(Object)this).posX + ", " + ((EntityPlayerMP)(Object)this).posY + ", " + ((EntityPlayerMP)(Object)this).posZ + ")");
         this.playerNetServerHandler.sendPacket(new Packet100OpenWindow(this.currentWindowId, InventoryType.Crafting.ordinal(), tileEntity.inventoryCrafting.getInvName(), tileEntity.inventoryCrafting.getSizeInventory()));
-        ((EntityPlayerMP)(Object)this).craftingInventory = new ContainerCraftingStation(((EntityPlayerMP)(Object)this).inventory, tileEntity);
-        ((EntityPlayerMP)(Object)this).craftingInventory.windowId = this.currentWindowId;
-        ((EntityPlayerMP)(Object)this).craftingInventory.onContainerInit(((EntityPlayerMP)(Object)this));
+        this.craftingInventory = new ContainerCraftingStation(((EntityPlayerMP)(Object)this).inventory, tileEntity);
+        this.craftingInventory.windowId = this.currentWindowId;
+        this.craftingInventory.onContainerInit(((EntityPlayerMP)(Object)this));
     }
 
     @Override
@@ -38,9 +42,9 @@ public class MixinEntityPlayerMP implements IBinkersEntityPlayerMP {
         NetServerHandler var10000 = this.playerNetServerHandler;
         NetServerHandler.logger.info(((EntityPlayerMP)(Object)this).username + " interacted with part builder at (" + ((EntityPlayerMP)(Object)this).posX + ", " + ((EntityPlayerMP)(Object)this).posY + ", " + ((EntityPlayerMP)(Object)this).posZ + ")");
         this.playerNetServerHandler.sendPacket(new Packet100OpenWindow(this.currentWindowId, InventoryType.Crafting.ordinal(), tileEntity.inventoryCrafting.getInvName(), tileEntity.inventoryCrafting.getSizeInventory()));
-        ((EntityPlayerMP)(Object)this).craftingInventory = new ContainerPartBuilder(((EntityPlayerMP)(Object)this).inventory, tileEntity);
-        ((EntityPlayerMP)(Object)this).craftingInventory.windowId = this.currentWindowId;
-        ((EntityPlayerMP)(Object)this).craftingInventory.onContainerInit(((EntityPlayerMP)(Object)this));
+        this.craftingInventory = new ContainerPartBuilder(((EntityPlayerMP)(Object)this).inventory, tileEntity);
+        this.craftingInventory.windowId = this.currentWindowId;
+        this.craftingInventory.onContainerInit(((EntityPlayerMP)(Object)this));
     }
 
     @Override
@@ -49,8 +53,19 @@ public class MixinEntityPlayerMP implements IBinkersEntityPlayerMP {
         NetServerHandler var10000 = this.playerNetServerHandler;
         NetServerHandler.logger.info(((EntityPlayerMP)(Object)this).username + " interacted with tool builder at (" + ((EntityPlayerMP)(Object)this).posX + ", " + ((EntityPlayerMP)(Object)this).posY + ", " + ((EntityPlayerMP)(Object)this).posZ + ")");
         this.playerNetServerHandler.sendPacket(new Packet100OpenWindow(this.currentWindowId, InventoryType.Crafting.ordinal(), tileEntity.inventoryCrafting.getInvName(), tileEntity.inventoryCrafting.getSizeInventory()));
-        ((EntityPlayerMP)(Object)this).craftingInventory = new ContainerToolStation(((EntityPlayerMP)(Object)this).inventory, tileEntity);
-        ((EntityPlayerMP)(Object)this).craftingInventory.windowId = this.currentWindowId;
-        ((EntityPlayerMP)(Object)this).craftingInventory.onContainerInit(((EntityPlayerMP)(Object)this));
+        this.craftingInventory = new ContainerToolStation(((EntityPlayerMP)(Object)this).inventory, tileEntity);
+        this.craftingInventory.windowId = this.currentWindowId;
+        this.craftingInventory.onContainerInit(((EntityPlayerMP)(Object)this));
+    }
+
+    //TODO: Multiplayer
+    @Override
+    public void displayBinkersGuiScreen(GuiScreen guiScreen, Container container, IInventory tile, int x, int y, int z) {
+
+    }
+
+    @Override
+    public void displayBinkersGuiScreen(GuiScreen guiScreen, Container container, IInventory tile, ItemStack stack) {
+
     }
 }

@@ -1,6 +1,6 @@
-v0.0.4 (not complete)
+v0.0.4
 - GUI refactored
-	
+- Added slime boots and slimesling	
 
 v0.0.3
 - properties online
