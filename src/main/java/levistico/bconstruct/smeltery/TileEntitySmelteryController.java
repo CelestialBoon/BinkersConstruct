@@ -8,8 +8,10 @@ import net.minecraft.src.ItemStack;
 import sunsetsatellite.fluidapi.FluidRegistry;
 import sunsetsatellite.fluidapi.api.FluidStack;
 import sunsetsatellite.fluidapi.template.tiles.TileEntityMultiFluidTank;
+import sunsetsatellite.sunsetutils.util.BlockInstance;
 import sunsetsatellite.sunsetutils.util.Connection;
 import sunsetsatellite.sunsetutils.util.Direction;
+import sunsetsatellite.sunsetutils.util.Vec3i;
 import sunsetsatellite.sunsetutils.util.multiblocks.IMultiblock;
 import sunsetsatellite.sunsetutils.util.multiblocks.Multiblock;
 
@@ -24,6 +26,7 @@ public class TileEntitySmelteryController extends TileEntityMultiFluidTank imple
     public static final HashMap<ArrayList<FluidStack>,FluidStack> alloyRecipes = new HashMap<>();
     public static final HashMap<ItemStack,FluidStack> smeltingRecipes = new HashMap<>();
     public HashMap<Integer,Integer> progress = new HashMap<>(); //HashMap<SlotId,TicksCooking>
+    public boolean multiblockValid = false;
 
     public TileEntitySmelteryController(){
         multiblock = Multiblock.multiblocks.get("smeltery");
@@ -54,14 +57,22 @@ public class TileEntitySmelteryController extends TileEntityMultiFluidTank imple
 
     @Override
     public void updateEntity() {
-        /*if(fluidContents.isEmpty()){
-            fluidContents.add(new FluidStack((BlockFluid) BConstruct.moltenCopperFlowing,9072/4));
-            fluidContents.add(new FluidStack((BlockFluid) BConstruct.moltenTinFlowing,9072/4));
-        }*/
-        getTank();
-        processAlloys();
-        processSmeltables();
-        super.updateEntity();
+        //TODO: By god somebody optimize this later
+        if(getMultiblock().isValidAt(worldObj,new BlockInstance(this.getBlockType(),new Vec3i(xCoord,yCoord,zCoord),this),Direction.getDirectionFromSide(worldObj.getBlockMetadata(xCoord,yCoord,zCoord)))) {
+            multiblockValid = true;
+        } else {
+            multiblockValid = false;
+        }
+        if(multiblockValid){
+            if(fluidContents.isEmpty()){
+                fluidContents.add(new FluidStack((BlockFluid) BConstruct.moltenCopperFlowing,9072/4));
+                fluidContents.add(new FluidStack((BlockFluid) BConstruct.moltenTinFlowing,9072/4));
+            }
+            getTank();
+            processAlloys();
+            processSmeltables();
+            super.updateEntity();
+        }
     }
 
     @Override

@@ -40,6 +40,7 @@ tile.bconstruct.searedBricks.name = Seared Bricks
 tile.bconstruct.smelteryController.name = Smeltery Controller
 tile.bconstruct.smelteryDrain.name = Smeltery Drain
 tile.bconstruct.searedTank.name = Seared Tank
+tile.bconstruct.castingBasin.name = Casting Basin
 
 tile.bconstruct.moltenMetalFlowing.name=Flowing Molten Metal
 tile.bconstruct.moltenMetalFlowing.desc=An unknown molten metal.

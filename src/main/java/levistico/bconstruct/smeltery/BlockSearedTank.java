@@ -34,4 +34,9 @@ public class BlockSearedTank extends BlockContainer {
             return true;
         }
     }
+
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
 }

@@ -22,7 +22,7 @@ public class TileEntitySearedTank extends TileEntityFluidTank {
 
     @Override
     public String getInvName() {
-        return "Fluid Tank";
+        return "Seared Tank";
     }
 
 }

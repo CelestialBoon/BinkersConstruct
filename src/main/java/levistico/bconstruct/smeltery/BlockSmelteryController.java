@@ -28,12 +28,8 @@ public class BlockSmelteryController extends BlockContainerRotatable {
         {
             TileEntitySmelteryController tile = (TileEntitySmelteryController) world.getBlockTileEntity(i, j, k);
             if(tile != null) {
-                //turbo dirty hack until it's fixed lmaoooo
-                world.setBlockAndMetadata(i-1,j,k,this.blockID,0);
-                world.setBlockMetadata(i-1,j,k,world.getBlockMetadata(i,j,k));
                 //TODO: Fix multiblock validation
-                if(tile.getMultiblock().isValidAt(world,new BlockInstance(this,new Vec3i(i,j,k),tile), Direction.Z_POS)){
-                    world.setBlockAndMetadata(i-1,j,k,0,0);
+                if(tile.getMultiblock().isValidAt(world,new BlockInstance(this,new Vec3i(i,j,k),tile),Direction.getDirectionFromSide(world.getBlockMetadata(i,j,k)))){
                     BConstruct.displayGui(entityplayer,new GUISmelteryController(entityplayer.inventory, tile),new ContainerSmeltery(entityplayer.inventory,tile),tile,i,j,k);
                 }
             }

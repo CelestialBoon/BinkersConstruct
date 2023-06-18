@@ -25,6 +25,7 @@ import sunsetsatellite.fluidapi.FluidAPI;
 import sunsetsatellite.fluidapi.FluidRegistry;
 import sunsetsatellite.fluidapi.render.RenderFluidInBlock;
 import sunsetsatellite.fluidapi.template.gui.GuiFluidTank;
+import sunsetsatellite.fluidapi.template.tiles.TileEntityFluidTank;
 import sunsetsatellite.sunsetutils.util.NBTEditCommand;
 import sunsetsatellite.sunsetutils.util.multiblocks.Multiblock;
 import sunsetsatellite.sunsetutils.util.multiblocks.RenderMultiblock;
@@ -66,8 +67,9 @@ public final class BConstruct implements ModInitializer {
 //    public static final Block searedBricks = BlockHelper.createBlock(MOD_ID, new Block(blockIdInc++), "searedBricks", "searedBricks.png", 0.1f, 0.1f, 0.0f)
     public static final Block searedBricks = BlockHelper.createBlock(MOD_ID, new Block(blockIdInc++,Material.rock), "searedBricks", "searedbrick.png", Block.soundStoneFootstep ,2.5f, 15f, 0.0f);
     public static final Block smelteryController = BlockHelper.createBlock(MOD_ID,new BlockSmelteryController(blockIdInc++), "smelteryController", "searedbrick.png","searedbrick.png","smeltery_inactive.png","searedbrick.png","searedbrick.png","searedbrick.png", Block.soundStoneFootstep,2.5f,15f,0.0f);
-    public static final Block smelteryDrain = BlockHelper.createBlock(MOD_ID,new Block(blockIdInc++,Material.rock), "smelteryDrain", "drain_side.png","drain_side.png","drain_out.png","drain_side.png","drain_basin.png","drain_side.png", Block.soundStoneFootstep,2.5f,15f,0.0f);
+    public static final Block smelteryDrain = BlockHelper.createBlock(MOD_ID,new BlockSmelteryDrain(blockIdInc++,Material.rock), "smelteryDrain", "drain_side.png","drain_side.png","drain_out.png","drain_side.png","drain_basin.png","drain_side.png", Block.soundStoneFootstep,2.5f,15f,0.0f);
     public static final Block searedTank = BlockHelper.createBlock(MOD_ID,new BlockSearedTank(blockIdInc++,Material.rock), "searedTank", "seared_tank_top.png","seared_tank_side.png","seared_tank_side.png","seared_tank_side.png","seared_tank_side.png","seared_tank_side.png", Block.soundStoneFootstep,2.5f,15f,0.0f);
+    public static final Block castingBasin = BlockHelper.createBlock(MOD_ID,new BlockCastingBasin(blockIdInc++,Material.rock), "castingBasin", "blockcast_top.png","blockcast_bottom.png","blockcast_side.png","blockcast_side.png","blockcast_side.png","blockcast_side.png", Block.soundStoneFootstep,2.5f,15f,0.0f);
 
     public static final int[] moltenMetalTex = FluidAPI.registerFluidTexture(MOD_ID,"molten_metal.png");
     public static final Block moltenMetalFlowing = BlockHelper.createBlock(MOD_ID,new BlockMoltenMetalFlowing(blockIdInc++,Material.lava,0xFFFFFFFF),"moltenMetalFlowing","molten_metal.png",Block.soundPowderFootstep,1.0f,1.0f,0).setNotInCreativeMenu().setPlaceOverwrites().setTexCoords(moltenMetalTex[0], moltenMetalTex[1], moltenMetalTex[2], moltenMetalTex[3], moltenMetalTex[4], moltenMetalTex[5], moltenMetalTex[6], moltenMetalTex[7], moltenMetalTex[8], moltenMetalTex[9], moltenMetalTex[10], moltenMetalTex[11]);
@@ -111,6 +113,7 @@ public final class BConstruct implements ModInitializer {
 
         EntityHelper.createTileEntity(CraftingTileEntity.class,"Crafting Table");
         EntityHelper.createSpecialTileEntity(TileEntitySmelteryController.class, new RenderSmeltery(),"Smeltery");
+        EntityHelper.createSpecialTileEntity(TileEntityCastingBasin.class, new RenderCastingBasin(),"Casting Basin");
         addToNameGuiMap("Smeltery", GUISmelteryController.class, TileEntitySmelteryController.class);
         EntityHelper.createSpecialTileEntity(TileEntitySearedTank.class,new RenderFluidInBlock(),"Seared Tank");
         addToNameGuiMap("Seared Tank", GuiFluidTank.class, TileEntitySearedTank.class);

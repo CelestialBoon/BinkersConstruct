@@ -29,11 +29,11 @@ public class GUISmelteryController extends GuiMultiFluidTank {
         int j = (this.width - this.xSize) / 2;
         int k = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(j, k, 0, 0, this.xSize, this.ySize);
-        this.drawFluidTank(j + 90, k + 15, 54, 55);
+        this.drawFluidTank(j + 90, k + 16, 54, 54);
         TileEntitySmelteryController smeltery = (TileEntitySmelteryController) tile;
         if(smeltery.tank != null){
             FluidStack fluidStack = smeltery.tank.fluidContents[0];
-            if (fluidStack.liquid != null) {
+            if (fluidStack != null && fluidStack.liquid != null) {
                 BlockFluid fluid = fluidStack.liquid;
                 int fluidBarSize = (int) FluidAPI.map(fluidStack.amount,0,smeltery.tank.fluidCapacity[0],2,54-2);
                 RenderFluid.drawFluidIntoGui(fontRenderer, this.mc.renderEngine, fluid.blockID, 0, fluid.getBlockTextureFromSide(0), j+153, k+15+55-fluidBarSize-2, 14-2, fluidBarSize);
