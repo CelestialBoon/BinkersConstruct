@@ -3,7 +3,9 @@ package levistico.bconstruct.recipes;
 import levistico.bconstruct.materials.BToolMaterial;
 import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.tools.BTool;
+import levistico.bconstruct.tools.ToolStack;
 import levistico.bconstruct.utils.Pair;
+import levistico.bconstruct.utils.Utils;
 import net.minecraft.src.InventoryCrafting;
 import net.minecraft.src.ItemStack;
 
@@ -16,7 +18,7 @@ public final class RecipeReplaceToolPart extends BRecipe {
         ItemStack toolStack = null;
         ItemStack partStack = null;
         Pair<Boolean, ItemStack> falseresult = new Pair<>(false, null);
-        for(int i = 0; i < inv.getSizeInventory(); i++) {
+        for(Integer i : Utils.range(0, inv.getSizeInventory())) {
             ItemStack stack = inv.getStackInSlot(i);
             if(stack == null) continue;
             else if(stack.getItem() instanceof BTool) {
@@ -31,14 +33,14 @@ public final class RecipeReplaceToolPart extends BRecipe {
         BTool tool = (BTool) toolStack.getItem();
         BToolPart part = (BToolPart) partStack.getItem();
 
-        for(int i =0; i < tool.composition.size(); i++) {
-            if(part.eToolPart == tool.composition.get(i)) { //that is the part to replace
-                BToolMaterial[] materials = BTool.getMaterials(toolStack);
+        for(Integer i : Utils.range(0, tool.composition.size())) {
+            if(part.eToolPart == tool.composition.get(i).eToolPart) { //that is the part to replace, this is where it is determined
+                BToolMaterial[] materials = ToolStack.getMaterials(toolStack);
                 BToolMaterial newMaterial = BToolPart.getToolMaterial(partStack);
                 materials [i] = newMaterial;
                 ItemStack resultStack = new ItemStack(tool);
-                tool.constructBaseTags(resultStack.tag, Arrays.stream(materials).collect(Collectors.toList()));
-                BTool.repairTool(newMaterial.getDurability(), resultStack);
+                tool.initializeTags(resultStack.tag, Arrays.stream(materials).collect(Collectors.toList()));
+                ToolStack.repairTool(newMaterial.getDurability(), resultStack);
                 return new Pair<>(true, resultStack);
             }
         }
@@ -47,7 +49,7 @@ public final class RecipeReplaceToolPart extends BRecipe {
 
     @Override
     public ItemStack[] onCraftResult(InventoryCrafting inv) {
-        for(int i = 0; i < inv.getSizeInventory(); i++) {
+        for(Integer i : Utils.range(0, inv.getSizeInventory())) {
             ItemStack stack = inv.getStackInSlot(i);
             if(stack == null) continue;
             if(stack.getItem() instanceof BTool) {

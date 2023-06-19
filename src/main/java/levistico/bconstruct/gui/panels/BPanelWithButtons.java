@@ -38,7 +38,7 @@ public abstract class BPanelWithButtons extends BasePanel {
         }
     }
 
-    public void drawTooltip(int topX, int topY, int relativeMouseX, int relativeMouseY) {
+    public void drawTooltip(int topX, int topY, int mouseX, int mouseY, int relativeMouseX, int relativeMouseY) {
         buttons.stream().filter(b -> b.isHovered(relativeMouseX, relativeMouseY)).findAny().ifPresent(b -> {
             if(! Utils.isStringEmpty(b.displayString))
                 guiContainer.drawTooltip(b.displayString, topX, topY, 0, -15, false);

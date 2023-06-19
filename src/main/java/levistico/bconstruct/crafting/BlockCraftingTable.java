@@ -1,5 +1,6 @@
 package levistico.bconstruct.crafting;
 
+import levistico.bconstruct.utils.Utils;
 import net.minecraft.src.*;
 
 import java.util.Random;
@@ -27,7 +28,7 @@ public abstract class BlockCraftingTable extends BlockContainer {
     public void onBlockRemoval(World world, int i, int j, int k) {
         CraftingTileEntity tileentitycrafting = (CraftingTileEntity) world.getBlockTileEntity(i, j, k);
 
-        for(int l = 0; l < tileentitycrafting.inventoryCrafting.getSizeInventory(); ++l) {
+        for(Integer l : Utils.range(0, tileentitycrafting.inventoryCrafting.getSizeInventory())) {
             ItemStack itemstack = tileentitycrafting.inventoryCrafting.getStackInSlot(l);
             if (itemstack != null) {
                 float f = this.random.nextFloat() * 0.8F + 0.1F;
@@ -41,11 +42,11 @@ public abstract class BlockCraftingTable extends BlockContainer {
                     }
 
                     itemstack.stackSize -= i1;
-                    EntityItem entityitem = new EntityItem(world, (double)((float)i + f), (double)((float)j + f1), (double)((float)k + f2), new ItemStack(itemstack.itemID, i1, itemstack.getMetadata()));
+                    EntityItem entityitem = new EntityItem(world, ((float)i + f), ((float)j + f1), ((float)k + f2), new ItemStack(itemstack.itemID, i1, itemstack.getMetadata()));
                     float f3 = 0.05F;
-                    entityitem.motionX = (double)((float)this.random.nextGaussian() * f3);
-                    entityitem.motionY = (double)((float)this.random.nextGaussian() * f3 + 0.2F);
-                    entityitem.motionZ = (double)((float)this.random.nextGaussian() * f3);
+                    entityitem.motionX = ((float)this.random.nextGaussian() * f3);
+                    entityitem.motionY = ((float)this.random.nextGaussian() * f3 + 0.2F);
+                    entityitem.motionZ = ((float)this.random.nextGaussian() * f3);
                     world.entityJoinedWorld(entityitem);
                 }
             }

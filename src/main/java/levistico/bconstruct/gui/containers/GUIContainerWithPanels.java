@@ -2,7 +2,7 @@ package levistico.bconstruct.gui.containers;
 
 import levistico.bconstruct.BConstruct;
 import levistico.bconstruct.crafting.BContainer;
-import levistico.bconstruct.gui.BSlotActivatable;
+import levistico.bconstruct.gui.BSlotCustomizable;
 import levistico.bconstruct.gui.GUIUtils;
 import levistico.bconstruct.gui.panels.IPanel;
 import levistico.bconstruct.parts.BToolPart;
@@ -43,8 +43,10 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
         InventoryPlayer inventoryplayer = this.mc.thePlayer.inventory;
         if (inventoryplayer.getHeldItemStack() != null) {
             GL11.glEnable(GUIUtils.GL_BLOCK_ITEM_MAGIC_NUMBER);
+            GL11.glTranslatef(0.0f, 0.0f, 32.0f);
             itemRenderer.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, inventoryplayer.getHeldItemStack(), mouseX - 8, mouseY - 8, 1.0F);
             itemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, inventoryplayer.getHeldItemStack(), mouseX - 8, mouseY - 8, 1.0F);
+            GL11.glTranslatef(0.0f, 0.0f, -32.0f);
             GL11.glDisable(GUIUtils.GL_BLOCK_ITEM_MAGIC_NUMBER);
         }
         GL11.glDisable(GL_LIGHTING);
@@ -103,9 +105,11 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
         int i = slot.xDisplayPosition;
         int j = slot.yDisplayPosition;
         mc.renderEngine.bindTexture(TextureUtils.GUI_ICONS_INDEX);
-        if(slot instanceof BSlotActivatable) { //draw slot square
+        if(slot instanceof BSlotCustomizable) { //draw slot square
+            BSlotCustomizable bslot = (BSlotCustomizable) slot;
             GUIUtils.drawLargeGUITexture(i - 1, j - 1, 8, 12, this.zLevel);
             //TODO more personalized slot drawings go here
+            if(bslot.textureUV != null && bslot.getStack() == null) GUIUtils.drawLargeGUITexture(i-1, j-1, bslot.textureUV.first, bslot.textureUV.second, this.zLevel);
         }
         if (isMouseOver) {
             GL11.glDisable(GL_LIGHTING);

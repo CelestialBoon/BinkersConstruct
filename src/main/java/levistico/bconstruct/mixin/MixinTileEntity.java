@@ -13,5 +13,4 @@ public class MixinTileEntity {
     static {
         addMapping(CraftingTileEntity.class, "Crafting Table");
     }
-
 }

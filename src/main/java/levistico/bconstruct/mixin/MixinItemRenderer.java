@@ -6,6 +6,7 @@ import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.gui.texture.TextureUtils;
 import levistico.bconstruct.gui.texture.ITexturedPart;
 import levistico.bconstruct.tools.BTool;
+import levistico.bconstruct.tools.ToolStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.*;
 import org.lwjgl.opengl.GL11;
@@ -21,7 +22,7 @@ public class MixinItemRenderer {
     @Shadow
     private Minecraft mc;
     @Inject(method = "renderItem(Lnet/minecraft/src/Entity;Lnet/minecraft/src/ItemStack;Z)V", cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD, at = @At("HEAD"))
-    private void renderInjection(Entity entity, ItemStack itemstack, boolean handheldTransform, CallbackInfo ci) {
+    private void bconsctruct_renderInject(Entity entity, ItemStack itemstack, boolean handheldTransform, CallbackInfo ci) {
         if(!(itemstack.getItem() instanceof BToolPart || itemstack.getItem() instanceof BTool)) {
             return;
         }
@@ -54,8 +55,8 @@ public class MixinItemRenderer {
         } else {
             GL11.glBindTexture(3553, TextureUtils.TOOL_BITS_TEXTURE_INDEX);
             BTool tool = (BTool) itemstack.getItem();
-            boolean broken = BTool.isToolBroken(itemstack);
-            BToolMaterial[] materials = BTool.getMaterials(itemstack);
+            boolean broken = ToolStack.isToolBroken(itemstack);
+            BToolMaterial[] materials = ToolStack.getMaterials(itemstack);
             for(Integer npart : tool.renderOrder) {
                 ITexturedPart part = tool.texturedParts.get(npart);
                 int ti = part.getIconIndex(materials[npart].eNumber, broken);
@@ -86,17 +87,17 @@ public class MixinItemRenderer {
         thickness = 0.0625F;
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, 0.0F, 1.0F);
-        tessellator.addVertexWithUV(0.0, 0.0, 0.0, (double)f1, (double)f3);
-        tessellator.addVertexWithUV((double)f4, 0.0, 0.0, (double)f, (double)f3);
-        tessellator.addVertexWithUV((double)f4, 1.0, 0.0, (double)f, (double)f2);
-        tessellator.addVertexWithUV(0.0, 1.0, 0.0, (double)f1, (double)f2);
+        tessellator.addVertexWithUV(0.0, 0.0, 0.0, f1, f3);
+        tessellator.addVertexWithUV(f4, 0.0, 0.0, f, f3);
+        tessellator.addVertexWithUV(f4, 1.0, 0.0, f, f2);
+        tessellator.addVertexWithUV(0.0, 1.0, 0.0, f1, f2);
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, 0.0F, -1.0F);
-        tessellator.addVertexWithUV(0.0, 1.0, (double)(0.0F - thickness), (double)f1, (double)f2);
-        tessellator.addVertexWithUV((double)f4, 1.0, (double)(0.0F - thickness), (double)f, (double)f2);
-        tessellator.addVertexWithUV((double)f4, 0.0, (double)(0.0F - thickness), (double)f, (double)f3);
-        tessellator.addVertexWithUV(0.0, 0.0, (double)(0.0F - thickness), (double)f1, (double)f3);
+        tessellator.addVertexWithUV(0.0, 1.0, (0.0F - thickness), f1, f2);
+        tessellator.addVertexWithUV(f4, 1.0, (0.0F - thickness), f, f2);
+        tessellator.addVertexWithUV(f4, 0.0, (0.0F - thickness), f, f3);
+        tessellator.addVertexWithUV(0.0, 0.0, (0.0F - thickness), f1, f3);
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(-1.0F, 0.0F, 0.0F);
@@ -109,10 +110,10 @@ public class MixinItemRenderer {
             f12 = (float)i1 / (float)tileWidth;
             f16 = f1 + (f - f1) * f12 - foon;
             f20 = f4 * f12;
-            tessellator.addVertexWithUV((double)f20, 0.0, (double)(0.0F - thickness), (double)f16, (double)f3);
-            tessellator.addVertexWithUV((double)f20, 0.0, 0.0, (double)f16, (double)f3);
-            tessellator.addVertexWithUV((double)f20, 1.0, 0.0, (double)f16, (double)f2);
-            tessellator.addVertexWithUV((double)f20, 1.0, (double)(0.0F - thickness), (double)f16, (double)f2);
+            tessellator.addVertexWithUV(f20, 0.0, (0.0F - thickness), f16, f3);
+            tessellator.addVertexWithUV(f20, 0.0, 0.0, f16, f3);
+            tessellator.addVertexWithUV(f20, 1.0, 0.0, f16, f2);
+            tessellator.addVertexWithUV(f20, 1.0, (0.0F - thickness), f16, f2);
         }
 
         tessellator.draw();
@@ -123,10 +124,10 @@ public class MixinItemRenderer {
             f12 = (float)i1 / (float)tileWidth;
             f16 = f1 + (f - f1) * f12 - foon;
             f20 = f4 * f12 + goon;
-            tessellator.addVertexWithUV((double)f20, 1.0, (double)(0.0F - thickness), (double)f16, (double)f2);
-            tessellator.addVertexWithUV((double)f20, 1.0, 0.0, (double)f16, (double)f2);
-            tessellator.addVertexWithUV((double)f20, 0.0, 0.0, (double)f16, (double)f3);
-            tessellator.addVertexWithUV((double)f20, 0.0, (double)(0.0F - thickness), (double)f16, (double)f3);
+            tessellator.addVertexWithUV(f20, 1.0, (0.0F - thickness), f16, f2);
+            tessellator.addVertexWithUV(f20, 1.0, 0.0, f16, f2);
+            tessellator.addVertexWithUV(f20, 0.0, 0.0, f16, f3);
+            tessellator.addVertexWithUV(f20, 0.0, (0.0F - thickness), f16, f3);
         }
 
         tessellator.draw();
@@ -137,10 +138,10 @@ public class MixinItemRenderer {
             f12 = (float)i1 / (float)tileWidth;
             f16 = f3 + (f2 - f3) * f12 - foon;
             f20 = f4 * f12 + goon;
-            tessellator.addVertexWithUV(0.0, (double)f20, 0.0, (double)f1, (double)f16);
-            tessellator.addVertexWithUV((double)f4, (double)f20, 0.0, (double)f, (double)f16);
-            tessellator.addVertexWithUV((double)f4, (double)f20, (double)(0.0F - thickness), (double)f, (double)f16);
-            tessellator.addVertexWithUV(0.0, (double)f20, (double)(0.0F - thickness), (double)f1, (double)f16);
+            tessellator.addVertexWithUV(0.0, f20, 0.0, f1, f16);
+            tessellator.addVertexWithUV(f4, f20, 0.0, f, f16);
+            tessellator.addVertexWithUV(f4, f20, (0.0F - thickness), f, f16);
+            tessellator.addVertexWithUV(0.0, f20, (0.0F - thickness), f1, f16);
         }
 
         tessellator.draw();
@@ -151,10 +152,10 @@ public class MixinItemRenderer {
             f12 = (float)i1 / (float)tileWidth;
             f16 = f3 + (f2 - f3) * f12 - foon;
             f20 = f4 * f12;
-            tessellator.addVertexWithUV((double)f4, (double)f20, 0.0, (double)f, (double)f16);
-            tessellator.addVertexWithUV(0.0, (double)f20, 0.0, (double)f1, (double)f16);
-            tessellator.addVertexWithUV(0.0, (double)f20, (double)(0.0F - thickness), (double)f1, (double)f16);
-            tessellator.addVertexWithUV((double)f4, (double)f20, (double)(0.0F - thickness), (double)f, (double)f16);
+            tessellator.addVertexWithUV(f4, f20, 0.0, f, f16);
+            tessellator.addVertexWithUV(0.0, f20, 0.0, f1, f16);
+            tessellator.addVertexWithUV(0.0, f20, (0.0F - thickness), f1, f16);
+            tessellator.addVertexWithUV(f4, f20, (0.0F - thickness), f, f16);
         }
         tessellator.draw();
     }
