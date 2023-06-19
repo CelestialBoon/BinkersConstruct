@@ -11,7 +11,6 @@ import levistico.bconstruct.tools.BTool;
 import levistico.bconstruct.tools.BTools;
 import levistico.bconstruct.tools.EToolBit;
 import levistico.bconstruct.utils.Utils;
-import net.minecraft.src.GLAllocation;
 import net.minecraft.src.TextureFX;
 import net.minecraft.src.helper.Color;
 import net.minecraft.src.helper.Textures;
@@ -83,7 +82,7 @@ public class TextureUtils {
         int texi = 0;
         Color bColor = new Color();
         List<Integer> iconIndexList = new ArrayList<>();
-        for(int tpi = 0; tpi < tplen; tpi++) {
+        for(Integer tpi : Utils.range(0, tplen)) {
             String path = String.format("%s/toolpart/%s.png", baseFolder, BToolParts.baseTextureArray.get(tpi));
             BufferedImage baseImage = Textures.readImage(TextureHandler.class.getResourceAsStream(path));
 
@@ -96,7 +95,7 @@ public class TextureUtils {
 //            BToolParts.partArray[tpi].baseTextureUV = new Pair<>(tpx, tpy);
 //            guiCounter++;
 
-            for (BToolMaterial mat : BToolMaterials.matArray) {
+            for (BToolMaterial mat : BToolMaterials.matList) {
                 int ix = texi % TEXTURE_ATLAS_WIDTH_TILES;
                 int iy = texi / TEXTURE_ATLAS_WIDTH_TILES;
                 int sx = ix * resolution;
@@ -119,7 +118,7 @@ public class TextureUtils {
                 iconIndexList.add(texi);
                 texi++;
             }
-            BToolParts.partArray.get(tpi).texturedPart = new TexturedToolPart(iconIndexList);
+            BToolParts.partList.get(tpi).texturedPart = new TexturedToolPart(iconIndexList);
             iconIndexList = new ArrayList<>();
         }
 
@@ -144,10 +143,10 @@ public class TextureUtils {
 
         int texi = 0;
         Color bColor = new Color();
-        for(int tpi = 0; tpi < tblen; tpi++) {
+        for(Integer tpi : Utils.range(0, tblen)) {
             String textureSource = String.format("%s/tool/%s.png",baseFolder, bitsLocation.get(tpi));
             BufferedImage baseImage = Textures.readImage(TextureHandler.class.getResourceAsStream(textureSource));
-            for (BToolMaterial mat : BToolMaterials.matArray) {
+            for (BToolMaterial mat : BToolMaterials.matList) {
                 int ix = texi % TEXTURE_ATLAS_WIDTH_TILES;
                 int iy = texi / TEXTURE_ATLAS_WIDTH_TILES;
                 int sx = ix * resolution;
@@ -224,9 +223,16 @@ public class TextureUtils {
         Utils.setAt(bitsLocation, EToolBit.Mattock_FrontHead.ordinal(), "mattock/front_head");
         Utils.setAt(bitsLocation, EToolBit.Mattock_FrontHead_Broken.ordinal(), "mattock/front_head_broken");
 
+        Utils.setAt(bitsLocation, EToolBit.Pickadze_FrontHead.ordinal(), "pickadze/front_head");
+        Utils.setAt(bitsLocation, EToolBit.Pickadze_FrontHead_Broken.ordinal(), "mattock/front_head_broken");
+
         Utils.setAt(bitsLocation, EToolBit.Pickaxe_Binding.ordinal(), "pickaxe/binding");
         Utils.setAt(bitsLocation, EToolBit.Pickaxe_Head.ordinal(), "pickaxe/head");
         Utils.setAt(bitsLocation, EToolBit.Pickaxe_Head_Broken.ordinal(), "pickaxe/head_broken");
+
+        Utils.setAt(bitsLocation, EToolBit.Kama_Binding.ordinal(), "kama/binding");
+        Utils.setAt(bitsLocation, EToolBit.Kama_Head.ordinal(), "kama/head");
+        Utils.setAt(bitsLocation, EToolBit.Kama_Head_Broken.ordinal(), "kama/head_broken");
 
         Utils.setAt(bitsLocation, EToolBit.Broadsword_Blade.ordinal(), "sword/blade");
         Utils.setAt(bitsLocation, EToolBit.Broadsword_Blade_Broken.ordinal(), "sword/blade_broken");

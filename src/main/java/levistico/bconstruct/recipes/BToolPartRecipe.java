@@ -18,7 +18,7 @@ public class BToolPartRecipe extends BRecipe {
         BToolPart partResult = (BToolPart) result;
         boolean hasPattern = !partResult.isNeedsPattern || (inv.getStackInSlot(0) != null && inv.getStackInSlot(0).getItem() == BConstruct.blankPattern);
         Pair<Boolean, BToolMaterial> resultMaterial = BToolMaterials.tryIsEnoughMaterial(inv.getStackInSlot(1), partResult);
-        if(resultMaterial.first && hasPattern && (resultMaterial.second.partsFlag & partResult.partFlag) == partResult.partFlag) {
+        if(resultMaterial.first && hasPattern && (resultMaterial.second.possiblePartsFlag & partResult.partFlag) > 0) {
             ItemStack resultStack = new ItemStack(partResult);
             partResult.setToolMaterial(resultStack, resultMaterial.second);
             return new Pair<>(true, resultStack);

@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = InventoryPlayer.class, remap = false)
 public abstract class MixinInventoryPlayer {
     @Inject(method = "canHarvestBlock", at = @At("HEAD"), remap = false, cancellable = true)
-    void canHarvestBlock(Block block, CallbackInfoReturnable<Boolean> cir) {
+    void bconsctruct_canHarvestBlockInject(Block block, CallbackInfoReturnable<Boolean> cir) {
         if(block == null) cir.setReturnValue(false);
     }
 }

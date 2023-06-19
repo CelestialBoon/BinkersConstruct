@@ -13,7 +13,7 @@ public class MixinEntity {
     @Shadow public double motionY;
     @Shadow public boolean onGround;
     @Redirect(method = "moveEntity (DDD)V", at = @At(value = "FIELD", target = "Lnet/minecraft/src/Entity;motionY:D", opcode = Opcodes.PUTFIELD, ordinal = 1))
-    private void moveInject(Entity instance, double value) {
+    private void bconsctruct_moveInject(Entity instance, double value) {
         if(!instance.onGround || instance.motionY < 0) instance.motionY = 0;
     }
 }

@@ -1,13 +1,18 @@
 package levistico.bconstruct.tools;
 
+import levistico.bconstruct.BConstruct;
 import levistico.bconstruct.materials.BToolMaterial;
-import levistico.bconstruct.materials.BToolMaterials;
-import levistico.bconstruct.mixin.AccessorNBTTagCompound;
+import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.parts.BToolParts;
 import levistico.bconstruct.parts.EToolPart;
-import levistico.bconstruct.parts.PartFlags;
-import levistico.bconstruct.properties.Properties;
+import levistico.bconstruct.parts.PartsFlag;
+import levistico.bconstruct.tools.properties.*;
 import levistico.bconstruct.gui.texture.ITexturedPart;
+import levistico.bconstruct.tools.actions.*;
+import levistico.bconstruct.tools.properties.Properties;
+import levistico.bconstruct.tools.stats.EToolStat;
+import levistico.bconstruct.tools.stats.StatBoosts;
+import levistico.bconstruct.utils.IHasTranslateKey;
 import levistico.bconstruct.utils.Pair;
 import levistico.bconstruct.utils.Utils;
 import net.minecraft.src.*;
@@ -18,56 +23,92 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static levistico.bconstruct.tools.ToolStack.*;
+
 // what should this class contain? what is common between tinkers tools?
 // the integer/used/broken mechanic
 // the repair-ability (for now at least)
 
 //TODO tool should be stressed more for improper actions (eg. hitting mobs with pickaxe)
 
-public abstract class BTool extends Item {
+public abstract class BTool extends Item implements IHasTranslateKey {
 
-    public static final String MATERIALS = "bic_materials";
-    public static final String BASE_STATS = "bic_base";
-    public static final String UPGRADES = "bic_upgrades";
-    public static final String TOTAL_STATS = "bic_total";
-    public static final String PROPERTIES = "properties";
+    /*
+    BTOOL REWORK
+    what a tool has:
 
-    public static final String MOBDAMAGE = "mobdamage";
-    public static final String EFFICIENCY = "efficiency";
-    public static final String MININGLEVEL = "mininglevel";
-    public static final String DURABILITY = "durability";
+    FIXED
+    multipliers
+    base bonuses
+    tool properties
+    base actions
+    part composition
+    part bits and render order
 
-    public static final String EXPERIENCE = "experience";
-    public static final String LEVEL = "level";
-    public static final String BROKEN = "broken";
+    ONBUILD
+    materials
+    base stats derived from materials + multipliers
+    material properties
 
-    public static final String IS_CUSTOM_NAME = "iscustomname";
-    public static final String NAME = "name";
+    VARIABLE
+    extra properties
+    total stats
 
-    public final String toolName;
-    public final String toolFolder;
-    private final Material[] materialsEffectiveAgainst;
-    public final float baseDurabilityMultiplier = 1;
-    public final float baseEfficiencyMultiplier = 1;
-    public final int baseDamageBonus = 2;
-    public final int baseDamageMultiplier = 1;
-    public final int baseLevelExp = 1;
-    public final Pair<Integer, Integer> baseTextureUV;
-    public final List<EToolPart> composition = new ArrayList<>();
+    MIXED
+    left click actions
+    right click actions
+     */
+
+    public final String translationKey;
+    public final String name;
+    public int baseDamageBonus = 2;
+    public float durabilityMultiplier = 1f;
+    public float attackDamageMultiplier = 1f;
+    public float miningSpeedMultiplier = 1f;
+    public float attackSpeedMultiplier = 1f;
+    public float expMultiplier = 1f;
+    public static final int baseLevelExp = 10;
+
+    public HarvestAction harvestAction = ToolActions.mine;
+    public AttackAction attackAction = ToolActions.attack;
+    final HarvestLogic harvestLogic;
+    public final boolean isWarTool;
+    ArrayList<Property> baseToolProperties = new ArrayList<>();
+    ArrayList<ToolAction> baseActions = new ArrayList<>();
+    ArrayList<RightClickAction> baseRightClickActions = new ArrayList<>();
+
+    public final Pair<Integer, Integer> baseTextureUV; //this is for the base tool representation in the tool builders
+    public final List<BToolPart> composition = new ArrayList<>();
     public final List<ITexturedPart> texturedParts = new ArrayList<>();
     public final List<Integer> renderOrder = new ArrayList<>();
+    public Pair<Integer, Integer>[] slotArrangement;
 
-    protected BTool(int id, String toolName, String toolFolder, Material[] materialsEffectiveAgainst, Pair<Integer, Integer> baseTextureUV) {
+    protected BTool(int id, String name, HarvestLogic harvestLogic, Boolean isWarTool, Pair<Integer, Integer> baseTextureUV) {
         super(id);
-        this.toolName = toolName;
-        this.toolFolder = toolFolder;
-        this.materialsEffectiveAgainst = materialsEffectiveAgainst;
+        this.name = name;
+        this.translationKey = String.format("item.%s.%s", BConstruct.MOD_ID, name);
+        this.harvestLogic = harvestLogic;
+        this.isWarTool = isWarTool;
         this.baseTextureUV = baseTextureUV;
         this.maxStackSize = 1;
         this.setMaxDamage(1); //this is to enable the damage bar
         this.notInCreativeMenu = true;
     }
 
+    //////////////////////////////// SETTERS ///////////////////////////////////
+    public BTool addBaseToolProperty(Property property) {baseToolProperties.add(property); return this;}
+    public BTool addBaseAction(ToolAction action) {baseActions.add(action); return this;}
+    public BTool addBaseRightClickAction(RightClickAction action) {baseRightClickActions.add(action); return this;}
+    public BTool setBaseDamageBonus(int value) {this.baseDamageBonus = value; return this;}
+    public BTool setDurabilityMultiplier(float value) {this.durabilityMultiplier = value; return this;}
+    public BTool setAttackDamageMultiplier(float value) {this.attackDamageMultiplier = value; return this;}
+    public BTool setMiningSpeedMultiplier(float value) {this.miningSpeedMultiplier = value; return this;}
+    public BTool setAttackSpeedMultiplier(float value) {this.attackSpeedMultiplier = value; return this;}
+    public BTool setExpMultiplier(float value) {this.expMultiplier = value; return this;}
+    public BTool setharvestAction(HarvestAction value) {this.harvestAction = value; return this;}
+    public BTool setattackAction(AttackAction value) {this.attackAction = value; return this;}
+
+    //////////////////////// OTHER ///////////////////
     @Override
     public String getItemNameIS(ItemStack itemstack) {
         return getItemNickname(itemstack);
@@ -78,7 +119,7 @@ public abstract class BTool extends Item {
         stack.tag.setBoolean(IS_CUSTOM_NAME, true);
     }
 
-    public ItemStack onItemRightClick(@NotNull ItemStack itemstack, World world, EntityPlayer entityplayer) {
+    /*public ItemStack onItemRightClick(@NotNull ItemStack itemstack, World world, EntityPlayer entityplayer) {
         StringBuilder sb = new StringBuilder("Composition: ");
 
         BToolMaterial[] materials = getMaterials(itemstack);
@@ -100,32 +141,16 @@ public abstract class BTool extends Item {
                 itemstack.tag.getInteger(LEVEL),
                 getPropertyTags(getTotalTags(itemstack)).getInteger(Properties.SILKTOUCH)));
         return itemstack;
+    }*/
+    public String getTranslateKey() {
+        return translationKey;
     }
-
-    public static NBTTagList getMaterialTags(@NotNull ItemStack stack) {
-        return stack.tag.getTagList(MATERIALS);
-    }
-
-    public static NBTTagCompound getBaseTags(@NotNull ItemStack stack) {
-        return stack.tag.getCompoundTag(BASE_STATS);
-    }
-    public static NBTTagCompound getUpgradeTags(@NotNull ItemStack stack) {
-        return stack.tag.getCompoundTag(UPGRADES);
-    }
-    public static NBTTagCompound getTotalTags(@NotNull ItemStack stack) {
-        return stack.tag.getCompoundTag(TOTAL_STATS);
-    }
-    public static NBTTagCompound getPropertyTags(@NotNull NBTTagCompound tags) {
-        return tags.getCompoundTag(PROPERTIES);
-    }
-
-
     public int getPartFlag(int i) {
-        return BToolParts.partArray.get(composition.get(i).ordinal()).partFlag;
+        return composition.get(i).partFlag;
     }
 
-    public NBTTagCompound constructBaseTags(@NotNull NBTTagCompound rootTags,
-                                            List<BToolMaterial> materials) {
+    public NBTTagCompound initializeTags(@NotNull NBTTagCompound rootTags,
+                                         List<BToolMaterial> materials) {
         rootTags.setBoolean(BROKEN, false);
 
         ///////////////////////MATERIALS/////////////////////////
@@ -136,16 +161,16 @@ public abstract class BTool extends Item {
         List<BToolMaterial> listBindingMaterials = new ArrayList<>();
         List<BToolMaterial> listHandleMaterials = new ArrayList<>();
         Set<BToolMaterial> setHeadMaterials = new LinkedHashSet<>();
-        for(int i = 0; i < materials.size(); i++) {
+        for(Integer i : Utils.range(0, materials.size())) {
             switch (getPartFlag(i)) {
-                case PartFlags.HEAD:
+                case PartsFlag.HEAD:
                     setHeadMaterials.add(materials.get(i));
                     listHeadMaterials.add(materials.get(i));
                     break;
-                case PartFlags.BINDING:
+                case PartsFlag.BINDING:
                     listBindingMaterials.add(materials.get(i));
                     break;
-                case PartFlags.HANDLE:
+                case PartsFlag.HANDLE:
                     listHandleMaterials.add(materials.get(i));
                     break;
             }
@@ -154,7 +179,10 @@ public abstract class BTool extends Item {
 
         ///////////////////////NAME/////////////////////////
         if(! rootTags.getBoolean(IS_CUSTOM_NAME)) {
-            rootTags.setString(NAME, String.format("%s %s", StringUtils.join(setHeadMaterials.stream().map(BToolMaterial::getName).collect(Collectors.toList()), '-'), toolName));
+            rootTags.setString(NAME, String.format("%s %s", StringUtils.join(setHeadMaterials.stream().map(Utils::translateKey).collect(Collectors.toList()), '-'), Utils.translateKey(this)));
+        }
+        if(! rootTags.hasKey(COLOR)) {
+            rootTags.setByte(COLOR, (byte) 0);
         }
 
         ///////////////////////BASE STATS/////////////////////////
@@ -163,21 +191,34 @@ public abstract class BTool extends Item {
 
         baseTags.setInteger(MININGLEVEL, listHeadMaterials.stream().map(BToolMaterial::getMiningLevel).max(Integer::compareTo).orElse(0));
 
-        Integer baseDamage = Utils.sumInt(listHeadMaterials.stream().map(BToolMaterial::getMobDamage));
-        baseTags.setInteger(MOBDAMAGE, baseDamageBonus + baseDamageMultiplier * baseDamage);
+        Float baseDamage = Utils.average(listHeadMaterials.stream().map(mat -> (float)mat.getAttackDamage()), listHeadMaterials.size());
+        baseTags.setFloat(ATTACKDAMAGE, baseDamageBonus + attackDamageMultiplier * baseDamage);
 
-        Float baseEfficiency = Utils.average(listHeadMaterials.stream().map(BToolMaterial::getEfficiency), listHeadMaterials.size());
-        baseTags.setFloat(EFFICIENCY, baseEfficiencyMultiplier * baseEfficiency);
+        Float baseMiningSpeed = Utils.average(listHeadMaterials.stream().map(BToolMaterial::getMiningSpeed), listHeadMaterials.size());
+        baseTags.setFloat(MININGSPEED, miningSpeedMultiplier * baseMiningSpeed);
 
         //TODO include handles etc. in durability calculation and all the extra stuff
-        Integer baseDurability = getBaseDurability(listHeadMaterials, listBindingMaterials, listHandleMaterials);
-        baseTags.setInteger(DURABILITY,  (int)(baseDurabilityMultiplier * baseDurability));
+        int numerator = 0;
+        int denominator = 0;
+        for(Integer i: Utils.range(0, listHeadMaterials.size())) {
+            BToolPart part = composition.get(i);
+            denominator += part.weight;
+            numerator += part.weight * listHeadMaterials.get(i).getDurability();
+        }
+        baseTags.setInteger(DURABILITY,  Utils.round(durabilityMultiplier * numerator / denominator));
 
         ///////////////////////BASE PROPERTIES/////////////////////////
-        NBTTagCompound propertiesTag = new NBTTagCompound();
-        baseTags.setCompoundTag(PROPERTIES, propertiesTag);
+        ArrayList<Property> baseProperties = new ArrayList<>(baseToolProperties);
 
-        propertiesTag.setInteger(Properties.SILKTOUCH, setHeadMaterials.contains(BToolMaterials.gold) ? 1 : 0);
+        //add properties from materials
+        listHeadMaterials.stream().flatMap(mat -> mat.getProperties(PartsFlag.HEAD).stream()).forEach(baseProperties::add);
+        listHandleMaterials.stream().flatMap(mat -> mat.getProperties(PartsFlag.HANDLE).stream()).forEach(baseProperties::add);
+        listBindingMaterials.stream().flatMap(mat -> mat.getProperties(PartsFlag.BINDING).stream()).forEach(baseProperties::add);
+
+        //collapse list summing levels
+        baseProperties = new ArrayList<>(Properties.collapse(baseProperties.stream()));
+
+        ToolStack.writeProperties(baseTags, baseProperties);
 
         calculateTotalTags(rootTags);
         return rootTags;
@@ -185,174 +226,67 @@ public abstract class BTool extends Item {
 
     public NBTTagCompound calculateTotalTags(@NotNull NBTTagCompound rootTags) {
         NBTTagCompound baseTags = rootTags.getCompoundTag(BASE_STATS);
+        NBTTagCompound upgradeTags = rootTags.getCompoundTag(UPGRADES);
+
         NBTTagCompound totalTags = new NBTTagCompound();
         rootTags.setCompoundTag(TOTAL_STATS, totalTags);
 
         ///////////////////////PROPERTIES/////////////////////////
-        NBTTagCompound baseProperties = rootTags.getCompoundTag(BASE_STATS).getCompoundTag(PROPERTIES);
-        NBTTagCompound upgradeProperties = rootTags.getCompoundTag(UPGRADES).getCompoundTag(PROPERTIES);
+        Collection<Property> properties = ToolStack.getProperties(baseTags);
+        properties.addAll(ToolStack.getProperties(upgradeTags));
 
-        NBTTagCompound totalProperties = new NBTTagCompound();
-        totalTags.setCompoundTag(PROPERTIES, totalProperties);
+        properties = Properties.collapse(properties.stream());
 
-        Set<String> propertiesKeys = ((AccessorNBTTagCompound)(Object)baseProperties).getTagMap().keySet();
-        propertiesKeys.addAll(((AccessorNBTTagCompound)(Object)upgradeProperties).getTagMap().keySet());
-
-        for(String key : propertiesKeys) {
-            totalProperties.setInteger(key, baseProperties.getInteger(key) + upgradeProperties.getInteger(key));
-        }
+        ToolStack.writeProperties(totalTags, properties);
 
         ///////////////////////TOTAL STATS/////////////////////////
-        //TODO multiply total stats with multipliers
-        totalTags.setInteger(MININGLEVEL, baseTags.getInteger(MININGLEVEL));
+        StatBoosts totalBoosts = PropertyStats.getTotalStatBoosts(properties.stream().flatMap(Utils.instancesOf(PropertyStats.class)));
+        totalTags.setInteger(MININGLEVEL, totalBoosts.applyMiningLevel(baseTags.getInteger(MININGLEVEL)));
 
-        totalTags.setInteger(MOBDAMAGE, baseTags.getInteger(MOBDAMAGE));
+        totalTags.setInteger(ATTACKDAMAGE, Utils.round(totalBoosts.apply(EToolStat.attackDamage.ordinal(), baseTags.getFloat(ATTACKDAMAGE))));
 
-        totalTags.setFloat(EFFICIENCY, baseTags.getFloat(EFFICIENCY));
+        totalTags.setFloat(MININGSPEED, totalBoosts.apply(EToolStat.miningSpeed.ordinal(), baseTags.getFloat(MININGSPEED)));
 
-        totalTags.setInteger(DURABILITY,  baseTags.getInteger(DURABILITY));
+        totalTags.setInteger(DURABILITY,  Utils.round(totalBoosts.apply(EToolStat.durability.ordinal(), baseTags.getInteger(DURABILITY))));
+
+        totalTags.setFloat(REINFORCED, totalBoosts.apply(EToolStat.reinforced.ordinal(), 1f));
+
+        ///////////////////////RIGHTCLICK ACTIONS/////////////////////////
+        List<RightClickAction> rcactions = new ArrayList<>(baseRightClickActions);
+
+        //TODO integrate upgrades
+
+        ToolStack.writeRightClickActions(totalTags, rcactions);
 
         return rootTags;
     }
 
-    private static Integer getBaseDurability(List<BToolMaterial> headMaterials, List<BToolMaterial> listBindingMaterials, List<BToolMaterial> listHandleMaterials) { //TODO expand (that differs (is overridden) for some complicated tools, but that's for later)
-        return Utils.sumInt(headMaterials.stream().map(BToolMaterial::getDurability));
+    /////////////////////////////// REDIRECTS ////////////////////////////////////
+    @Override
+    public float getStrVsBlock(ItemStack itemstack, Block block) {
+        return ToolStack.getStrVsBlock(itemstack, this, block);
     }
-    public static boolean isToolBroken(@NotNull ItemStack itemstack) {
-        return itemstack.tag.getBoolean(BROKEN);
+    @Override
+    public boolean onBlockDestroyed(ItemStack itemstack, int id, int x, int y, int z, EntityLiving player) {
+       return ToolStack.onBlockDestroyed(itemstack, id, x,y,z, player);
     }
-    public static int getMaxDurability(@NotNull ItemStack stack) {
-        return getTotalTags(stack).getInteger(DURABILITY);
+    @Override
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int x, int y, int z, int sideHit, double heightPlaced) {
+        return ToolStack.onItemUse(itemstack, entityplayer, world, x,y,z,sideHit, heightPlaced);
     }
-    public static int getMiningLevel(@NotNull ItemStack stack) {
-        return getTotalTags(stack).getInteger(MININGLEVEL);
+    @Override
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+        return ToolStack.onItemRightClick(itemstack, world, entityplayer);
     }
-    public static float getEfficiency(@NotNull ItemStack stack) {
-        return getTotalTags(stack).getFloat(EFFICIENCY);
+    @Override
+    public boolean useItemOnEntity(ItemStack itemstack, EntityLiving entityliving, EntityPlayer entityPlayer) {
+        return ToolStack.useItemOnEntity(itemstack, entityliving, entityPlayer);
     }
-    public static int getMobDamage(@NotNull ItemStack stack) {
-        return getTotalTags(stack).getInteger(MOBDAMAGE);
-    }
-    public static BToolMaterial[] getMaterials(@NotNull ItemStack stack) {
-        NBTTagList materialTags = getMaterialTags(stack);
-        int numMats = materialTags.tagCount();
-        BToolMaterial[] materials = new BToolMaterial[numMats];
-        for(int i = 0; i < numMats; i++) {
-            materials[i] = BToolMaterials.matArray.get(((NBTTagInt)materialTags.tagAt(i)).intValue);
-        }
-        return materials;
-    }
-    public Set<BToolMaterial> getRepairMaterials(ItemStack stack) {
-        BToolMaterial[] materials = getMaterials(stack);
-
-        Set<BToolMaterial> materialSet = new HashSet<>();
-        for(BToolMaterial mat : materials) {
-            materialSet.add(mat);
-        }
-
-        return materialSet;
-    }
-
-    public float getStrVsBlock(@NotNull ItemStack itemstack, Block block) {
-        if(isToolBroken(itemstack)) return 0.1f;
-        else if(Arrays.stream(this.materialsEffectiveAgainst).anyMatch(material -> material == block.blockMaterial))
-            return getTotalTags(itemstack).getFloat(EFFICIENCY);
-        else return 1.0F;
-    }
-
+    @Override
     public boolean hitEntity(ItemStack itemstack, EntityLiving mob, EntityLiving player) {
-        stressTool(1, itemstack, player);
-        return true;
+        return ToolStack.hitEntity(itemstack, this, mob, player);
     }
-
-    public boolean onBlockDestroyed(ItemStack itemstack, int i, int j, int k, int l, EntityLiving player) {
-        Block block = Block.blocksList[i];
-        if (block != null && block.getHardness() > 0.0F) {
-            stressTool(1, itemstack, player);
-        }
-        return true;
-    }
-
-    public static void stressTool(int damageAmount, ItemStack itemStack, Entity entity) {
-        if (!isToolBroken(itemStack) && entity instanceof EntityPlayer && ((EntityPlayer)entity).getGamemode().toolDurability) {
-            earnToolExp(1, itemStack, (EntityPlayer) entity);
-            //here goes reinforced probability calculations to avoid damage (but still earn xp)
-            if(true) { //TODO checking for reinforced and shiz
-                updateToolDamage(damageAmount, itemStack);
-            }
-        }
-    }
-
-    public static void earnToolExp(int i, ItemStack itemStack, EntityPlayer player) {
-        BTool tool = (BTool) itemStack.getItem();
-        NBTTagCompound tags = itemStack.tag;
-        int experience = tags.getInteger(EXPERIENCE) + i;
-        tags.setInteger(EXPERIENCE, experience);
-        //check against a table of xp goals and award levels
-        int newLevel = 0;
-        int expToLevel = tool.baseLevelExp;
-        while(experience >= expToLevel) {
-            expToLevel *= 2; //FIXME change this to 3 once testing is done (since we want to double the effort each time)
-            newLevel++;
-        }
-        int level = tags.getInteger(LEVEL);
-        for(int j = level+1; j <= newLevel; j++) {
-            //TODO level up sequence!
-            //play ding
-            //send text message
-//            player.addChatMessage(String.format("Level up! Your %s has reached level %d!", itemStack.getItemName(), j));
-            tags.setInteger(LEVEL, j);
-            //levels in turn will award other things, like extra upgrade slots
-        }
-    }
-
-    public static void repairTool(int healAmount, ItemStack itemStack) {
-        updateToolDamage(-healAmount, itemStack);
-    }
-
-    public static void updateToolDamage(int damageAmount, ItemStack itemStack) {
-        int damage = itemStack.getMetadata();
-        boolean broken = false;
-        damage += damageAmount;
-        if (damage >= getMaxDurability(itemStack)) {
-            damage = getMaxDurability(itemStack);
-            broken = true;
-        } else if (damage <= 0) {
-            damage = 0;
-        }
-        itemStack.setMetadata(damage);
-        itemStack.tag.setBoolean(BROKEN, broken);
-    }
-
-    public boolean canHarvestBlock(ItemStack itemstack, Block block) {
-        if (isSilkTouch(itemstack)) return true;
-        else return Arrays.stream(materialsEffectiveAgainst).anyMatch(material -> material == block.blockMaterial);
-    }
-
-    public int getDamageVsEntity(ItemStack itemstack, Entity noUse) {
-        if(isToolBroken(itemstack)) return 1;
-        else return getTotalTags(itemstack).getInteger(MOBDAMAGE);
-    }
-
     public boolean isFull3D() {
         return true;
-    }
-
-    @Override
-    public boolean isSilkTouch() {
-        throw new RuntimeException("this should never be called");
-    }
-
-    public static Integer getProperty(ItemStack stack, String s) {
-        return getPropertyTags(getTotalTags(stack)).getInteger(s);
-    }
-    public static boolean isSilkTouch(ItemStack stack) {
-        return getProperty(stack, Properties.SILKTOUCH) > 0;
-    }
-    public int getBlockHitDelay() {
-        return 4;
-        //TODO maybe find a way to dynamically use itemstack
-        //in PlayerController (to redirect by mixin)
-        //this.blockHitDelay = stack.getItem().getBlockHitDelay();
     }
 }

@@ -14,25 +14,25 @@ public class BToolParts {
     public static TPPickaxeHead pickaxeHead;
     public static TPShovelHead shovelHead;
     public static TPLargeGuard largeGuard;
-    public static TPSwordBlade swordBlade;
-    public static ArrayList<BToolPart> partArray = new ArrayList<>();
+    public static TPBlade blade;
+    public static ArrayList<BToolPart> partList = new ArrayList<>();
     public static ArrayList<String> baseTextureArray = new ArrayList<>();
 
     public static void InitializeToolParts(String MOD_ID) {
 
-        repairKit = (TPRepairKit) createToolPart(MOD_ID, new TPRepairKit(BConstruct.itemIdInc++), EToolPart.repairKit, "repairKit", "repair_kit");
-        rod = (TPRod) createToolPart(MOD_ID, new TPRod(BConstruct.itemIdInc++), EToolPart.rod, "rod", "rod");
-        binding = (TPBinding) createToolPart(MOD_ID, new TPBinding(BConstruct.itemIdInc++), EToolPart.binding, "binding", "binding");
-        axeHead = (TPAxeHead) createToolPart(MOD_ID, new TPAxeHead(BConstruct.itemIdInc++), EToolPart.axeHead, "axeHead", "axe_head");
-        pickaxeHead = (TPPickaxeHead) createToolPart(MOD_ID, new TPPickaxeHead(BConstruct.itemIdInc++), EToolPart.pickaxeHead, "pickaxeHead", "pickaxe_head");
-        shovelHead = (TPShovelHead) createToolPart(MOD_ID, new TPShovelHead(BConstruct.itemIdInc++), EToolPart.shovelHead, "shovelHead", "shovel_head");
-        largeGuard = (TPLargeGuard) createToolPart(MOD_ID, new TPLargeGuard(BConstruct.itemIdInc++), EToolPart.largeGuard, "largeGuard", "large_guard");
-        swordBlade = (TPSwordBlade) createToolPart(MOD_ID, new TPSwordBlade(BConstruct.itemIdInc++), EToolPart.swordBlade, "swordBlade", "sword_blade");
+        repairKit = (TPRepairKit) createToolPart(MOD_ID, new TPRepairKit(BConstruct.itemIdInc++), EToolPart.repairKit, "repair_kit");
+        rod = (TPRod) createToolPart(MOD_ID, new TPRod(BConstruct.itemIdInc++), EToolPart.rod, "rod");
+        binding = (TPBinding) createToolPart(MOD_ID, new TPBinding(BConstruct.itemIdInc++), EToolPart.binding, "binding");
+        axeHead = (TPAxeHead) createToolPart(MOD_ID, new TPAxeHead(BConstruct.itemIdInc++), EToolPart.axeHead, "axe_head");
+        pickaxeHead = (TPPickaxeHead) createToolPart(MOD_ID, new TPPickaxeHead(BConstruct.itemIdInc++), EToolPart.pickaxeHead, "pickaxe_head");
+        shovelHead = (TPShovelHead) createToolPart(MOD_ID, new TPShovelHead(BConstruct.itemIdInc++), EToolPart.shovelHead, "shovel_head");
+        largeGuard = (TPLargeGuard) createToolPart(MOD_ID, new TPLargeGuard(BConstruct.itemIdInc++), EToolPart.largeGuard, "large_guard");
+        blade = (TPBlade) createToolPart(MOD_ID, new TPBlade(BConstruct.itemIdInc++), EToolPart.blade, "blade");
     }
 
-    static BToolPart createToolPart(String modId, BToolPart toolPart, EToolPart enumToolPart, String translationKey, String partTexture) {
-        toolPart.setItemName(HalpLibe.addModId(modId, translationKey));
-        Utils.setAt(partArray, enumToolPart.ordinal(), toolPart);
+    static BToolPart createToolPart(String modId, BToolPart toolPart, EToolPart enumToolPart, String partTexture) {
+        toolPart.setItemName(HalpLibe.addModId(modId, toolPart.name));
+        Utils.setAt(partList, enumToolPart.ordinal(), toolPart);
         Utils.setAt(baseTextureArray, enumToolPart.ordinal(), partTexture);
         return toolPart;
     }

@@ -3,17 +3,18 @@ package levistico.bconstruct.gui;
 import levistico.bconstruct.gui.texture.TextureUtils;
 import levistico.bconstruct.utils.Pair;
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.FontRenderer;
 import net.minecraft.src.GuiButton;
 import org.lwjgl.opengl.GL11;
 
 public class BGuiButton extends GuiButton
 {
+    private final int baseTextureV;
     private final Pair<Integer, Integer> textureUV;
     public boolean isSelected;
 
-    public BGuiButton(int id, String displayString, int xPosition, int yPosition, int width, int height, Pair<Integer, Integer> textureUV) {
-        super(id, xPosition, yPosition, width, height, displayString);
+    public BGuiButton(int id, String translationKey, int xPosition, int yPosition, int baseTextureV, Pair<Integer, Integer> textureUV) {
+        super(id, xPosition, yPosition, 18, 18, translationKey);
+        this.baseTextureV = baseTextureV;
         this.textureUV = textureUV;
     }
 
@@ -28,13 +29,12 @@ public class BGuiButton extends GuiButton
 
     public void drawButton(Minecraft minecraft, int offsetX, int offsetY, int relativeMouseX, int relativeMouseY) {
         if (this.visible) {
-            FontRenderer fontrenderer = minecraft.fontRenderer;
             GL11.glBindTexture(3553, TextureUtils.GUI_ICONS_INDEX);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             boolean isHover = relativeMouseX >= this.xPosition && relativeMouseY >= this.yPosition && relativeMouseX < this.xPosition + this.width && relativeMouseY < this.yPosition + this.height;
             int k = this.getButtonState(isHover);
             if(isSelected) k = 0;
-            GUIUtils.drawLargeGUITexture(xPosition + offsetX, yPosition + offsetY, 8+k*2,13, zLevel);
+            GUIUtils.drawLargeGUITexture(xPosition + offsetX, yPosition + offsetY, 8+k*2, baseTextureV, zLevel);
             //drawing the specific image on top
             GUIUtils.drawLargeGUITexture(xPosition + offsetX, yPosition + offsetY, textureUV.first, textureUV.second, zLevel);
 

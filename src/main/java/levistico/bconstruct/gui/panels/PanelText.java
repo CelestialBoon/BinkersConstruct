@@ -66,7 +66,7 @@ public class PanelText extends BasePanel{
     }
 
     @Override
-    public void drawTooltip(int mouseX, int mouseY, int relativeMouseX, int relativeMouseY) {
+    public void drawTooltip(int topX, int topY, int mouseX, int mouseY, int relativeMouseX, int relativeMouseY) {
         int textLineHovered = (relativeMouseY - textOffsetY - scroll) / textHeight;
         if(textLineHovered >= 0 && textLineHovered < textLines.size()) {
             guiContainer.drawTooltipAtMouse(textLines.get(textLineHovered).tooltip, mouseX, mouseY);

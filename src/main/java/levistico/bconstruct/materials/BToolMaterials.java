@@ -1,7 +1,8 @@
 package levistico.bconstruct.materials;
 
 import levistico.bconstruct.parts.BToolPart;
-import levistico.bconstruct.parts.PartFlags;
+import levistico.bconstruct.parts.PartsFlag;
+import levistico.bconstruct.tools.properties.Properties;
 import levistico.bconstruct.utils.Pair;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
@@ -12,7 +13,7 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 
 public class BToolMaterials {
-    static public ArrayList<BToolMaterial> matArray = new ArrayList<>();
+    static public ArrayList<BToolMaterial> matList = new ArrayList<>(); //items are automatically added to this list
     static public HashMap<Item, BToolMaterial> partBuilderItemMap = new HashMap<Item, BToolMaterial>();
 
     //    public static final ToolMaterial wood = (new ToolMaterial()).setDurability(64).setEfficiency(2.0F, 4.0F).setMiningLevel(0);
@@ -22,21 +23,22 @@ public class BToolMaterials {
 //    public static final ToolMaterial diamond = (new ToolMaterial()).setDurability(1536).setEfficiency(14.0F, 45.0F).setMiningLevel(3).setDamage(4).setBlockHitDelay(4);
 //    public static final ToolMaterial gold = (new ToolMaterial()).setDurability(64).setEfficiency(4.0F, 8.0F).setMiningLevel(0).setSilkTouch(true);
     //TODO paper, slime, nether, etc.
-    public static final BToolMaterial wood = new BToolMaterial("Wood","#876627", EToolMaterial.wood.ordinal(), 64, 2f, 1, 0, PartFlags.EVERYTHING);
-    public static final BToolMaterial cactus = new BToolMaterial("Cactus", "#0D6418", EToolMaterial.cactus.ordinal(), 50, 2f, 3, 0, PartFlags.HEAD+PartFlags.OTHER);
-    public static final BToolMaterial bone = new BToolMaterial("Bone", "#E8E5D2", EToolMaterial.bone.ordinal(),70, 3f, 3, 0, PartFlags.EVERYTHING);
-    public static final BToolMaterial stone = new BToolMaterial("Stone", "#B1AFAD", EToolMaterial.stone.ordinal(),128, 3f, 2, 1, PartFlags.EVERYTHING);
-    public static final BToolMaterial flint = new BToolMaterial("Flint", "#3D3C3C", EToolMaterial.flint.ordinal(),100, 3.5f, 4, 1, PartFlags.EVERYTHING);
-    public static final BToolMaterial quartz = new BToolMaterial("Quartz", "#F9DDDC", EToolMaterial.quartz.ordinal(),200, 5f, 4, 1, PartFlags.EVERYTHING);
-    public static final BToolMaterial gold = new BToolMaterial("Gold", "#FDF55F", EToolMaterial.gold.ordinal(),64, 4f, 1, 1, PartFlags.EVERYTHING);
-    public static final BToolMaterial iron = new BToolMaterial("Iron","#D8D8D8", EToolMaterial.iron.ordinal(),256, 6f, 3, 2, PartFlags.EVERYTHING);
-    public static final BToolMaterial diamond = new BToolMaterial("Diamond", "#8CF4E2", EToolMaterial.diamond.ordinal(),1536, 14f, 4, 3, PartFlags.EVERYTHING);
-    public static final BToolMaterial obsidian = new BToolMaterial("Obsidian", "#3B2754", EToolMaterial.obsidian.ordinal(),200, 10f, 5, 3, PartFlags.EVERYTHING);
-    public static final BToolMaterial steel = new BToolMaterial("Steel", "#959595", EToolMaterial.steel.ordinal(),4608, 7f, 4, 3, PartFlags.EVERYTHING);
-    public static final BToolMaterial string = new BToolMaterial("String", "#FFFFFF", EToolMaterial.string.ordinal(),25, 7f, 4, 3, PartFlags.BINDING);
-//    public static final BToolMaterial vine = new BToolMaterial("Vine", "#959595", EToolMaterial.vine.ordinal(),4608, 7f, 4, 3, PartFlags.BINDING);
-    public static final BToolMaterial leather = new BToolMaterial("Leather", "#C65C35", EToolMaterial.leather.ordinal(),50, 7f, 4, 3, PartFlags.BINDING);
-    public static final BToolMaterial chain = new BToolMaterial("Chain", "#3E4453", EToolMaterial.chain.ordinal(),100, 7f, 4, 3, PartFlags.BINDING);
+    public static final BToolMaterial wood = new BToolMaterial("wood", "#876627", EToolMaterial.wood.ordinal(), 64, 2f, 0, 0, PartsFlag.BASIC_TOOLPARTS)
+            .addAllProperty(Properties.generate(Properties.ECOLOGICAL,1));
+    public static final BToolMaterial cactus = new BToolMaterial("cactus", "#0D6418", EToolMaterial.cactus.ordinal(), 50, 2f, 2, 0, PartsFlag.HEAD);
+    public static final BToolMaterial bone = new BToolMaterial("bone", "#E8E5D2", EToolMaterial.bone.ordinal(),70, 3f, 2, 0, PartsFlag.BASIC_TOOLPARTS);
+    public static final BToolMaterial stone = new BToolMaterial("stone", "#B1AFAD", EToolMaterial.stone.ordinal(),128, 3f, 1, 1, PartsFlag.BASIC_TOOLPARTS);
+    public static final BToolMaterial flint = new BToolMaterial("flint", "#3D3C3C", EToolMaterial.flint.ordinal(),100, 3.5f, 3, 1, PartsFlag.BASIC_TOOLPARTS);
+    public static final BToolMaterial quartz = new BToolMaterial("quartz","#F9DDDC", EToolMaterial.quartz.ordinal(),200, 5f, 3, 1, PartsFlag.BASIC_TOOLPARTS);
+    public static final BToolMaterial gold = new BToolMaterial("gold", "#FDF55F", EToolMaterial.gold.ordinal(),64, 4f, 1, 1, PartsFlag.BASIC_TOOLPARTS)
+            .addHeadProperty(Properties.generate(Properties.SILKTOUCH, 1));
+    public static final BToolMaterial iron = new BToolMaterial("iron", "#D8D8D8", EToolMaterial.iron.ordinal(),256, 6f, 2, 2, PartsFlag.BASIC_TOOLPARTS);
+    public static final BToolMaterial diamond = new BToolMaterial("diamond", "#8CF4E2", EToolMaterial.diamond.ordinal(),1536, 14f, 4, 3, PartsFlag.BASIC_TOOLPARTS);
+    public static final BToolMaterial obsidian = new BToolMaterial("obsidian","#3B2754", EToolMaterial.obsidian.ordinal(),200, 10f, 4, 3, PartsFlag.BASIC_TOOLPARTS);
+    public static final BToolMaterial steel = new BToolMaterial("steel", "#959595", EToolMaterial.steel.ordinal(),4608, 7f, 3, 3, PartsFlag.BASIC_TOOLPARTS);
+    public static final BToolMaterial string = new BToolMaterial("string", "#FFFFFF", EToolMaterial.string.ordinal(),25, 0f, 0, 0, PartsFlag.BINDING);
+    public static final BToolMaterial leather = new BToolMaterial("leather", "#C65C35", EToolMaterial.leather.ordinal(),50, 0f, 0, 0, PartsFlag.BINDING);
+    public static final BToolMaterial chain = new BToolMaterial("chain", "#3E4453", EToolMaterial.chain.ordinal(),100, 0f, 0, 0, PartsFlag.BINDING);
 
 
 //    static public final Fraction ONE_NINTH = Fraction.getFraction(1, 9);

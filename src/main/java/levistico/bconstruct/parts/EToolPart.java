@@ -8,5 +8,5 @@ public enum EToolPart {
     pickaxeHead,
     shovelHead,
     largeGuard,
-    swordBlade
+    blade
 }

@@ -1,11 +1,8 @@
 package levistico.bconstruct.gui.panels;
 
-import levistico.bconstruct.gui.BGuiButton;
 import levistico.bconstruct.gui.GUIUtils;
 import levistico.bconstruct.gui.containers.GUIContainerWithPanels;
 import org.lwjgl.opengl.GL11;
-
-import java.util.List;
 
 public abstract class BasePanel implements IPanel {
     public int width;
@@ -50,7 +47,7 @@ public abstract class BasePanel implements IPanel {
         int topX = getTopX(screenWidth);
         int topY = getTopY(screenHeight);
         if(isMouseHere(topX, topY, mouseX, mouseY)) {
-            drawTooltip(mouseX, mouseY, getInternalMouseX(screenWidth, mouseX), getInternalMouseY(screenHeight, mouseY));
+            drawTooltip(topX, topY, mouseX, mouseY, getInternalMouseX(screenWidth, mouseX), getInternalMouseY(screenHeight, mouseY));
         }
     }
 
@@ -62,7 +59,7 @@ public abstract class BasePanel implements IPanel {
         }
     }
 
-    protected abstract void drawTooltip(int mouseX, int mouseY, int relativeMouseX, int relativeMouseY);
+    protected abstract void drawTooltip(int topX, int topY, int mouseX, int mouseY, int relativeMouseX, int relativeMouseY);
     protected abstract void mouseClicked(int mouseX, int mouseY, int relativeMouseX, int relativeMouseY, int mouseButton);
 
     int getTopX(int screenWidth) {

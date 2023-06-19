@@ -5,6 +5,6 @@ import levistico.bconstruct.utils.Pair;
 public class TPLargeGuard extends BToolPart {
 
     public TPLargeGuard(int i) {
-        super(i, "Large Guard", EToolPart.largeGuard, PartFlags.OTHER, 1, true, new Pair<>(2,3));
+        super(i, "largeGuard", EToolPart.largeGuard, PartsFlag.HANDLE, 1, true, new Pair<>(2,4));
     }
 }

@@ -1,12 +1,18 @@
 package levistico.bconstruct.crafting;
 
 import levistico.bconstruct.gui.BGuiButton;
+import levistico.bconstruct.gui.BSlotCustomizable;
+import levistico.bconstruct.parts.BToolPart;
+import levistico.bconstruct.parts.BToolParts;
 import levistico.bconstruct.recipes.BRecipe;
 import levistico.bconstruct.recipes.BToolRecipe;
 import levistico.bconstruct.tools.BTool;
 import levistico.bconstruct.tools.BTools;
+import levistico.bconstruct.utils.AcceptRule;
+import levistico.bconstruct.utils.Pair;
 import levistico.bconstruct.utils.Utils;
 import net.minecraft.src.*;
+import net.minecraft.src.helper.Listener;
 
 import java.util.ArrayList;
 
@@ -21,33 +27,44 @@ public final class ContainerToolStation extends BContainerWithRecipe {
     //TODO everything about the arrangement has to be done here first, all the nits and grits, and then this data can be passed to panel generation by having accessible fields
     public ContainerToolStation(InventoryPlayer inventoryplayer, CraftingTileEntity tileEntity) {
        super(inventoryplayer, tileEntity);
-        //TODO change here the arrangement of slots a bit and make it so that each tool has its own positions and set of icons, OR have it done in the individual recipes
-
         recipe = new BToolRecipe(BTools.toolList.get(0));
 
         super.resizeCraftingSlots(((BTool)recipe.result).composition.size());
 
-        int i = 0;
-        for(BTool tool : BTools.toolList) {
-            BGuiButton button = new BGuiButton(i, tool.toolName,(i%5)*20, (i/5)*20, 18, 18, tool.baseTextureUV);
-            button.setListener(button1 -> {
-                recipe.result = tool;
-                super.resizeCraftingSlots(tool.composition.size());
-                if(selectedButton != null) selectedButton.isSelected = false;
-                ((BGuiButton)button1).isSelected = true;
-                selectedButton = (BGuiButton) button1;
-                onCraftMatrixChanged();
-            });
+        Listener<GuiButton> listener = button -> {
+            BTool tool = BTools.toolList.get(button.id);
+            recipe.result = tool;
+            super.resizeCraftingSlots(tool.composition.size());
+            //TODO customize overall background here
+            for(Integer j : Utils.range(0, tool.composition.size())) {
+                BSlotCustomizable slot = craftingSlots.get(j);
+                BToolPart part = tool.composition.get(j);
+                slot.textureUV = new Pair<>(part.baseTextureUV.first, part.baseTextureUV.second+1);
+                slot.changePosition(tool.slotArrangement[j]);
+                if(part.itemID == BToolParts.rod.itemID) {
+                    slot.acceptsOnly = AcceptRule.acceptsOnlyIds(BToolParts.rod.itemID, Item.stick.itemID);
+                } else slot.acceptsOnly = AcceptRule.acceptsOnlyIds(part.itemID);
+                slot.tooltipString = Utils.translateKey(part);
+            }
+            if(selectedButton != null) selectedButton.isSelected = false;
+            selectedButton = (BGuiButton) button;
+            ((BGuiButton)button).isSelected = true;
+            onCraftMatrixChanged();
+        };
+
+        for(Integer i : Utils.range(0, BTools.toolList.size())) {
+            BTool tool = BTools.toolList.get(i);
+            BGuiButton button = new BGuiButton(i, Utils.translateKey(tool),(i%5)*20, (i/5)*20, 13, tool.baseTextureUV);
+            button.setListener(listener);
             toolSelectButtons.add(button);
-            i++;
         }
-        selectedButton = toolSelectButtons.get(0);
-        toolSelectButtons.get(0).isSelected = true;
 
         nameChangeListener = guiTextField -> {
             chosenName = guiTextField.getText();
             onCraftMatrixChanged(null);
         };
+
+        listener.listen(toolSelectButtons.get(0));
     }
 
     @Override

@@ -2,7 +2,7 @@ package levistico.bconstruct.materials;
 
 import org.apache.commons.lang3.math.Fraction;
 
-public final class ValueResult {
+/*public final class ValueResult {
 
     public ValueResult(BToolMaterial material, Fraction value, int liquidValue) {
         this.material = material;
@@ -24,4 +24,4 @@ public final class ValueResult {
     public Integer getLiquidValue() {
         return liquidValue;
     }
-}
+}*/
