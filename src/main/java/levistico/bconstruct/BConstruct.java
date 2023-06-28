@@ -85,7 +85,11 @@ public final class BConstruct implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        LOGGER.info("Binkers initialized.");
+        Multiblock.multiblocks.put("smeltery",smelteryMultiblock);
+
+        CommandHelper.createCommand(new NBTEditCommand());
+        CommandHelper.createCommand(new StructureCommand("structure","struct"));
+
         BToolMaterials.InitializeMaterialMaps();
         BToolParts.InitializeToolParts(MOD_ID);
         BTools.InitializeTools(MOD_ID);
@@ -125,6 +129,8 @@ public final class BConstruct implements ModInitializer {
         RecipeHelper.Crafting.createRecipe(Block.saplingEucalyptus, 1, new Object[] {"L","L",'L', Block.leavesEucalyptus});
         RecipeHelper.Crafting.createRecipe(Block.saplingOakRetro, 1, new Object[] {"L","L",'L', Block.leavesOakRetro});
         RecipeHelper.Crafting.createRecipe(Block.saplingShrub, 1, new Object[] {"L","L",'L', Block.leavesShrub});
+
+        BConstruct.LOGGER.info(String.valueOf(smelteryMultiblock));
     }
 
     public static Block createFluid(String name, int color, boolean flowing){
