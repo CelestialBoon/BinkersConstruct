@@ -14,7 +14,7 @@ public final class GUIPartBuilder extends GUIContainerWithPanels {
         ContainerPartBuilder container = (ContainerPartBuilder) this.inventorySlots;
 
 //        ArrayList<TextWithTooltip> lines = new ArrayList<>();
-//        for(int i = 0; i < 30; i++) {
+//        for(Integer i : Utils.range(0, 30)) {
 //            lines.add(new TextWithTooltip("text"+i, "tooltip"+i));
 //        }
 

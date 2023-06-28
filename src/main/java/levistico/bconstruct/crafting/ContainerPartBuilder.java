@@ -1,15 +1,19 @@
 package levistico.bconstruct.crafting;
 
+import levistico.bconstruct.BConstruct;
 import levistico.bconstruct.gui.BGuiButton;
-import levistico.bconstruct.gui.BSlotActivatable;
-import levistico.bconstruct.gui.BSlotCrafting;
+import levistico.bconstruct.gui.BSlotCustomizable;
 import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.parts.BToolParts;
 import levistico.bconstruct.parts.EToolPart;
 import levistico.bconstruct.recipes.BToolPartRecipe;
 
 import levistico.bconstruct.recipes.BRecipe;
+import levistico.bconstruct.utils.AcceptRule;
+import levistico.bconstruct.utils.Pair;
+import levistico.bconstruct.utils.Utils;
 import net.minecraft.src.*;
+import net.minecraft.src.helper.Listener;
 
 import java.util.ArrayList;
 
@@ -32,28 +36,40 @@ public final class ContainerPartBuilder extends BContainerWithRecipe {
 //        }
         resizeCraftingSlots(2);
 
-        recipe = new BToolPartRecipe(BToolParts.partArray.get(EToolPart.repairKit.ordinal()));
-        int i = 0;
-        for(BToolPart toolPart : BToolParts.partArray) {
-            BGuiButton button = new BGuiButton(i, toolPart.name, (i%5)*20, (i/5)*20, 18, 18, toolPart.baseTextureUV);
-            button.setListener(button1 -> {
-                recipe.result = toolPart;
-                if(selectedButton != null) selectedButton.isSelected = false;
-                ((BGuiButton)button1).isSelected = true;
-                selectedButton = (BGuiButton) button1;
-                onCraftMatrixChanged();
-            });
+        BSlotCustomizable cslot = craftingSlots.get(0);
+        cslot.tooltipString = StringTranslate.getInstance().translateKey(BConstruct.blankPattern.getItemName() + ".name");
+        cslot.acceptsOnly = AcceptRule.acceptsOnlyIds(BConstruct.blankPattern.itemID);
+        cslot.textureUV = new Pair<>(0,12);
+
+        cslot = craftingSlots.get(1);
+        cslot.tooltipString = StringTranslate.getInstance().translateKey("material.bconstruct.anything.name");
+        cslot.textureUV = new Pair<>(2,12);
+
+        //TODO set custom slot textures here
+
+        Listener<GuiButton> listener = button -> {
+            recipe.result = BToolParts.partList.get(button.id);
+            if(selectedButton != null) selectedButton.isSelected = false;
+            selectedButton = (BGuiButton) button;
+            ((BGuiButton)button).isSelected = true;
+            onCraftMatrixChanged();
+        };
+
+        recipe = new BToolPartRecipe(BToolParts.partList.get(EToolPart.repairKit.ordinal()));
+        for(Integer i : Utils.range(0, BToolParts.partList.size())) {
+            BToolPart toolPart = BToolParts.partList.get(i);
+            BGuiButton button = new BGuiButton(i, Utils.translateKey(toolPart), (i%5)*20, (i/5)*20, 13, toolPart.baseTextureUV);
+            button.setListener(listener);
             buttons.add(button);
-            i++;
         }
-        selectedButton = buttons.get(0);
-        buttons.get(0).isSelected = true;
+        listener.listen(buttons.get(0));
     }
+
 
     @Override
     public BRecipe getRecipe() {
         if(recipe == null) {
-            recipe = new BToolPartRecipe(BToolParts.partArray.get(EToolPart.repairKit.ordinal()));
+            recipe = new BToolPartRecipe(BToolParts.partList.get(EToolPart.repairKit.ordinal()));
         }
         return recipe;
     }

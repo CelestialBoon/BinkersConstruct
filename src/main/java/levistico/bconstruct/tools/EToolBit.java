@@ -19,6 +19,14 @@ public enum EToolBit {
     Mattock_BackHead,
     Mattock_BackHead_Broken,
 
+    Pickadze_FrontHead,
+    Pickadze_FrontHead_Broken,
+
+
+    Kama_Binding,
+    Kama_Head,
+    Kama_Head_Broken,
+
     //broadsword
     Broadsword_Handle,
     Broadsword_Guard,

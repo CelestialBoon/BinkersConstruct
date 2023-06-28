@@ -5,6 +5,7 @@ import levistico.bconstruct.materials.BToolMaterial;
 import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.parts.BToolParts;
 import levistico.bconstruct.tools.BTool;
+import levistico.bconstruct.tools.ToolStack;
 import levistico.bconstruct.utils.Utils;
 import net.minecraft.src.*;
 import net.minecraft.src.command.ChatColor;
@@ -20,7 +21,7 @@ public class GUIUtils {
     public static RenderItem itemRenderer = new RenderItem();
 
     public static boolean isMouseOverSlot(Slot slot, int relativeMouseX, int relativeMouseY) {
-        if (slot instanceof BSlotActivatable && !((BSlotActivatable)slot).isActive) return false;
+        if (slot instanceof BSlotCustomizable && !((BSlotCustomizable)slot).isActive) return false;
 
         return relativeMouseX >= slot.xDisplayPosition - 1 && relativeMouseX < slot.xDisplayPosition + 16 + 1
                 && relativeMouseY >= slot.yDisplayPosition - 1 && relativeMouseY < slot.yDisplayPosition + 16 + 1;
@@ -28,20 +29,19 @@ public class GUIUtils {
 
     public static StringBuilder getToolPartTooltip(StringBuilder text,ItemStack stack) {
         BToolPart part = (BToolPart) stack.getItem();
-        return text.append(String.format("%s %s", BToolPart.getToolMaterial(stack).getName(), part.name));
+        return text.append(String.format("%s %s", Utils.translateKey(BToolPart.getToolMaterial(stack)), Utils.translateKey(part)));
     }
 
     public static StringBuilder getToolTooltip(StringBuilder text, ItemStack stack, boolean control, boolean shift) {
         BTool tool = (BTool) stack.getItem();
-        text.append(tool.getItemNameIS(stack));
-        if(BTool.isToolBroken(stack)) text.append(" (Broken)");
+        text.append(ChatColor.get(stack.tag.getByte(ToolStack.COLOR))).append(tool.getItemNameIS(stack));
+        if(ToolStack.isToolBroken(stack)) text.append(" (Broken)");
         text.append("\n");
         if (control) {
 //            Control:
-            List<BToolPart> parts = tool.composition.stream().map(e -> BToolParts.partArray.get(e.ordinal())).collect(Collectors.toList());
             int partCount = 0;
-            for (BToolMaterial mat : BTool.getMaterials(stack)) {
-                stringifyToolPart(text, parts.get(partCount), mat);
+            for (BToolMaterial mat : ToolStack.getMaterials(stack)) {
+                stringifyToolPart(text, tool.composition.get(partCount), mat);
                 partCount++;
             }
 
@@ -56,15 +56,15 @@ public class GUIUtils {
 //            repair materials
 
 //            durability (number is light blue)
-            int maxDurability = BTool.getMaxDurability(stack);
+            int maxDurability = ToolStack.getMaxDurability(stack);
             text.append(ChatColor.white).append("\nDurability: ").append(ChatColor.orange)
                     .append(maxDurability - stack.getMetadata()).append("/").append(maxDurability);
 //            effective durability
 
 //            attack damage (blue)
-            text.append(ChatColor.white).append("\nAttack damage: ").append(ChatColor.red).append(BTool.getMobDamage(stack));
+            text.append(ChatColor.white).append("\nAttack damage: ").append(ChatColor.red).append(ToolStack.getAttackDamage(stack));
 //                    mining speed (yellow)
-            text.append(ChatColor.white).append("\nMining speed: ").append(ChatColor.yellow).append(BTool.getEfficiency(stack));
+            text.append(ChatColor.white).append("\nMining speed: ").append(ChatColor.yellow).append(ToolStack.getMiningSpeed(stack));
 //            modifiers remaining (2)
             text.append(ChatColor.lightGray).append("\nModifiers go here");
 //            modifiers:
@@ -86,7 +86,7 @@ public class GUIUtils {
     private static StringBuilder stringifyToolPart(StringBuilder sb, BToolPart part, BToolMaterial mat) {
         return sb.append(mat.chatcolor)
 //                .append(ChatFormat.underline)
-                .append(mat.getName()).append(" ").append(Utils.translateItemName(part)).append("\n");
+                .append(Utils.translateKey(mat)).append(" ").append(Utils.translateKey(part)).append("\n");
     }
 
     public static void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, int tileWidth, int tileHeight, float factor, float zLevel) {

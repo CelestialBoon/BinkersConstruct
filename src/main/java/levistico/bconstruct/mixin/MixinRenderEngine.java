@@ -21,7 +21,7 @@ public abstract class MixinRenderEngine {
     private Map<String, Integer> textureMap = new HashMap<>();
 
     @Inject(method = "refreshTextures", at = @At("HEAD"))
-    private void initTexturesHead(CallbackInfo ci) {
+    private void bconstruct_initTexturesHead(CallbackInfo ci) {
         TextureUtils.importGUITextures();
         TextureUtils.generateToolPartsTexture();
         TextureUtils.generateToolBitsTexture();
@@ -30,7 +30,7 @@ public abstract class MixinRenderEngine {
 //        BTools.InitializeTools(MOD_ID);
     }
     @Inject(method = "refreshTextures", at = @At("TAIL"))
-    private void initTexturesTail(CallbackInfo ci) {
+    private void bconstruct_initTexturesTail(CallbackInfo ci) {
         TextureUtils.initializeSlimeTextures();
     }
 }

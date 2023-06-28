@@ -1,20 +1,20 @@
 package levistico.bconstruct.crafting;
 
-import levistico.bconstruct.BConstruct;
-import levistico.bconstruct.gui.BSlotActivatable;
-import levistico.bconstruct.gui.BSlotCrafting;
+import levistico.bconstruct.gui.BSlotCustomizable;
+import levistico.bconstruct.gui.BSlotCraftingResult;
 import levistico.bconstruct.mixin.AccessorInventoryCrafting;
 import levistico.bconstruct.utils.Utils;
 import net.minecraft.src.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BContainer extends Container implements IOnCraftResult {
     public CraftingTileEntity tileEntity;
     public IInventory craftResult = new InventoryCraftResult();
     Integer maxSlot = 9;
-    public BSlotCrafting resultSlot;
-    public ArrayList<BSlotActivatable> craftingSlots = new ArrayList<>();
+    public BSlotCraftingResult resultSlot;
+    public ArrayList<BSlotCustomizable> craftingSlots = new ArrayList<>();
     public ArrayList<Slot> lowerSlots = new ArrayList<>();
     public InventoryPlayer inventoryPlayer;
 
@@ -27,12 +27,12 @@ public abstract class BContainer extends Container implements IOnCraftResult {
         int j1;
         int l1;
 
-        resultSlot = new BSlotCrafting(this, 0, inventoryplayer.player, this.craftResult, 124, 35);
+        resultSlot = new BSlotCraftingResult(this, 0, inventoryplayer.player, this.craftResult, 124, 35);
         this.addSlot(resultSlot);
 
         for(j1 = 0; j1 < 3; ++j1) { //crafting slots
             for(l1 = 0; l1 < 3; ++l1) {
-                BSlotActivatable craftSlot = new BSlotActivatable(this.tileEntity.inventoryCrafting, l1 + j1 * 3, true, 30 + l1 * 18, 17 + j1 * 18);
+                BSlotCustomizable craftSlot = new BSlotCustomizable(this.tileEntity.inventoryCrafting, l1 + j1 * 3, true, 30 + l1 * 18, 17 + j1 * 18);
                 craftingSlots.add(craftSlot);
                 this.addSlot(craftSlot);
             }
@@ -59,7 +59,7 @@ public abstract class BContainer extends Container implements IOnCraftResult {
     void resizeCraftingSlots(Integer newmax) {
         if(newmax > maxSlot) {
             //open slots
-            for(int j = maxSlot; j < newmax; j++) {
+            for(Integer j : Utils.range(maxSlot, newmax)) {
                 craftingSlots.get(j).isActive = true;
             }
         } else if (maxSlot > newmax) {
@@ -160,5 +160,59 @@ public abstract class BContainer extends Container implements IOnCraftResult {
 
     public void onCraftResult(ItemStack stack, EntityPlayer player) { //default crafting behaviour, to be occasionally overridden
         Utils.decreaseAllInventoryBy(tileEntity.inventoryCrafting, 1);
+    }
+
+    @Override
+    protected boolean onStackMergeShiftClick(ItemStack itemStack, int minSlot, int maxSlot, boolean sendToLastSlot) {
+        if (itemStack == null)
+            return false;
+
+        List<Integer> emptySlots = new ArrayList<>();
+        List<Integer> sameStackSlots = new ArrayList<>();
+
+        for (Integer i : Utils.range(minSlot, maxSlot)) {
+            Slot slot = this.getSlot(i);
+            ItemStack stack = slot.getStack();
+            if(stack == null && slot.canPutStackInSlot(itemStack)) {
+                emptySlots.add(i);
+            } else if (stack != null && itemStack.canStackWith(stack) && stack.stackSize < stack.getMaxStackSize()) {
+                sameStackSlots.add(i);
+            }
+        }
+
+        if (sameStackSlots.isEmpty() && emptySlots.isEmpty())
+            return false;
+
+        ItemStack iStack;
+        Slot iSlot;
+        if(sendToLastSlot) {
+            sameStackSlots = Utils.reverseList(sameStackSlots);
+            emptySlots = Utils.reverseList(emptySlots);
+        }
+        for(Integer i : sameStackSlots) {
+            iSlot = this.getSlot(i);
+            iStack = iSlot.getStack();
+            int a = Utils.clamp(0, iStack.getMaxStackSize() - iStack.stackSize, itemStack.stackSize);
+            if (a > 0) {
+                itemStack.stackSize -= a;
+                iStack.stackSize += a;
+                iSlot.onSlotChanged();
+                if (itemStack.stackSize == 0) {
+                    break;
+                }
+            }
+        }
+
+        if (itemStack.stackSize == 0)
+            return true;
+
+        for(Integer i : emptySlots) {
+            iSlot = this.getSlot(i);
+            iSlot.putStack(itemStack.copy());
+            itemStack.stackSize = 0;
+            iSlot.onSlotChanged();
+            break;
+        }
+        return true;
     }
 }

@@ -18,7 +18,7 @@ public class MixinEntityPlayer extends EntityLiving {
     }
 
     @Inject(method = "fall (F)V", cancellable = true, at = @At(value = "INVOKE", target = "Lnet/minecraft/src/EntityLiving; fall (F)V"))
-    private void fallInject(float f, CallbackInfo ci) {
+    private void bconsctruct_fallInject(float f, CallbackInfo ci) {
         if (inventory.armorInventory[0] != null && inventory.armorInventory[0].getItem() != null && inventory.armorInventory[0].getItem() == BConstruct.slimeBoots) {
             EntityPlayer thePlayer = (EntityPlayer) (Object) this;
             if (thePlayer.isSneaking()) {

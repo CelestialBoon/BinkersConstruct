@@ -1,11 +1,12 @@
 package levistico.bconstruct.gui.panels;
 
 import levistico.bconstruct.BConstruct;
-import levistico.bconstruct.gui.BSlotActivatable;
-import levistico.bconstruct.gui.BSlotCrafting;
+import levistico.bconstruct.gui.BSlotCustomizable;
+import levistico.bconstruct.gui.BSlotCraftingResult;
 import levistico.bconstruct.gui.GUIUtils;
 import levistico.bconstruct.gui.containers.GUIContainerWithPanels;
 import levistico.bconstruct.gui.texture.TextureUtils;
+import levistico.bconstruct.utils.Utils;
 import net.minecraft.src.GuiTextField;
 import net.minecraft.src.Slot;
 import net.minecraft.src.SlotCrafting;
@@ -13,17 +14,18 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static levistico.bconstruct.BConstruct.mc;
 
 public class PanelCrafting extends BPanelWithSlots {
 
     String panelName;
-    List<BSlotActivatable> craftingSlots;
-    BSlotCrafting resultSlot;
+    List<BSlotCustomizable> craftingSlots;
+    BSlotCraftingResult resultSlot;
     GuiTextField textBox;
 
-    public PanelCrafting(GUIContainerWithPanels guiContainer, String panelName, float zLevel, List<BSlotActivatable> craftingSlots, BSlotCrafting resultSlot) {
+    public PanelCrafting(GUIContainerWithPanels guiContainer, String panelName, float zLevel, List<BSlotCustomizable> craftingSlots, BSlotCraftingResult resultSlot) {
         super(guiContainer,176, 83, zLevel);
         centerOffsetY = -42;
         this.craftingSlots = craftingSlots;
@@ -49,7 +51,7 @@ public class PanelCrafting extends BPanelWithSlots {
 
         wind(topX, topY);
         for(Slot slot : slots) {
-            if(!(slot instanceof BSlotActivatable) || ((BSlotActivatable)slot).isActive) {
+            if(!(slot instanceof BSlotCustomizable) || ((BSlotCustomizable)slot).isActive) {
                 boolean isMouseOver = getIsMouseOverSlot(slot, relativeMouseX, relativeMouseY);
                 guiContainer.drawSlotInventory(slot, isMouseOver);
             }
@@ -59,10 +61,18 @@ public class PanelCrafting extends BPanelWithSlots {
     }
 
     @Override
-    public void drawTooltip(int mouseX, int mouseY, int relativeMouseX, int relativeMouseY) {
-        slots.stream().filter(slot -> GUIUtils.isMouseOverSlot(slot, relativeMouseX, relativeMouseY) && slot.hasStack()).forEach(slot -> {
-            guiContainer.drawItemTooltip(slot.getStack(), mouseX, mouseY, slot.discovered, slot instanceof SlotCrafting);
-        });
+    public void drawTooltip(int topX, int topY, int mouseX, int mouseY, int relativeMouseX, int relativeMouseY) {
+        Optional<Slot> mslot = slots.stream().filter(slot -> GUIUtils.isMouseOverSlot(slot, relativeMouseX, relativeMouseY)).findAny();
+        if(mslot.isPresent()) {
+            Slot slot = mslot.get();
+            if(slot.hasStack())
+                guiContainer.drawItemTooltip(slot.getStack(), mouseX, mouseY, slot.discovered, slot instanceof SlotCrafting);
+            else if (slot instanceof BSlotCustomizable) {
+                BSlotCustomizable cslot = (BSlotCustomizable) slot;
+                if(! Utils.isStringEmpty(cslot.tooltipString))
+                    guiContainer.drawTooltipAtMouse(cslot.tooltipString, mouseX, mouseY);
+            }
+        }
     }
 
     @Override

@@ -6,6 +6,7 @@ import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.gui.texture.TextureUtils;
 import levistico.bconstruct.tools.BTool;
 import levistico.bconstruct.gui.texture.ITexturedPart;
+import levistico.bconstruct.tools.ToolStack;
 import net.minecraft.src.*;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Final;
@@ -79,8 +80,8 @@ public abstract class MixinRenderItem extends Render {
             renderengine.bindTexture(TextureUtils.TOOL_BITS_TEXTURE_INDEX);
 //            BConstruct.LOGGER.info("rendering tool bits at texture: " + renderengine.getTexture(GBitsUtil.TOOL_BITS_TEXTURE));
             BTool tool = (BTool) item;
-            boolean broken = BTool.isToolBroken(itemstack);
-            BToolMaterial[] materials = BTool.getMaterials(itemstack);
+            boolean broken = ToolStack.isToolBroken(itemstack);
+            BToolMaterial[] materials = ToolStack.getMaterials(itemstack);
             for(Integer npart : tool.renderOrder) {
                 ITexturedPart part = tool.texturedParts.get(npart);
                 int k = part.getIconIndex(materials[npart].eNumber, broken);
@@ -191,8 +192,8 @@ public abstract class MixinRenderItem extends Render {
                 } else {
                     this.renderManager.renderEngine.bindTexture(TextureUtils.TOOL_BITS_TEXTURE_INDEX);
                     BTool tool = (BTool) itemstack.getItem();
-                    boolean broken = BTool.isToolBroken(itemstack);
-                    BToolMaterial[] materials = BTool.getMaterials(itemstack);
+                    boolean broken = ToolStack.isToolBroken(itemstack);
+                    BToolMaterial[] materials = ToolStack.getMaterials(itemstack);
                     for (Integer npart : tool.renderOrder) {
                         ITexturedPart part = tool.texturedParts.get(npart);
                         int ti = part.getIconIndex(materials[npart].eNumber, broken);

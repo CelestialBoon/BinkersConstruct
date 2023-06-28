@@ -1,6 +1,6 @@
 # Binker's Construct
 
-An opinionated port of Tinker's Construct for Babric (BTA Minecraft).
+An opinionated port of Tinker's Construct for Babric (BTA Minecraft). Uses [halplibe](https://github.com/Turnip-Labs/bta-halplibe/releases).
 
 ## Disclaimer
 

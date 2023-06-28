@@ -3,11 +3,11 @@ package levistico.bconstruct.gui;
 import levistico.bconstruct.crafting.IOnCraftResult;
 import net.minecraft.src.*;
 
-public class BSlotCrafting extends Slot {
+public class BSlotCraftingResult extends Slot {
     private IOnCraftResult container;
     private EntityPlayer player;
 
-    public BSlotCrafting(IOnCraftResult container, int id, EntityPlayer entityplayer, IInventory iinventory, int x, int y) {
+    public BSlotCraftingResult(IOnCraftResult container, int id, EntityPlayer entityplayer, IInventory iinventory, int x, int y) {
         super(iinventory, id, x, y);
         this.player = entityplayer;
         this.container = container;
