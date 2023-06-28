@@ -30,7 +30,6 @@ public class TileEntityCastingBasin extends TileEntityFluidTank {
 
     @Override
     public void updateEntity() {
-        BConstruct.LOGGER.info(String.valueOf(fluidContents[0]));
         if(fluidContents[0] != null) {
             basinRecipes.forEach((K,V)->{
                 if(fluidContents[0] != null && K.isFluidEqual(fluidContents[0])){
