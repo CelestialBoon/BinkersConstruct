@@ -79,7 +79,7 @@ dependencies {
 	modImplementation "org.apache.logging.log4j:log4j-slf4j18-impl:2.16.0"
 
 	modImplementation "fluidapi:fluidapi:1.6.1"
-	modImplementation "sunsetutils:sunsetutils:1.4"
+	modImplementation "sunsetutils:sunsetutils:1.5.1"
 
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'

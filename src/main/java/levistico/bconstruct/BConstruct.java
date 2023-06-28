@@ -116,6 +116,7 @@ public final class BConstruct implements ModInitializer {
         EntityHelper.createSpecialTileEntity(TileEntityCastingBasin.class, new RenderCastingBasin(),"Casting Basin");
         addToNameGuiMap("Smeltery", GUISmelteryController.class, TileEntitySmelteryController.class);
         EntityHelper.createSpecialTileEntity(TileEntitySearedTank.class,new RenderFluidInBlock(),"Seared Tank");
+        EntityHelper.createSpecialTileEntity(TileEntitySmelteryDrain.class,new RenderSmelteryDrain(),"Smeltery Drain");
         addToNameGuiMap("Seared Tank", GuiFluidTank.class, TileEntitySearedTank.class);
 
         RecipeHelper.Crafting.createShapelessRecipe(craftingStation, 1, new Object[] {new ItemStack(Block.workbench, 1)});

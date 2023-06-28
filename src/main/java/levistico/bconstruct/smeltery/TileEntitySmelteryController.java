@@ -1,5 +1,6 @@
 package levistico.bconstruct.smeltery;
 
+import b100.utils.ReflectUtils;
 import levistico.bconstruct.BConstruct;
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockFluid;
@@ -8,10 +9,7 @@ import net.minecraft.src.ItemStack;
 import sunsetsatellite.fluidapi.FluidRegistry;
 import sunsetsatellite.fluidapi.api.FluidStack;
 import sunsetsatellite.fluidapi.template.tiles.TileEntityMultiFluidTank;
-import sunsetsatellite.sunsetutils.util.BlockInstance;
-import sunsetsatellite.sunsetutils.util.Connection;
-import sunsetsatellite.sunsetutils.util.Direction;
-import sunsetsatellite.sunsetutils.util.Vec3i;
+import sunsetsatellite.sunsetutils.util.*;
 import sunsetsatellite.sunsetutils.util.multiblocks.IMultiblock;
 import sunsetsatellite.sunsetutils.util.multiblocks.Multiblock;
 
@@ -27,6 +25,14 @@ public class TileEntitySmelteryController extends TileEntityMultiFluidTank imple
     public static final HashMap<ItemStack,FluidStack> smeltingRecipes = new HashMap<>();
     public HashMap<Integer,Integer> progress = new HashMap<>(); //HashMap<SlotId,TicksCooking>
     public boolean multiblockValid = false;
+    public TickTimer checkValidity;
+    {
+        try {
+            checkValidity = new TickTimer(this, this.getClass().getDeclaredMethod("checkMultiblockValidity"),100,true);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public TileEntitySmelteryController(){
         multiblock = Multiblock.multiblocks.get("smeltery");
@@ -57,21 +63,26 @@ public class TileEntitySmelteryController extends TileEntityMultiFluidTank imple
 
     @Override
     public void updateEntity() {
-        //TODO: By god somebody optimize this later
+        checkValidity.tick(); //checks multiblock validity every 5 seconds.
+        if(multiblockValid){
+            getTank();
+            processAlloys();
+            processSmeltables();
+            ArrayList<BlockInstance> blocks = multiblock.getTileEntities(worldObj,new BlockInstance(getBlockType(),new Vec3i(xCoord,yCoord,zCoord),this),Direction.getDirectionFromSide(worldObj.getBlockMetadata(xCoord,yCoord,zCoord)));
+            for (BlockInstance block : blocks) {
+                if(block.tile instanceof TileEntitySmelteryDrain && !fluidContents.isEmpty()){
+                    ((TileEntitySmelteryDrain) block.tile).drainingStack = fluidContents.get(0);
+                }
+            }
+            super.updateEntity();
+        }
+    }
+
+    public void checkMultiblockValidity(){
         if(getMultiblock().isValidAt(worldObj,new BlockInstance(this.getBlockType(),new Vec3i(xCoord,yCoord,zCoord),this),Direction.getDirectionFromSide(worldObj.getBlockMetadata(xCoord,yCoord,zCoord)))) {
             multiblockValid = true;
         } else {
             multiblockValid = false;
-        }
-        if(multiblockValid){
-            if(fluidContents.isEmpty()){
-                fluidContents.add(new FluidStack((BlockFluid) BConstruct.moltenCopperFlowing,9072/4));
-                fluidContents.add(new FluidStack((BlockFluid) BConstruct.moltenTinFlowing,9072/4));
-            }
-            getTank();
-            processAlloys();
-            processSmeltables();
-            super.updateEntity();
         }
     }
 
