@@ -11,6 +11,7 @@ import levistico.bconstruct.tools.BTool;
 import levistico.bconstruct.tools.BTools;
 import levistico.bconstruct.tools.EToolBit;
 import levistico.bconstruct.utils.Utils;
+import net.minecraft.src.GLAllocation;
 import net.minecraft.src.TextureFX;
 import net.minecraft.src.helper.Color;
 import net.minecraft.src.helper.Textures;
