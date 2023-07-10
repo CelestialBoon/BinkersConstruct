@@ -1,6 +1,17 @@
 item.bconstruct.blankPattern.name = Blank Pattern
 item.bconstruct.blankPattern.desc = Your basic resource for crafting tool parts at the Part Station.
 
+item.bconstruct.bucketMoltenMetal.name = Molten Metal Bucket
+item.bconstruct.bucketMoltenMetal.desc = A bucket full of unknown molten metal.
+item.bconstruct.bucketMoltenIron.name = Molten Iron Bucket
+item.bconstruct.bucketMoltenIron.desc = A bucket full of molten iron.
+item.bconstruct.bucketMoltenCopper.name = Molten Copper Bucket
+item.bconstruct.bucketMoltenCopper.desc = A bucket full of molten copper.
+item.bconstruct.bucketMoltenTin.name = Molten Tin Bucket
+item.bconstruct.bucketMoltenTin.desc = A bucket full of molten tin.
+item.bconstruct.bucketMoltenBronze.name = Molten Bronze Bucket
+item.bconstruct.bucketMoltenBronze.desc = A bucket full of molten bronze.
+
 item.bconstruct.slimeBoots.name = Slime Boots
 item.bconstruct.slimeBoots.desc = Bouncy!
 
@@ -42,3 +53,34 @@ item.bconstruct.pickadze.name = Pickadze
 tile.bconstruct.partBuilder.name = Part Builder
 tile.bconstruct.craftingStation.name = Crafting Station
 tile.bconstruct.toolStation.name = Tool Station
+
+tile.bconstruct.searedBricks.name = Seared Bricks
+tile.bconstruct.smelteryController.name = Smeltery Controller
+tile.bconstruct.smelteryDrain.name = Smeltery Drain
+tile.bconstruct.searedTank.name = Seared Tank
+tile.bconstruct.castingBasin.name = Casting Basin
+
+tile.bconstruct.moltenMetalFlowing.name=Flowing Molten Metal
+tile.bconstruct.moltenMetalFlowing.desc=An unknown molten metal.
+tile.bconstruct.moltenMetalStill.name=Still Molten Metal
+tile.bconstruct.moltenMetalStill.desc=An unknown molten metal.
+
+tile.bconstruct.moltenCopperFlowing.name=Flowing Molten Copper
+tile.bconstruct.moltenCopperFlowing.desc=A cubic meter of molten copper.
+tile.bconstruct.moltenCopperStill.name=Still Molten Copper
+tile.bconstruct.moltenCopperStill.desc=A cubic meter of molten copper.
+
+tile.bconstruct.moltenIronFlowing.name=Flowing Molten Iron
+tile.bconstruct.moltenIronFlowing.desc=A cubic meter of molten iron.
+tile.bconstruct.moltenIronStill.name=Still Molten Iron
+tile.bconstruct.moltenIronStill.desc=A cubic meter of molten iron.
+
+tile.bconstruct.moltenTinFlowing.name=Flowing Molten Tin
+tile.bconstruct.moltenTinFlowing.desc=A cubic meter of molten tin.
+tile.bconstruct.moltenTinStill.name=Still Molten Tin
+tile.bconstruct.moltenTinStill.desc=A cubic meter of molten tin.
+
+tile.bconstruct.moltenBronzeFlowing.name=Flowing Molten Bronze
+tile.bconstruct.moltenBronzeFlowing.desc=A cubic meter of molten bronze.
+tile.bconstruct.moltenBronzeStill.name=Still Molten Bronze
+tile.bconstruct.moltenBronzeStill.desc=A cubic meter of molten bronze.
