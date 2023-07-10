@@ -31,7 +31,6 @@ public class RenderSmelteryDrain extends TileEntitySpecialRenderer {
                 } else {
                     GL11.glColor3f(1.0F, 1.0F, 1.0F);
                 }
-                //BConstruct.LOGGER.info(String.valueOf(position));
                 drawBlock(this.getFontRenderer(),this.tileEntityRenderer.renderEngine, drain.drainingStack.getLiquid().blockID, 0, drain );
                 GL11.glPopMatrix();
             }
