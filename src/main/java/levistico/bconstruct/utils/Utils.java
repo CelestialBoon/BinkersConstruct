@@ -1,6 +1,7 @@
 package levistico.bconstruct.utils;
 
 import net.minecraft.src.*;
+import net.minecraft.src.command.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -186,4 +187,13 @@ public final class Utils {
     }
 
 
+    public static String getHarvestTier(int miningLevel) {
+        switch (miningLevel) {
+            case 0: return "" + ChatColor.brown + "Wood";
+            case 1: return "" + ChatColor.gray + "Stone";
+            case 2: return "" + ChatColor.lightGray + "Iron";
+            case 3: return "" + ChatColor.cyan + "Diamond";
+        }
+        return null;
+    }
 }

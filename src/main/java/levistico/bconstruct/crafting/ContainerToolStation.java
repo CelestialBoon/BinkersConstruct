@@ -24,6 +24,8 @@ public final class ContainerToolStation extends BContainerWithRecipe {
     String chosenName = "";
     private final GuiTextField.TextChangeListener nameChangeListener;
 
+    private ArrayList<Listener<ItemStack>> subscriptionListOnCraftMatrixChange;
+
     //TODO everything about the arrangement has to be done here first, all the nits and grits, and then this data can be passed to panel generation by having accessible fields
     public ContainerToolStation(InventoryPlayer inventoryplayer, CraftingTileEntity tileEntity) {
        super(inventoryplayer, tileEntity);
@@ -74,6 +76,10 @@ public final class ContainerToolStation extends BContainerWithRecipe {
             BTool.setCustomName(resultStack, chosenName);
         }
         this.craftResult.setInventorySlotContents(0, resultStack);
+        if(subscriptionListOnCraftMatrixChange == null) subscriptionListOnCraftMatrixChange = new ArrayList<>();
+        for (Listener<ItemStack> subscriber : subscriptionListOnCraftMatrixChange){
+            subscriber.listen(resultStack);
+        }
     }
 
     public void initializeNameField(GuiTextField textBox) {
@@ -89,4 +95,9 @@ public final class ContainerToolStation extends BContainerWithRecipe {
         }
         return recipe;
     }
+
+    public void subscribeToOnCraftMatrixChange(Listener<ItemStack> subscription){
+        this.subscriptionListOnCraftMatrixChange.add(subscription);
+    }
+
 }

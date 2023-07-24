@@ -37,6 +37,10 @@ public class PanelText extends BasePanel{
         return this;
     }
 
+    public void clearTextLines(){
+        this.textLines.clear();
+    }
+
     void calculatemaxScroll() {
         maxScroll = Math.min(0, height-textOffsetY-yBottomBorder - textLines.size()*textHeight);
     }
@@ -49,6 +53,7 @@ public class PanelText extends BasePanel{
         if(isMouseHere(topX, topY, mouseX, mouseY)) {
             scroll(Mouse.getDWheel());
         }
+        guiContainer.drawRect(topX, topY, width, height, 0x80202020);
         int len = textLines.size();
         //this is where the fun lives
         for(int i = 0; i<len; i++) {
@@ -68,7 +73,7 @@ public class PanelText extends BasePanel{
     @Override
     public void drawTooltip(int topX, int topY, int mouseX, int mouseY, int relativeMouseX, int relativeMouseY) {
         int textLineHovered = (relativeMouseY - textOffsetY - scroll) / textHeight;
-        if(textLineHovered >= 0 && textLineHovered < textLines.size()) {
+        if(textLineHovered >= 0 && textLineHovered < textLines.size() && !Utils.isStringEmpty(textLines.get(textLineHovered).tooltip)) {
             guiContainer.drawTooltipAtMouse(textLines.get(textLineHovered).tooltip, mouseX, mouseY);
         }
     }

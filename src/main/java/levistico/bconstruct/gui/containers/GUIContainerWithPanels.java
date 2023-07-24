@@ -217,4 +217,8 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
     public void drawTooltipAtMouse(String text, int mouseX, int mouseY) {
         this.drawTooltip(text, mouseX, mouseY, 8, -8, true);
     }
+
+    public void drawRect(int x, int y, int w, int h, int color){
+        super.drawRect(x,y,x+w,y+h,color);
+    }
 }
