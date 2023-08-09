@@ -1,5 +1,8 @@
 package levistico.bconstruct.tools;
 
+import com.mojang.nbt.CompoundTag;
+import com.mojang.nbt.IntTag;
+import com.mojang.nbt.ListTag;
 import levistico.bconstruct.BConstruct;
 import levistico.bconstruct.materials.BToolMaterial;
 import levistico.bconstruct.parts.BToolPart;
@@ -15,9 +18,13 @@ import levistico.bconstruct.tools.stats.StatBoosts;
 import levistico.bconstruct.utils.IHasTranslateKey;
 import levistico.bconstruct.utils.Pair;
 import levistico.bconstruct.utils.Utils;
-import net.minecraft.src.*;
+import net.minecraft.core.block.Block;
+import net.minecraft.core.entity.EntityLiving;
+import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.item.Item;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.world.World;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -109,14 +116,10 @@ public abstract class BTool extends Item implements IHasTranslateKey {
     public BTool setattackAction(AttackAction value) {this.attackAction = value; return this;}
 
     //////////////////////// OTHER ///////////////////
-    @Override
-    public String getItemNameIS(ItemStack itemstack) {
-        return getItemNickname(itemstack);
-    }
 
     public static void setCustomName(ItemStack stack, String name) {
-        stack.tag.setString(NAME, name);
-        stack.tag.setBoolean(IS_CUSTOM_NAME, true);
+        stack.tag.putString(NAME, name);
+        stack.tag.putBoolean(IS_CUSTOM_NAME, true);
     }
 
     /*public ItemStack onItemRightClick(@NotNull ItemStack itemstack, World world, EntityPlayer entityplayer) {
@@ -149,13 +152,13 @@ public abstract class BTool extends Item implements IHasTranslateKey {
         return composition.get(i).partFlag;
     }
 
-    public NBTTagCompound initializeTags(@NotNull NBTTagCompound rootTags,
-                                         List<BToolMaterial> materials) {
-        rootTags.setBoolean(BROKEN, false);
+    public CompoundTag initializeTags(@NotNull CompoundTag rootTags,
+                                      List<BToolMaterial> materials) {
+        rootTags.putBoolean(BROKEN, false);
 
         ///////////////////////MATERIALS/////////////////////////
-        NBTTagList materialsTag = new NBTTagList();
-        rootTags.setTag(MATERIALS, materialsTag);
+        ListTag materialsTag = new ListTag();
+        rootTags.put(MATERIALS, materialsTag);
 
         List<BToolMaterial> listHeadMaterials = new ArrayList<>();
         List<BToolMaterial> listBindingMaterials = new ArrayList<>();
@@ -174,28 +177,28 @@ public abstract class BTool extends Item implements IHasTranslateKey {
                     listHandleMaterials.add(materials.get(i));
                     break;
             }
-            materialsTag.setTag(new NBTTagInt(materials.get(i).eNumber));
+            materialsTag.addTag(new IntTag(materials.get(i).eNumber));
         }
 
         ///////////////////////NAME/////////////////////////
         if(! rootTags.getBoolean(IS_CUSTOM_NAME)) {
-            rootTags.setString(NAME, String.format("%s %s", StringUtils.join(setHeadMaterials.stream().map(Utils::translateKey).collect(Collectors.toList()), '-'), Utils.translateKey(this)));
+            rootTags.putString(NAME, String.format("%s %s", StringUtils.join(setHeadMaterials.stream().map(Utils::translateKey).collect(Collectors.toList()), '-'), Utils.translateKey(this)));
         }
-        if(! rootTags.hasKey(COLOR)) {
-            rootTags.setByte(COLOR, (byte) 0);
+        if(! rootTags.containsKey(COLOR)) {
+            rootTags.putByte(COLOR, (byte) 0);
         }
 
         ///////////////////////BASE STATS/////////////////////////
-        NBTTagCompound baseTags = new NBTTagCompound();
-        rootTags.setCompoundTag(BASE_STATS, baseTags);
+        CompoundTag baseTags = new CompoundTag();
+        rootTags.putCompound(BASE_STATS, baseTags);
 
-        baseTags.setInteger(MININGLEVEL, listHeadMaterials.stream().map(BToolMaterial::getMiningLevel).max(Integer::compareTo).orElse(0));
+        baseTags.putInt(MININGLEVEL, listHeadMaterials.stream().map(BToolMaterial::getMiningLevel).max(Integer::compareTo).orElse(0));
 
         Float baseDamage = Utils.average(listHeadMaterials.stream().map(mat -> (float)mat.getAttackDamage()), listHeadMaterials.size());
-        baseTags.setFloat(ATTACKDAMAGE, baseDamageBonus + attackDamageMultiplier * baseDamage);
+        baseTags.putFloat(ATTACKDAMAGE, baseDamageBonus + attackDamageMultiplier * baseDamage);
 
         Float baseMiningSpeed = Utils.average(listHeadMaterials.stream().map(BToolMaterial::getMiningSpeed), listHeadMaterials.size());
-        baseTags.setFloat(MININGSPEED, miningSpeedMultiplier * baseMiningSpeed);
+        baseTags.putFloat(MININGSPEED, miningSpeedMultiplier * baseMiningSpeed);
 
         //TODO include handles etc. in durability calculation and all the extra stuff
         int numerator = 0;
@@ -205,7 +208,7 @@ public abstract class BTool extends Item implements IHasTranslateKey {
             denominator += part.weight;
             numerator += part.weight * listHeadMaterials.get(i).getDurability();
         }
-        baseTags.setInteger(DURABILITY,  Utils.round(durabilityMultiplier * numerator / denominator));
+        baseTags.putInt(DURABILITY,  Utils.round(durabilityMultiplier * numerator / denominator));
 
         ///////////////////////BASE PROPERTIES/////////////////////////
         ArrayList<Property> baseProperties = new ArrayList<>(baseToolProperties);
@@ -224,12 +227,12 @@ public abstract class BTool extends Item implements IHasTranslateKey {
         return rootTags;
     }
 
-    public NBTTagCompound calculateTotalTags(@NotNull NBTTagCompound rootTags) {
-        NBTTagCompound baseTags = rootTags.getCompoundTag(BASE_STATS);
-        NBTTagCompound upgradeTags = rootTags.getCompoundTag(UPGRADES);
+    public CompoundTag calculateTotalTags(@NotNull CompoundTag rootTags) {
+        CompoundTag baseTags = rootTags.getCompound(BASE_STATS);
+        CompoundTag upgradeTags = rootTags.getCompound(UPGRADES);
 
-        NBTTagCompound totalTags = new NBTTagCompound();
-        rootTags.setCompoundTag(TOTAL_STATS, totalTags);
+        CompoundTag totalTags = new CompoundTag();
+        rootTags.putCompound(TOTAL_STATS, totalTags);
 
         ///////////////////////PROPERTIES/////////////////////////
         Collection<Property> properties = ToolStack.getProperties(baseTags);
@@ -241,15 +244,15 @@ public abstract class BTool extends Item implements IHasTranslateKey {
 
         ///////////////////////TOTAL STATS/////////////////////////
         StatBoosts totalBoosts = PropertyStats.getTotalStatBoosts(properties.stream().flatMap(Utils.instancesOf(PropertyStats.class)));
-        totalTags.setInteger(MININGLEVEL, totalBoosts.applyMiningLevel(baseTags.getInteger(MININGLEVEL)));
+        totalTags.putInt(MININGLEVEL, totalBoosts.applyMiningLevel(baseTags.getInteger(MININGLEVEL)));
 
-        totalTags.setInteger(ATTACKDAMAGE, Utils.round(totalBoosts.apply(EToolStat.attackDamage.ordinal(), baseTags.getFloat(ATTACKDAMAGE))));
+        totalTags.putInt(ATTACKDAMAGE, Utils.round(totalBoosts.apply(EToolStat.attackDamage.ordinal(), baseTags.getFloat(ATTACKDAMAGE))));
 
-        totalTags.setFloat(MININGSPEED, totalBoosts.apply(EToolStat.miningSpeed.ordinal(), baseTags.getFloat(MININGSPEED)));
+        totalTags.putFloat(MININGSPEED, totalBoosts.apply(EToolStat.miningSpeed.ordinal(), baseTags.getFloat(MININGSPEED)));
 
-        totalTags.setInteger(DURABILITY,  Utils.round(totalBoosts.apply(EToolStat.durability.ordinal(), baseTags.getInteger(DURABILITY))));
+        totalTags.putInt(DURABILITY,  Utils.round(totalBoosts.apply(EToolStat.durability.ordinal(), baseTags.getInteger(DURABILITY))));
 
-        totalTags.setFloat(REINFORCED, totalBoosts.apply(EToolStat.reinforced.ordinal(), 1f));
+        totalTags.putFloat(REINFORCED, totalBoosts.apply(EToolStat.reinforced.ordinal(), 1f));
 
         ///////////////////////RIGHTCLICK ACTIONS/////////////////////////
         List<RightClickAction> rcactions = new ArrayList<>(baseRightClickActions);

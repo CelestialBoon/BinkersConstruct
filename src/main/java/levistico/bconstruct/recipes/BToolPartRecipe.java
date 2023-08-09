@@ -5,8 +5,10 @@ import levistico.bconstruct.materials.BToolMaterial;
 import levistico.bconstruct.materials.BToolMaterials;
 import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.utils.Pair;
-import net.minecraft.src.InventoryCrafting;
-import net.minecraft.src.ItemStack;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.player.inventory.InventoryCrafting;
+import net.minecraft.core.player.inventory.InventoryCrafting;
+import net.minecraft.core.item.ItemStack;
 
 public class BToolPartRecipe extends BRecipe {
 

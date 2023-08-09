@@ -1,6 +1,8 @@
 package levistico.bconstruct.crafting;
 
-import net.minecraft.src.*;
+import net.minecraft.core.crafting.CraftingManager;
+import net.minecraft.core.player.inventory.IInventory;
+import net.minecraft.core.player.inventory.InventoryPlayer;
 
 public final class ContainerCraftingStation extends BContainer {
     public ContainerCraftingStation(InventoryPlayer inventoryplayer, CraftingTileEntity tileEntity) {

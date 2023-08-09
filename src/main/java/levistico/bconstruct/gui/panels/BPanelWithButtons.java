@@ -2,8 +2,10 @@ package levistico.bconstruct.gui.panels;
 
 import levistico.bconstruct.BConstruct;
 import levistico.bconstruct.gui.BGuiButton;
+import levistico.bconstruct.gui.GUIUtils;
 import levistico.bconstruct.gui.containers.GUIContainerWithPanels;
 import levistico.bconstruct.utils.Utils;
+import net.minecraft.core.sound.SoundType;
 
 import java.util.List;
 
@@ -28,7 +30,7 @@ public abstract class BPanelWithButtons extends BasePanel {
     void clickButtons(int relativeMouseX, int relativeMouseY, int mouseButton) {
         if (mouseButton == 0) {
             buttons.stream().filter(b -> b.mousePressed(BConstruct.mc, relativeMouseX, relativeMouseY)).findAny().ifPresent(guiButton -> {
-                BConstruct.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+                BConstruct.mc.sndManager.playSound("random.click", SoundType.GUI_SOUNDS, 1.0F, 1.0F);
                 if (guiButton.listener != null) {
                     guiButton.listener.listen(guiButton);
                 } else {
@@ -41,7 +43,7 @@ public abstract class BPanelWithButtons extends BasePanel {
     public void drawTooltip(int topX, int topY, int mouseX, int mouseY, int relativeMouseX, int relativeMouseY) {
         buttons.stream().filter(b -> b.isHovered(relativeMouseX, relativeMouseY)).findAny().ifPresent(b -> {
             if(! Utils.isStringEmpty(b.displayString))
-                guiContainer.drawTooltip(b.displayString, topX, topY, 0, -15, false);
+                GUIUtils.tooltip.render(b.displayString, topX, topY, 0, -15);
         });
     }
 

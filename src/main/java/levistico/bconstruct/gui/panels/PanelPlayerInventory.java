@@ -3,8 +3,8 @@ package levistico.bconstruct.gui.panels;
 import levistico.bconstruct.gui.GUIUtils;
 import levistico.bconstruct.gui.containers.GUIContainerWithPanels;
 import levistico.bconstruct.gui.texture.TextureUtils;
-import net.minecraft.src.Slot;
-import net.minecraft.src.SlotCrafting;
+import net.minecraft.core.player.inventory.slot.Slot;
+import net.minecraft.core.player.inventory.slot.SlotCrafting;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public class PanelPlayerInventory extends BPanelWithSlots {
     @Override
     public void drawTooltip(int topX, int topY, int mouseX, int mouseY, int relativeMouseX, int relativeMouseY) {
         slots.stream().filter(slot -> GUIUtils.isMouseOverSlot(slot, relativeMouseX, relativeMouseY) && slot.hasStack()).forEach(slot -> {
-            guiContainer.drawItemTooltip(slot.getStack(), mouseX, mouseY, slot.discovered, slot instanceof SlotCrafting);
+            guiContainer.drawItemTooltip(slot.getStack(), mouseX, mouseY, slot instanceof SlotCrafting);
         });
     }
 
@@ -50,7 +50,7 @@ public class PanelPlayerInventory extends BPanelWithSlots {
     }
 
     @Override
-    public boolean keyTyped(char c, int i) {
+    public boolean keyTyped(char c, int i, int mouseX, int mouseY) {
         return false; //TODO later this can capture number hotkeys
     }
 

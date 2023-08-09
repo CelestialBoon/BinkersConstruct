@@ -20,18 +20,18 @@ public class BToolParts {
 
     public static void InitializeToolParts(String MOD_ID) {
 
-        repairKit = (TPRepairKit) createToolPart(MOD_ID, new TPRepairKit(BConstruct.itemIdInc++), EToolPart.repairKit, "repair_kit");
-        rod = (TPRod) createToolPart(MOD_ID, new TPRod(BConstruct.itemIdInc++), EToolPart.rod, "rod");
-        binding = (TPBinding) createToolPart(MOD_ID, new TPBinding(BConstruct.itemIdInc++), EToolPart.binding, "binding");
-        axeHead = (TPAxeHead) createToolPart(MOD_ID, new TPAxeHead(BConstruct.itemIdInc++), EToolPart.axeHead, "axe_head");
-        pickaxeHead = (TPPickaxeHead) createToolPart(MOD_ID, new TPPickaxeHead(BConstruct.itemIdInc++), EToolPart.pickaxeHead, "pickaxe_head");
-        shovelHead = (TPShovelHead) createToolPart(MOD_ID, new TPShovelHead(BConstruct.itemIdInc++), EToolPart.shovelHead, "shovel_head");
-        largeGuard = (TPLargeGuard) createToolPart(MOD_ID, new TPLargeGuard(BConstruct.itemIdInc++), EToolPart.largeGuard, "large_guard");
-        blade = (TPBlade) createToolPart(MOD_ID, new TPBlade(BConstruct.itemIdInc++), EToolPart.blade, "blade");
+        repairKit = (TPRepairKit) createToolPart(MOD_ID, new TPRepairKit(BConstruct.idInc++), EToolPart.repairKit, "repair_kit");
+        rod = (TPRod) createToolPart(MOD_ID, new TPRod(BConstruct.idInc++), EToolPart.rod, "rod");
+        binding = (TPBinding) createToolPart(MOD_ID, new TPBinding(BConstruct.idInc++), EToolPart.binding, "binding");
+        axeHead = (TPAxeHead) createToolPart(MOD_ID, new TPAxeHead(BConstruct.idInc++), EToolPart.axeHead, "axe_head");
+        pickaxeHead = (TPPickaxeHead) createToolPart(MOD_ID, new TPPickaxeHead(BConstruct.idInc++), EToolPart.pickaxeHead, "pickaxe_head");
+        shovelHead = (TPShovelHead) createToolPart(MOD_ID, new TPShovelHead(BConstruct.idInc++), EToolPart.shovelHead, "shovel_head");
+        largeGuard = (TPLargeGuard) createToolPart(MOD_ID, new TPLargeGuard(BConstruct.idInc++), EToolPart.largeGuard, "large_guard");
+        blade = (TPBlade) createToolPart(MOD_ID, new TPBlade(BConstruct.idInc++), EToolPart.blade, "blade");
     }
 
     static BToolPart createToolPart(String modId, BToolPart toolPart, EToolPart enumToolPart, String partTexture) {
-        toolPart.setItemName(HalpLibe.addModId(modId, toolPart.name));
+        toolPart.setKey(HalpLibe.addModId(modId, toolPart.name));
         Utils.setAt(partList, enumToolPart.ordinal(), toolPart);
         Utils.setAt(baseTextureArray, enumToolPart.ordinal(), partTexture);
         return toolPart;

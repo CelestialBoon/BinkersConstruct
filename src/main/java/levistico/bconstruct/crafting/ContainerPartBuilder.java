@@ -6,14 +6,15 @@ import levistico.bconstruct.gui.BSlotCustomizable;
 import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.parts.BToolParts;
 import levistico.bconstruct.parts.EToolPart;
-import levistico.bconstruct.recipes.BToolPartRecipe;
-
 import levistico.bconstruct.recipes.BRecipe;
+import levistico.bconstruct.recipes.BToolPartRecipe;
 import levistico.bconstruct.utils.AcceptRule;
 import levistico.bconstruct.utils.Pair;
 import levistico.bconstruct.utils.Utils;
-import net.minecraft.src.*;
-import net.minecraft.src.helper.Listener;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.core.lang.I18n;
+import net.minecraft.core.player.inventory.InventoryPlayer;
+import net.minecraft.core.util.helper.Listener;
 
 import java.util.ArrayList;
 
@@ -37,12 +38,12 @@ public final class ContainerPartBuilder extends BContainerWithRecipe {
         resizeCraftingSlots(2);
 
         BSlotCustomizable cslot = craftingSlots.get(0);
-        cslot.tooltipString = StringTranslate.getInstance().translateKey(BConstruct.blankPattern.getItemName() + ".name");
-        cslot.acceptsOnly = AcceptRule.acceptsOnlyIds(BConstruct.blankPattern.itemID);
+        cslot.tooltipString = I18n.getInstance().translateKey(BConstruct.blankPattern.getKey() + ".name");
+        cslot.acceptsOnly = AcceptRule.acceptsOnlyIds(BConstruct.blankPattern.id);
         cslot.textureUV = new Pair<>(0,12);
 
         cslot = craftingSlots.get(1);
-        cslot.tooltipString = StringTranslate.getInstance().translateKey("material.bconstruct.anything.name");
+        cslot.tooltipString = I18n.getInstance().translateKey("material.bconstruct.anything.name");
         cslot.textureUV = new Pair<>(2,12);
 
         //TODO set custom slot textures here
@@ -73,4 +74,5 @@ public final class ContainerPartBuilder extends BContainerWithRecipe {
         }
         return recipe;
     }
+
 }

@@ -1,6 +1,11 @@
 package levistico.bconstruct.crafting;
 
-import net.minecraft.src.*;
+import com.mojang.nbt.CompoundTag;
+import com.mojang.nbt.ListTag;
+import net.minecraft.core.block.entity.TileEntity;
+import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.player.inventory.IInventory;
 
 public final class ContainerTileEntity extends TileEntity implements IInventory {
     public final int size;
@@ -56,35 +61,35 @@ public final class ContainerTileEntity extends TileEntity implements IInventory 
         return name;
     }
 
-    public void readFromNBT(NBTTagCompound nbttagcompound) {
+    public void readFromNBT(CompoundTag nbttagcompound) {
         super.readFromNBT(nbttagcompound);
-        NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
+        ListTag nbttaglist = nbttagcompound.getList("Items");
         this.contents = new ItemStack[this.getSizeInventory()];
 
         for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-            NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
+            CompoundTag nbttagcompound1 = (CompoundTag) nbttaglist.tagAt(i);
             int j = nbttagcompound1.getByte("Slot") & 255;
             if (j >= 0 && j < this.contents.length) {
-                this.contents[j] = new ItemStack(nbttagcompound1);
+                this.contents[j] = ItemStack.readItemStackFromNbt(nbttagcompound1);
             }
         }
 
     }
 
-    public void writeToNBT(NBTTagCompound nbttagcompound) {
+    public void writeToNBT(CompoundTag nbttagcompound) {
         super.writeToNBT(nbttagcompound);
-        NBTTagList nbttaglist = new NBTTagList();
+        ListTag nbttaglist = new ListTag();
 
         for (int i = 0; i < this.contents.length; ++i) {
             if (this.contents[i] != null) {
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-                nbttagcompound1.setByte("Slot", (byte) i);
+                CompoundTag nbttagcompound1 = new CompoundTag();
+                nbttagcompound1.putByte("Slot", (byte) i);
                 this.contents[i].writeToNBT(nbttagcompound1);
-                nbttaglist.setTag(nbttagcompound1);
+                nbttaglist.addTag(nbttagcompound1);
             }
         }
 
-        nbttagcompound.setTag("Items", nbttaglist);
+        nbttagcompound.put("Items", nbttaglist);
     }
 
     public int getInventoryStackLimit() {
@@ -95,7 +100,7 @@ public final class ContainerTileEntity extends TileEntity implements IInventory 
         if (this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this) {
             return false;
         } else {
-            return entityplayer.getDistanceSq((double) this.xCoord + 0.5, (double) this.yCoord + 0.5, (double) this.zCoord + 0.5) <= 64.0;
+            return entityplayer.distanceToSqr((double) this.xCoord + 0.5, (double) this.yCoord + 0.5, (double) this.zCoord + 0.5) <= 64.0;
         }
     }
 }

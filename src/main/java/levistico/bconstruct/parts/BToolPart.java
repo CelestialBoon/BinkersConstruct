@@ -6,8 +6,8 @@ import levistico.bconstruct.materials.BToolMaterials;
 import levistico.bconstruct.gui.texture.TexturedToolPart;
 import levistico.bconstruct.utils.IHasTranslateKey;
 import levistico.bconstruct.utils.Pair;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.core.item.Item;;;
+import net.minecraft.core.item.ItemStack;
 
 
 public class BToolPart extends Item implements IHasTranslateKey {

@@ -1,11 +1,10 @@
 package levistico.bconstruct.crafting;
 
-import levistico.bconstruct.gui.panels.IPanel;
 import levistico.bconstruct.recipes.BRecipe;
-import net.minecraft.src.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.player.inventory.IInventory;
+import net.minecraft.core.player.inventory.InventoryPlayer;
 
 public abstract class BContainerWithRecipe extends BContainer {
     public BRecipe recipe;

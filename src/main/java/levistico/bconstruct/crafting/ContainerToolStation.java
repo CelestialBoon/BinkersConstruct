@@ -11,8 +11,13 @@ import levistico.bconstruct.tools.BTools;
 import levistico.bconstruct.utils.AcceptRule;
 import levistico.bconstruct.utils.Pair;
 import levistico.bconstruct.utils.Utils;
-import net.minecraft.src.*;
-import net.minecraft.src.helper.Listener;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.core.item.Item;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.player.inventory.IInventory;
+import net.minecraft.core.player.inventory.InventoryPlayer;
+import net.minecraft.core.util.helper.Listener;
 
 import java.util.ArrayList;
 
@@ -22,7 +27,7 @@ public final class ContainerToolStation extends BContainerWithRecipe {
     BGuiButton selectedButton;
     public GuiTextField nameField;
     String chosenName = "";
-    private final GuiTextField.TextChangeListener nameChangeListener;
+    private final GuiTextField.ITextChangeListener nameChangeListener;
 
     private ArrayList<Listener<ItemStack>> subscriptionListOnCraftMatrixChange;
 
@@ -43,9 +48,9 @@ public final class ContainerToolStation extends BContainerWithRecipe {
                 BToolPart part = tool.composition.get(j);
                 slot.textureUV = new Pair<>(part.baseTextureUV.first, part.baseTextureUV.second+1);
                 slot.changePosition(tool.slotArrangement[j]);
-                if(part.itemID == BToolParts.rod.itemID) {
-                    slot.acceptsOnly = AcceptRule.acceptsOnlyIds(BToolParts.rod.itemID, Item.stick.itemID);
-                } else slot.acceptsOnly = AcceptRule.acceptsOnlyIds(part.itemID);
+                if(part.id == BToolParts.rod.id) {
+                    slot.acceptsOnly = AcceptRule.acceptsOnlyIds(BToolParts.rod.id, Item.stick.id);
+                } else slot.acceptsOnly = AcceptRule.acceptsOnlyIds(part.id);
                 slot.tooltipString = Utils.translateKey(part);
             }
             if(selectedButton != null) selectedButton.isSelected = false;

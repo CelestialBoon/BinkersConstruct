@@ -1,7 +1,7 @@
 package levistico.bconstruct.crafting;
 
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.ItemStack;
+import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.item.ItemStack;
 
 public interface IOnCraftResult {
     public void onCraftResult(ItemStack stack, EntityPlayer player);

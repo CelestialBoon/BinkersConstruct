@@ -7,9 +7,9 @@ import levistico.bconstruct.gui.texture.TexturedToolBitBreakable;
 import levistico.bconstruct.gui.texture.TexturedToolBitReliable;
 import levistico.bconstruct.tools.actions.HarvestLogics;
 import levistico.bconstruct.utils.Pair;
-import net.minecraft.src.Block;
-import net.minecraft.src.EntityLiving;
-import net.minecraft.src.ItemStack;
+import net.minecraft.core.block.Block;
+import net.minecraft.core.entity.EntityLiving;
+import net.minecraft.core.item.ItemStack;
 
 public final class ToolBroadsword extends BTool {
     public ToolBroadsword(int id) {

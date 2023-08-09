@@ -1,7 +1,15 @@
 package levistico.bconstruct.gui;
 
 import levistico.bconstruct.crafting.IOnCraftResult;
-import net.minecraft.src.*;
+import net.minecraft.core.achievement.AchievementList;
+import net.minecraft.core.block.Block;
+import net.minecraft.core.crafting.CraftingManager;
+import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.item.Item;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.player.inventory.IInventory;
+import net.minecraft.core.player.inventory.InventoryCrafting;
+import net.minecraft.core.player.inventory.slot.Slot;
 
 public class BSlotCraftingResult extends Slot {
     private IOnCraftResult container;
@@ -17,31 +25,40 @@ public class BSlotCraftingResult extends Slot {
         return false;
     }
 
-    public void onPickupFromSlot(ItemStack stack) {
-        //crafting achievements here
-        if (stack.itemID == Block.workbench.blockID) {
-            player.addStat(AchievementList.buildWorkBench, 1);
-        } else if (stack.itemID == Item.toolPickaxeWood.itemID) {
-            player.addStat(AchievementList.buildPickaxe, 1);
-        } else if (stack.itemID == Block.furnaceStoneIdle.blockID) {
-            player.addStat(AchievementList.buildFurnace, 1);
-        } else if (stack.itemID == Item.toolHoeWood.itemID) {
-            player.addStat(AchievementList.buildHoe, 1);
-        } else if (stack.itemID == Item.foodBread.itemID) {
-            player.addStat(AchievementList.makeBread, 1);
-        } else if (stack.itemID == Item.foodCake.itemID) {
-            player.addStat(AchievementList.bakeCake, 1);
-        } else if (stack.itemID == Item.toolPickaxeStone.itemID) {
-            player.addStat(AchievementList.buildBetterPickaxe, 1);
-        } else if (stack.itemID == Item.toolSwordWood.itemID) {
-            player.addStat(AchievementList.buildSword, 1);
-        } else if (stack.itemID == Item.handcannonUnloaded.itemID) {
-            player.addStat(AchievementList.craftHandcannon, 1);
-        } else if (stack.itemID == Item.armorBootsChainmail.itemID || stack.itemID == Item.armorHelmetChainmail.itemID || stack.itemID == Item.armorChestplateChainmail.itemID || stack.itemID == Item.armorLeggingsChainmail.itemID) {
-            player.addStat(AchievementList.repairArmour, 1);
+    public void onPickupFromSlot(final ItemStack itemstack) {
+        itemstack.onCrafting(this.player.world, this.player);
+        if (itemstack.itemID == Block.workbench.id) {
+            this.player.addStat(AchievementList.BUILD_WORKBENCH, 1);
+        }
+        else if (itemstack.itemID == Item.toolPickaxeWood.id) {
+            this.player.addStat(AchievementList.BUILD_PICKAXE, 1);
+        }
+        else if (itemstack.itemID == Block.furnaceStoneIdle.id) {
+            this.player.addStat(AchievementList.BUILD_FURNACE, 1);
+        }
+        else if (itemstack.itemID == Item.toolHoeWood.id) {
+            this.player.addStat(AchievementList.BUILD_HOE, 1);
+        }
+        else if (itemstack.itemID == Item.foodBread.id) {
+            this.player.addStat(AchievementList.MAKE_BREAD, 1);
+        }
+        else if (itemstack.itemID == Item.foodCake.id) {
+            this.player.addStat(AchievementList.BAKE_CAKE, 1);
+        }
+        else if (itemstack.itemID == Item.toolPickaxeStone.id) {
+            this.player.addStat(AchievementList.BUILD_BETTER_PICKAXE, 1);
+        }
+        else if (itemstack.itemID == Item.toolSwordWood.id) {
+            this.player.addStat(AchievementList.BUILD_SWORD, 1);
+        }
+        else if (itemstack.itemID == Item.handcannonUnloaded.id) {
+            this.player.addStat(AchievementList.CRAFT_HANDCANNON, 1);
+        }
+        else if (itemstack.itemID == Item.armorBootsChainmail.id || itemstack.itemID == Item.armorHelmetChainmail.id || itemstack.itemID == Item.armorChestplateChainmail.id || itemstack.itemID == Item.armorLeggingsChainmail.id) {
+            this.player.addStat(AchievementList.REPAIR_ARMOR, 1);
         }
 
-        stack.onCrafting(this.player.worldObj, this.player);
-        container.onCraftResult(stack, player);
+        itemstack.onCrafting(this.player.world, this.player);
+        container.onCraftResult(itemstack, player); //todo
     }
 }

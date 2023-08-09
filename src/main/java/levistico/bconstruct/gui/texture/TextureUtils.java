@@ -11,9 +11,9 @@ import levistico.bconstruct.tools.BTool;
 import levistico.bconstruct.tools.BTools;
 import levistico.bconstruct.tools.EToolBit;
 import levistico.bconstruct.utils.Utils;
-import net.minecraft.src.TextureFX;
-import net.minecraft.src.helper.Color;
-import net.minecraft.src.helper.Textures;
+import net.minecraft.client.render.TextureFX;
+import net.minecraft.core.util.helper.Color;
+import net.minecraft.core.util.helper.Textures;
 import turniplabs.halplibe.util.TextureHandler;
 
 import javax.imageio.ImageIO;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static levistico.bconstruct.BConstruct.mc;
-import static net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES;
+import static net.minecraft.core.Global.TEXTURE_ATLAS_WIDTH_TILES;
 
 
 public class TextureUtils {

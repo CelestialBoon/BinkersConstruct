@@ -7,9 +7,9 @@ import levistico.bconstruct.gui.GUIUtils;
 import levistico.bconstruct.gui.containers.GUIContainerWithPanels;
 import levistico.bconstruct.gui.texture.TextureUtils;
 import levistico.bconstruct.utils.Utils;
-import net.minecraft.src.GuiTextField;
-import net.minecraft.src.Slot;
-import net.minecraft.src.SlotCrafting;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.core.player.inventory.slot.Slot;
+import net.minecraft.core.player.inventory.slot.SlotCrafting;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class PanelCrafting extends BPanelWithSlots {
     String panelName;
     List<BSlotCustomizable> craftingSlots;
     BSlotCraftingResult resultSlot;
-    GuiTextField textBox;
+    net.minecraft.client.gui.GuiTextField textBox;
 
     public PanelCrafting(GUIContainerWithPanels guiContainer, String panelName, float zLevel, List<BSlotCustomizable> craftingSlots, BSlotCraftingResult resultSlot) {
         super(guiContainer,176, 83, zLevel);
@@ -66,7 +66,7 @@ public class PanelCrafting extends BPanelWithSlots {
         if(mslot.isPresent()) {
             Slot slot = mslot.get();
             if(slot.hasStack())
-                guiContainer.drawItemTooltip(slot.getStack(), mouseX, mouseY, slot.discovered, slot instanceof SlotCrafting);
+                guiContainer.drawItemTooltip(slot.getStack(), mouseX, mouseY, slot instanceof SlotCrafting);
             else if (slot instanceof BSlotCustomizable) {
                 BSlotCustomizable cslot = (BSlotCustomizable) slot;
                 if(! Utils.isStringEmpty(cslot.tooltipString))
@@ -84,7 +84,7 @@ public class PanelCrafting extends BPanelWithSlots {
     }
 
     @Override
-    public boolean keyTyped(char c, int i) {
+    public boolean keyTyped(char c, int i, int mouseX, int mouseY) {
         if(textBox != null && textBox.isFocused) {
             textBox.textboxKeyTyped(c, i);
             return true;

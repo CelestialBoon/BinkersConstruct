@@ -2,7 +2,8 @@ package levistico.bconstruct.mixin;
 
 import levistico.bconstruct.BConstruct;
 import levistico.bconstruct.gui.texture.TextureUtils;
-import net.minecraft.src.RenderEngine;
+import net.minecraft.client.render.RenderEngine;
+import net.minecraft.client.render.RenderEngine;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

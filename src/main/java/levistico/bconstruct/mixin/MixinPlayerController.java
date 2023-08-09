@@ -4,8 +4,8 @@ package levistico.bconstruct.mixin;
 import levistico.bconstruct.tools.BTool;
 import levistico.bconstruct.tools.ToolStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.PlayerController;
+import net.minecraft.client.player.controller.PlayerController;
+import net.minecraft.core.item.ItemStack;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,7 +20,7 @@ public class MixinPlayerController {
 
     @Shadow @Final protected Minecraft mc;
 
-    @Redirect(method = "mine (IIII)V", at = @At(value = "FIELD", target = "Lnet/minecraft/src/PlayerController;blockHitDelay:I", opcode = Opcodes.PUTFIELD, ordinal = 2))
+    @Redirect(method = "mine (III Lnet/minecraft/core/util/helper/Side;)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/player/controller/PlayerController;blockHitDelay:I", opcode = Opcodes.PUTFIELD, ordinal = 2))
     void bconstruct_mineInject(PlayerController instance, int value) {
         ItemStack stack = this.mc.thePlayer.inventory.getCurrentItem();
         if(stack.getItem() instanceof BTool) {

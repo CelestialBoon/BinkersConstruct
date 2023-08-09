@@ -1,7 +1,7 @@
 package levistico.bconstruct.utils;
 
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.core.item.Item;;;
+import net.minecraft.core.item.ItemStack;
 
 import java.util.Arrays;
 import java.util.Objects;

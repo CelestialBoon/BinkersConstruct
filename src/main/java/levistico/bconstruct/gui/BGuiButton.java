@@ -3,7 +3,7 @@ package levistico.bconstruct.gui;
 import levistico.bconstruct.gui.texture.TextureUtils;
 import levistico.bconstruct.utils.Pair;
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.GuiButton;
+import net.minecraft.client.gui.GuiButton;
 import org.lwjgl.opengl.GL11;
 
 public class BGuiButton extends GuiButton

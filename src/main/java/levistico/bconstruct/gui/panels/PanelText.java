@@ -89,7 +89,7 @@ public class PanelText extends BasePanel{
     }
 
     @Override
-    public boolean keyTyped(char c, int i) {
+    public boolean keyTyped(char c, int i, int mouseX, int mouseY) {
         return false; //nothing to be typed here
     }
 }

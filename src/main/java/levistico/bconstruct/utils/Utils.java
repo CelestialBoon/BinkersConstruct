@@ -1,7 +1,15 @@
 package levistico.bconstruct.utils;
 
-import net.minecraft.src.*;
-import net.minecraft.src.command.ChatColor;
+import com.mojang.nbt.ListTag;
+import com.mojang.nbt.Tag;
+import net.minecraft.core.item.Item;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.lang.I18n;
+import net.minecraft.core.net.ChatLine;
+import net.minecraft.core.player.inventory.InventoryCrafting;
+import net.minecraft.core.util.helper.ChatAllowedCharacters;
+import net.minecraft.core.util.helper.Color;
+import net.minecraft.core.util.helper.MathHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -32,7 +40,7 @@ public final class Utils {
     }
 
     public static String translateKey(IHasTranslateKey thing) {
-        return StringTranslate.getInstance().translateKey(thing.getTranslateKey() + ".name");
+        return I18n.getInstance().translateKey(thing.getTranslateKey() + ".name");
     }
 
     public static <T> T[] concatTwoArrays(T[] a1, T[] a2) {
@@ -66,9 +74,9 @@ public final class Utils {
         return MathHelper.sqrt_float(1- pitchSin*pitchSin);
     }
 
-    public static net.minecraft.src.helper.Color colorFromString(String hex) {
+    public static Color colorFromString(String hex) {
         java.awt.Color c = java.awt.Color.decode(hex);
-        return new net.minecraft.src.helper.Color().setRGB(c.getRed(), c.getGreen(), c.getBlue());
+        return new Color().setRGB(c.getRed(), c.getGreen(), c.getBlue());
     }
 
     public static int ubyteToInt(byte b) {
@@ -166,17 +174,17 @@ public final class Utils {
         array.add(element);
         return element;
     }
-    public static Iterator<NBTBase> steamTag(NBTTagList list) {
+    public static Iterator<Tag<?>> steamTag(ListTag list) {
         int len = list.tagCount();
         final int[] i = {0};
-        return new Iterator<NBTBase>() {
+        return new Iterator<Tag<?>>() {
             @Override
             public boolean hasNext() {
                 return i[0] < len;
             }
 
             @Override
-            public NBTBase next() {
+            public Tag next() {
                 return list.tagAt(i[0]++);
             }
         };
@@ -189,10 +197,10 @@ public final class Utils {
 
     public static String getHarvestTier(int miningLevel) {
         switch (miningLevel) {
-            case 0: return "" + ChatColor.brown + "Wood";
-            case 1: return "" + ChatColor.gray + "Stone";
-            case 2: return "" + ChatColor.lightGray + "Iron";
-            case 3: return "" + ChatColor.cyan + "Diamond";
+//            case 0: return "" + TextFormatting.BROWN + "Wood";
+//            case 1: return "" + TextFormatting.GRAY + "Stone";
+//            case 2: return "" + TextFormatting.LIGHT_GRAY + "Iron";
+//            case 3: return "" + TextFormatting.CYAN + "Diamond";
         }
         return null;
     }

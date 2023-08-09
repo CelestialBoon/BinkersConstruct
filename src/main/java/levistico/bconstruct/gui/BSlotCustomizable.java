@@ -2,9 +2,9 @@ package levistico.bconstruct.gui;
 
 import levistico.bconstruct.utils.AcceptRule;
 import levistico.bconstruct.utils.Pair;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.Slot;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.player.inventory.IInventory;
+import net.minecraft.core.player.inventory.slot.Slot;
 
 public class BSlotCustomizable extends Slot {
     public boolean isActive;

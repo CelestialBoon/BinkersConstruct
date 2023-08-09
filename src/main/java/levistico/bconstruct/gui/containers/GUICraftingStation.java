@@ -5,7 +5,7 @@ import levistico.bconstruct.crafting.CraftingTileEntity;
 import levistico.bconstruct.gui.panels.IPanel;
 import levistico.bconstruct.gui.panels.PanelCrafting;
 import levistico.bconstruct.gui.panels.PanelPlayerInventory;
-import net.minecraft.src.*;
+import net.minecraft.core.player.inventory.InventoryPlayer;
 import org.lwjgl.opengl.GL11;
 
 public final class GUICraftingStation extends GUIContainerWithPanels {

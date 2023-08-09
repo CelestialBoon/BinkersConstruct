@@ -1,20 +1,26 @@
 package levistico.bconstruct.crafting;
 
 import levistico.bconstruct.utils.Utils;
-import net.minecraft.src.*;
+import net.minecraft.core.block.BlockTileEntity;
+import net.minecraft.core.block.entity.TileEntity;
+import net.minecraft.core.block.material.Material;
+import net.minecraft.core.entity.EntityItem;
+import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.world.World;
 
 import java.util.Random;
 
-public abstract class BlockCraftingTable extends BlockContainer {
+public abstract class BlockCraftingTable extends BlockTileEntity {
     Random random = new Random();
     public BlockCraftingTable(int i, Material m) {
-        super(i, m);
+        super("block.craftingtable", i, m);
     }
 
     public abstract boolean blockActivated(World world, int x, int y, int z, EntityPlayer player);
 //    {
 //        TileEntityCrafting tileEntity = (TileEntityCrafting)world.getBlockTileEntity(x, y, z);
-//        if (world.isMultiplayerAndNotHost) {
+//        if (world.isClientSide) {
 //        } else if(player instanceof EntityPlayerMP) {
 //            //Multiplayer
 //            ((IBinkersEntityPlayerMP)player).displayGUICraftingStation(tileEntity);
@@ -44,9 +50,9 @@ public abstract class BlockCraftingTable extends BlockContainer {
                     itemstack.stackSize -= i1;
                     EntityItem entityitem = new EntityItem(world, ((float)i + f), ((float)j + f1), ((float)k + f2), new ItemStack(itemstack.itemID, i1, itemstack.getMetadata()));
                     float f3 = 0.05F;
-                    entityitem.motionX = ((float)this.random.nextGaussian() * f3);
-                    entityitem.motionY = ((float)this.random.nextGaussian() * f3 + 0.2F);
-                    entityitem.motionZ = ((float)this.random.nextGaussian() * f3);
+                    entityitem.xd = ((float)this.random.nextGaussian() * f3);
+                    entityitem.yd = ((float)this.random.nextGaussian() * f3 + 0.2F);
+                    entityitem.zd = ((float)this.random.nextGaussian() * f3);
                     world.entityJoinedWorld(entityitem);
                 }
             }
@@ -56,7 +62,7 @@ public abstract class BlockCraftingTable extends BlockContainer {
     }
 
     @Override
-    protected TileEntity getBlockEntity() {
+    protected TileEntity getNewBlockEntity() {
         return new CraftingTileEntity();
     }
 }

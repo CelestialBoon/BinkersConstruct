@@ -1,7 +1,11 @@
 package levistico.bconstruct.gadgets;
 
 import levistico.bconstruct.utils.Utils;
-import net.minecraft.src.*;
+import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.item.Item;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.util.helper.MathHelper;
+import net.minecraft.core.world.World;
 
 public class SlimeSling extends Item {
     public SlimeSling(int i) {
@@ -11,17 +15,17 @@ public class SlimeSling extends Item {
 
     public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int x, int y, int z, int sideHit, double heightPlaced) {
 
-        float yaw = entityplayer.rotationYaw * Utils.degToRad;
-        float pitch = entityplayer.rotationPitch * Utils.degToRad;
+        float yaw = entityplayer.limbYaw * Utils.degToRad;
+        float pitch = entityplayer.cameraPitch * Utils.degToRad;
 
 //        float factor = 3.0f * itemstack.getMetadata() / 100f;
         float factor = 2f;
         float pitchSin = MathHelper.sin(pitch);
-        entityplayer.motionY += factor * pitchSin;
+        entityplayer.yd += factor * pitchSin;
 
         float yawFactor = Utils.yawFactor(pitchSin) * factor;
-        entityplayer.motionZ -= MathHelper.cos(yaw) * yawFactor;
-        entityplayer.motionX += MathHelper.sin(yaw) * yawFactor;
+        entityplayer.zd -= MathHelper.cos(yaw) * yawFactor;
+        entityplayer.xd += MathHelper.sin(yaw) * yawFactor;
 //        itemstack.setMetadata(101);
         return true;
     }

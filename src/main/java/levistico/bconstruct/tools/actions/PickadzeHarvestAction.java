@@ -1,8 +1,8 @@
 package levistico.bconstruct.tools.actions;
 
 import levistico.bconstruct.tools.ToolStack;
-import net.minecraft.src.Block;
-import net.minecraft.src.ItemStack;
+import net.minecraft.core.block.Block;
+import net.minecraft.core.item.ItemStack;
 
 public class PickadzeHarvestAction extends HarvestAction {
     @Override

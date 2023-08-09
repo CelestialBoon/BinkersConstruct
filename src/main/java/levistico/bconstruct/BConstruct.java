@@ -12,8 +12,14 @@ import levistico.bconstruct.tools.BTools;
 import levistico.bconstruct.gadgets.SlimeSling;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.*;
-import net.minecraft.src.material.ArmorMaterial;
+import net.minecraft.client.sound.block.BlockSounds;
+import net.minecraft.core.block.Block;
+import net.minecraft.core.crafting.CraftingManager;
+import net.minecraft.core.crafting.recipe.IRecipe;
+import net.minecraft.core.item.Item;
+import net.minecraft.core.item.ItemArmor;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.item.material.ArmorMaterial;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import turniplabs.halplibe.helper.ArmorHelper;
@@ -24,24 +30,24 @@ import turniplabs.halplibe.helper.RecipeHelper;
 
 public final class BConstruct implements ModInitializer {
 
-    public static final Minecraft mc = Minecraft.getMinecraft();
+    public static final Minecraft mc = Minecraft.getMinecraft(Minecraft.class);
     public static final String MOD_ID = "bconstruct";
     public static String guiFolder;
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static final CraftingManager craftingManager = CraftingManager.getInstance();
 
-    public static int itemIdInc = 140;
-    public static final Item blankPattern = ItemHelper.createItem(MOD_ID, new Item(itemIdInc++), "blankPattern", "pattern_blank.png");
+    public static int idInc = 140;
+    public static final Item blankPattern = ItemHelper.createItem(MOD_ID, new Item(idInc++), "blankPattern", "pattern_blank.png");
 
     public static final ArmorMaterial slimeArmorMaterial = ArmorHelper.createArmorMaterial("slime", 100,  0,0,0,200);
     public static Item slimeBoots;
     public static Item slimeSling;
 
     public static int blockIdInc = 900;
-    public static final Block craftingStation = BlockHelper.createBlock(MOD_ID, new BlockCraftingStation(blockIdInc++), "craftingStation", "craftingstation_top.png", "craftingstation_bottom.png", "craftingstation_side.png", Block.soundWoodFootstep, 2.5f, 15f, 0.0f);
-    public static final Block partBuilder = BlockHelper.createBlock(MOD_ID, new BlockPartBuilder(blockIdInc++), "partBuilder", "partbuilder_oak_top.png", "partbuilder_oak_bottom.png", "partbuilder_oak_side.png", Block.soundWoodFootstep, 2.5f, 15f, 0.0f);
-    public static final Block toolStation = BlockHelper.createBlock(MOD_ID, new BlockToolStation(blockIdInc++), "toolStation", "toolstation_top.png", "toolstation_bottom.png", "toolstation_side.png", Block.soundWoodFootstep, 2.5f, 15f, 0.0f);
+    public static final Block craftingStation = BlockHelper.createBlock(MOD_ID, new BlockCraftingStation(blockIdInc++), "craftingstation_top.png", "craftingstation_bottom.png", "craftingstation_side.png", BlockSounds.WOOD, 2.5f, 15f, 0.0f);
+    public static final Block partBuilder = BlockHelper.createBlock(MOD_ID, new BlockPartBuilder(blockIdInc++), "partbuilder_oak_top.png", "partbuilder_oak_bottom.png", "partbuilder_oak_side.png", BlockSounds.WOOD, 2.5f, 15f, 0.0f);
+    public static final Block toolStation = BlockHelper.createBlock(MOD_ID, new BlockToolStation(blockIdInc++), "toolstation_top.png", "toolstation_bottom.png", "toolstation_side.png", BlockSounds.WOOD, 2.5f, 15f, 0.0f);
 
 
     @SuppressWarnings("unchecked")
@@ -55,8 +61,8 @@ public final class BConstruct implements ModInitializer {
         BToolParts.InitializeToolParts(MOD_ID);
         BTools.InitializeTools(MOD_ID);
 
-        slimeBoots = ItemHelper.createItem(MOD_ID, new ItemArmor(itemIdInc++, slimeArmorMaterial, 3), "slimeBoots", "slime_boots.png");
-        slimeSling = ItemHelper.createItem(MOD_ID, new SlimeSling(itemIdInc++).setMaxStackSize(1), "slimeSling", "slime_sling.png");
+        slimeBoots = ItemHelper.createItem(MOD_ID, new ItemArmor("slimeBoots",idInc++, slimeArmorMaterial, 3), "slimeBoots", "slime_boots.png");
+        slimeSling = ItemHelper.createItem(MOD_ID, new SlimeSling(idInc++).setMaxStackSize(1), "slimeSling", "slime_sling.png");
         ((AccessorItem)slimeBoots).setMaxDamage(0);
 
         //TODO smelter items (including stuff like ladles/cans)

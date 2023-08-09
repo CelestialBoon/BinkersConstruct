@@ -2,10 +2,10 @@ package levistico.bconstruct.tools.actions;
 
 import levistico.bconstruct.utils.Pair;
 import levistico.bconstruct.utils.Utils;
-import net.minecraft.src.Block;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemToolPickaxe;
-import net.minecraft.src.Material;
+import net.minecraft.core.block.Block;
+import net.minecraft.core.block.material.Material;
+import net.minecraft.core.item.Item;
+
 
 import java.util.*;
 import java.util.function.Function;

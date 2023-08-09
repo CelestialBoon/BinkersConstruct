@@ -6,7 +6,7 @@ import levistico.bconstruct.gui.containers.GUIToolStation;
 import levistico.bconstruct.crafting.CraftingTileEntity;
 import levistico.bconstruct.mixinInterfaces.IBinkersEntityPlayerSP;
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.*;
+import net.minecraft.client.entity.player.EntityPlayerSP;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 

@@ -8,9 +8,9 @@ import levistico.bconstruct.tools.ToolStack;
 import levistico.bconstruct.utils.Pair;
 import levistico.bconstruct.parts.TPRepairKit;
 import levistico.bconstruct.utils.Utils;
-import net.minecraft.src.InventoryCrafting;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.core.player.inventory.InventoryCrafting;
+import net.minecraft.core.item.Item;;;
+import net.minecraft.core.item.ItemStack;
 
 
 import java.util.Map;
@@ -45,7 +45,7 @@ public final class RecipeRepairKitRepair extends BRecipe {
     public int repairAmount(ItemStack toolStack, ItemStack kitStack) {
         Map<Integer, Integer> materials = ToolStack.getRepairMaterials(toolStack);
         BToolMaterial kitMaterial = null;
-        if(kitStack.itemID == Item.string.itemID) {
+        if(kitStack.id == Item.string.id) {
             kitMaterial = BToolMaterials.string;
         } else kitMaterial = TPRepairKit.getToolMaterial(kitStack);
         //make it dependent on the number of head parts of the same material the tool has, maybe a direct multiplier?

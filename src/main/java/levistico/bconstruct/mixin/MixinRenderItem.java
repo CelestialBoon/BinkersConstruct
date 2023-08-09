@@ -7,19 +7,29 @@ import levistico.bconstruct.gui.texture.TextureUtils;
 import levistico.bconstruct.tools.BTool;
 import levistico.bconstruct.gui.texture.ITexturedPart;
 import levistico.bconstruct.tools.ToolStack;
-import net.minecraft.src.*;
+import net.minecraft.client.gui.GuiRenderItem;
+import net.minecraft.client.render.*;
+import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.ItemEntityRenderer;
+import net.minecraft.core.entity.Entity;
+import net.minecraft.core.entity.EntityItem;
+import net.minecraft.core.item.Item;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.util.helper.MathHelper;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import turniplabs.halplibe.mixin.accessors.RenderManagerAccessor;
 
 import java.util.Random;
 
 import static levistico.bconstruct.BConstruct.mc;
+import static net.minecraft.core.Global.TEXTURE_ATLAS_WIDTH_TILES;
 
-@Mixin(value = RenderItem.class, remap = false)
-public abstract class MixinRenderItem extends Render {
+@Mixin(value = ItemEntityRenderer.class, remap = false)
+public abstract class MixinRenderItem extends EntityRenderer<EntityItem> {
     @Shadow
     public boolean field_27004_a;
     @Final @Shadow
@@ -75,7 +85,7 @@ public abstract class MixinRenderItem extends Render {
 //            BConstruct.LOGGER.info("rendering tool parts at texture: " + renderengine.getTexture(GBitsUtil.TOOL_PARTS_TEXTURE));
             BToolPart tpart = (BToolPart) item;
             int ti = tpart.texturedPart.getIconIndex(BToolPart.getToolMaterial(itemstack).eNumber, false);
-            this.renderTexturedQuad(i, j, ti % net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth, ti / net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth, tileWidth, tileWidth);
+            this.renderTexturedQuad(i, j, ti % TEXTURE_ATLAS_WIDTH_TILES * tileWidth, ti / TEXTURE_ATLAS_WIDTH_TILES * tileWidth, tileWidth, tileWidth);
         } else {
             renderengine.bindTexture(TextureUtils.TOOL_BITS_TEXTURE_INDEX);
 //            BConstruct.LOGGER.info("rendering tool bits at texture: " + renderengine.getTexture(GBitsUtil.TOOL_BITS_TEXTURE));
@@ -85,7 +95,7 @@ public abstract class MixinRenderItem extends Render {
             for(Integer npart : tool.renderOrder) {
                 ITexturedPart part = tool.texturedParts.get(npart);
                 int k = part.getIconIndex(materials[npart].eNumber, broken);
-                this.renderTexturedQuad(i, j, k % net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth, k / net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth, tileWidth, tileWidth);
+                this.renderTexturedQuad(i, j, k % TEXTURE_ATLAS_WIDTH_TILES * tileWidth, k / TEXTURE_ATLAS_WIDTH_TILES * tileWidth, tileWidth, tileWidth);
             }
         }
 
@@ -99,9 +109,8 @@ public abstract class MixinRenderItem extends Render {
      * @reason Dealing with item render
      */
     @Overwrite
-    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
+    public void doRender(EntityItem entityitem, double d, double d1, double d2, float f, float f1) {
 //        BConstruct.LOGGER.info("doRender is being called");
-        EntityItem entityitem = (EntityItem)entity;
         if(!(entityitem.item.getItem() instanceof BToolPart || entityitem.item.getItem() instanceof BTool)) {
             this.doRenderItem(entityitem, d, d1, d2, f, f1);
             return;
@@ -149,7 +158,7 @@ public abstract class MixinRenderItem extends Render {
             f16 = (float)(j >> 16 & 255) / 255.0F;
             f18 = (float)(j >> 8 & 255) / 255.0F;
             f20 = (float)(j & 255) / 255.0F;
-            float f21 = entityitem.getEntityBrightness(f1);
+            float f21 = entityitem.getBrightness(f1);
             if (mc.fullbright) {
                 f21 = 1.0F;
             }
@@ -166,7 +175,7 @@ public abstract class MixinRenderItem extends Render {
             for(j = 0; j < renderCount; ++j) {
                 GL11.glPushMatrix();
                 GL11.glTranslated(0.0, 0.0, 0.1 * (double)j);
-                RenderManager.instance.itemRenderer.renderItem(entityitem, itemstack, false);
+                EntityRenderDispatcher.instance.itemRenderer.renderItem(entityitem, itemstack, false);
                 GL11.glPopMatrix();
             }
 
@@ -181,16 +190,16 @@ public abstract class MixinRenderItem extends Render {
                     GL11.glTranslatef(f16, f18, f20);
                 }
 
-                GL11.glRotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+                GL11.glRotatef(180.0F - this.renderDispatcher.viewLerpYaw, 0.0F, 1.0F, 0.0F);
 
                 if(itemstack.getItem() instanceof BToolPart) {
-                    this.renderManager.renderEngine.bindTexture(TextureUtils.TOOL_PARTS_TEXTURE_INDEX);
+                    this.renderDispatcher.renderEngine.bindTexture(TextureUtils.TOOL_PARTS_TEXTURE_INDEX);
                     BToolPart tpart = (BToolPart) itemstack.getItem();
                     int ti = tpart.texturedPart.getIconIndex(BToolPart.getToolMaterial(itemstack).eNumber, false);
                     doRenderTexturedQuad(ti);
                     GL11.glPopMatrix();
                 } else {
-                    this.renderManager.renderEngine.bindTexture(TextureUtils.TOOL_BITS_TEXTURE_INDEX);
+                    this.renderDispatcher.renderEngine.bindTexture(TextureUtils.TOOL_BITS_TEXTURE_INDEX);
                     BTool tool = (BTool) itemstack.getItem();
                     boolean broken = ToolStack.isToolBroken(itemstack);
                     BToolMaterial[] materials = ToolStack.getMaterials(itemstack);
@@ -210,10 +219,10 @@ public abstract class MixinRenderItem extends Render {
     private void doRenderTexturedQuad(int i) {
         Tessellator tessellator = Tessellator.instance;
         int tileWidth = TextureFX.tileWidthItems;
-        float f6 = (float)(i % net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth) / (float)(net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-        float f8 = (float)(i % net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-        float f10 = (float)(i / net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth) / (float)(net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-        float f11 = (float)(i / net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+        float f6 = (float)(i % TEXTURE_ATLAS_WIDTH_TILES * tileWidth) / (float)(TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+        float f8 = (float)(i % TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+        float f10 = (float)(i / TEXTURE_ATLAS_WIDTH_TILES * tileWidth) / (float)(TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+        float f11 = (float)(i / TEXTURE_ATLAS_WIDTH_TILES * tileWidth + tileWidth) / (float)(TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
 
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, 1.0F, 0.0F);

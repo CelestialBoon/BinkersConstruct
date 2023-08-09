@@ -1,5 +1,6 @@
 package levistico.bconstruct.gui;
 
+import levistico.bconstruct.BConstruct;
 import levistico.bconstruct.gui.texture.TextureUtils;
 import levistico.bconstruct.materials.BToolMaterial;
 import levistico.bconstruct.parts.BToolPart;
@@ -7,18 +8,25 @@ import levistico.bconstruct.parts.BToolParts;
 import levistico.bconstruct.tools.BTool;
 import levistico.bconstruct.tools.ToolStack;
 import levistico.bconstruct.utils.Utils;
-import net.minecraft.src.*;
-import net.minecraft.src.command.ChatColor;
+import net.minecraft.client.gui.GuiTooltip;
+import net.minecraft.client.render.RenderEngine;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TextureFX;
+import net.minecraft.client.render.entity.ItemEntityRenderer;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.net.command.TextFormatting;
+import net.minecraft.core.player.inventory.slot.Slot;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES;
+import static net.minecraft.core.Global.TEXTURE_ATLAS_WIDTH_TILES;
 
 public class GUIUtils {
 
     public static final int GL_BLOCK_ITEM_MAGIC_NUMBER = 32826;
-    public static RenderItem itemRenderer = new RenderItem();
+    public static ItemEntityRenderer itemRenderer = new ItemEntityRenderer();
+    public static GuiTooltip tooltip = new GuiTooltip(BConstruct.mc);
 
     public static boolean isMouseOverSlot(Slot slot, int relativeMouseX, int relativeMouseY) {
         if (slot instanceof BSlotCustomizable && !((BSlotCustomizable)slot).isActive) return false;
@@ -34,7 +42,7 @@ public class GUIUtils {
 
     public static StringBuilder getToolTooltip(StringBuilder text, ItemStack stack, boolean control, boolean shift) {
         BTool tool = (BTool) stack.getItem();
-        text.append(ChatColor.get(stack.tag.getByte(ToolStack.COLOR))).append(tool.getItemNameIS(stack));
+        text.append(TextFormatting.get(stack.tag.getByte(ToolStack.COLOR))).append(stack.getItemName());
         if(ToolStack.isToolBroken(stack)) text.append(" (Broken)");
         text.append("\n");
         if (control) {
@@ -52,32 +60,32 @@ public class GUIUtils {
 //            Shift:
 //            item name
 //            properties (colored)
-            text.append(ChatColor.lightGray).append("Properties go here\n");
+            text.append(TextFormatting.LIGHT_GRAY).append("Properties go here\n");
 //            repair materials
 
 //            durability (number is light blue)
             int maxDurability = ToolStack.getMaxDurability(stack);
-            text.append(ChatColor.white).append("\nDurability: ").append(ChatColor.orange)
+            text.append(TextFormatting.WHITE).append("\nDurability: ").append(TextFormatting.ORANGE)
                     .append(maxDurability - stack.getMetadata()).append("/").append(maxDurability);
 //            effective durability
 
 //            attack damage (blue)
-            text.append(ChatColor.white).append("\nAttack damage: ").append(ChatColor.red).append(ToolStack.getAttackDamage(stack));
+            text.append(TextFormatting.WHITE).append("\nAttack damage: ").append(TextFormatting.RED).append(ToolStack.getAttackDamage(stack));
 //                    mining speed (yellow)
-            text.append(ChatColor.white).append("\nMining speed: ").append(ChatColor.yellow).append(ToolStack.getMiningSpeed(stack));
+            text.append(TextFormatting.WHITE).append("\nMining speed: ").append(TextFormatting.YELLOW).append(ToolStack.getMiningSpeed(stack));
 //            modifiers remaining (2)
-            text.append(ChatColor.lightGray).append("\nModifiers go here");
+            text.append(TextFormatting.LIGHT_GRAY).append("\nModifiers go here");
 //            modifiers:
 //            (in their colors)
 
         } else {
 //            item name
-            text.append(ChatColor.lightGray).append("Properties go here\n");
+            text.append(TextFormatting.LIGHT_GRAY).append("Properties go here\n");
 //            properties go here
 //            Hold Shift (yellow) for stats
-            text.append(ChatColor.lightGray).append("Hold ").append(ChatColor.yellow).append("Shift").append(ChatColor.lightGray).append(" for stats\n");
+            text.append(TextFormatting.LIGHT_GRAY).append("Hold ").append(TextFormatting.YELLOW).append("Shift").append(TextFormatting.LIGHT_GRAY).append(" for stats\n");
 //            Hold Ctrl (minecraft blue) for material
-            text.append(ChatColor.lightGray).append("Hold ").append(ChatColor.blue).append("Ctrl").append(ChatColor.lightGray).append(" for materials\n");
+            text.append(TextFormatting.LIGHT_GRAY).append("Hold ").append(TextFormatting.BLUE).append("Ctrl").append(TextFormatting.LIGHT_GRAY).append(" for materials\n");
         }
 
         return text;
@@ -107,6 +115,29 @@ public class GUIUtils {
 
     public static void drawLargeGUITexture(int x, int y, int u, int v, float zLevel) {
         drawTexturedModalRect(x, y, u*18, v*18,18, 18, 18, 18,TextureUtils.LARGE_TEXTURE_FACTOR, zLevel);
+    }
+
+    public static String formatDescription(final String description, final int preferredLineLength) {
+        final StringBuilder string = new StringBuilder();
+        string.append(TextFormatting.LIGHT_GRAY);
+        int lineLength = 0;
+        for (int i = 0; i < description.length(); ++i) {
+            final char c = description.charAt(i);
+            if (c == ' ') {
+                if (lineLength > preferredLineLength) {
+                    lineLength = 0;
+                    string.append("\n").append(TextFormatting.LIGHT_GRAY);
+                }
+                else {
+                    string.append(c);
+                }
+            }
+            else {
+                ++lineLength;
+                string.append(c);
+            }
+        }
+        return string.toString();
     }
 
 

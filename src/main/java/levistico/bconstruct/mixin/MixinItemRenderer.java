@@ -8,7 +8,11 @@ import levistico.bconstruct.gui.texture.ITexturedPart;
 import levistico.bconstruct.tools.BTool;
 import levistico.bconstruct.tools.ToolStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.*;
+import net.minecraft.client.render.ItemRenderer;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.TextureFX;
+import net.minecraft.core.entity.Entity;
+import net.minecraft.core.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,11 +21,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import static net.minecraft.core.Global.TEXTURE_ATLAS_WIDTH_TILES;
+
 @Mixin(value = ItemRenderer.class, remap = false)
 public class MixinItemRenderer {
     @Shadow
     private Minecraft mc;
-    @Inject(method = "renderItem(Lnet/minecraft/src/Entity;Lnet/minecraft/src/ItemStack;Z)V", cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD, at = @At("HEAD"))
+    @Inject(method = "ItemEntityRenderer(Lnet/minecraft/core/entity/Entity;Lnet/minecraft/core/item/ItemStack;Z)V", cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD, at = @At("HEAD"))
     private void bconsctruct_renderInject(Entity entity, ItemStack itemstack, boolean handheldTransform, CallbackInfo ci) {
         if(!(itemstack.getItem() instanceof BToolPart || itemstack.getItem() instanceof BTool)) {
             return;
@@ -74,13 +80,13 @@ public class MixinItemRenderer {
         int tileWidth = TextureFX.tileWidthItems;
 
         Tessellator tessellator = Tessellator.instance;
-        float f = ((float)(i % net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth) + 0.0F) / (float)(net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-        float f1 = ((float)(i % net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth) + ((float)tileWidth - 0.01F)) / (float)(net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-        float f2 = ((float)(i / net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth) + 0.0F) / (float)(net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
-        float f3 = ((float)(i / net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth) + ((float)tileWidth - 0.01F)) / (float)(net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+        float f = ((float)(i % TEXTURE_ATLAS_WIDTH_TILES * tileWidth) + 0.0F) / (float)(TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+        float f1 = ((float)(i % TEXTURE_ATLAS_WIDTH_TILES * tileWidth) + ((float)tileWidth - 0.01F)) / (float)(TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+        float f2 = ((float)(i / TEXTURE_ATLAS_WIDTH_TILES * tileWidth) + 0.0F) / (float)(TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
+        float f3 = ((float)(i / TEXTURE_ATLAS_WIDTH_TILES * tileWidth) + ((float)tileWidth - 0.01F)) / (float)(TEXTURE_ATLAS_WIDTH_TILES * tileWidth);
 
         float f4 = 1.0F;
-        float foon = 0.5F / (float)tileWidth / (float)net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES;
+        float foon = 0.5F / (float)tileWidth / (float)TEXTURE_ATLAS_WIDTH_TILES;
         float goon = 0.0625F * (16.0F / (float)tileWidth);
         float thickness;
 

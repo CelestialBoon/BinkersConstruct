@@ -1,15 +1,24 @@
 package levistico.bconstruct.tools;
 
+import com.mojang.nbt.CompoundTag;
+import com.mojang.nbt.IntTag;
+import com.mojang.nbt.ListTag;
+import com.mojang.nbt.Tag;
 import levistico.bconstruct.materials.BToolMaterial;
 import levistico.bconstruct.materials.BToolMaterials;
-import levistico.bconstruct.mixin.AccessorNBTTagCompound;
 import levistico.bconstruct.parts.PartsFlag;
 import levistico.bconstruct.tools.actions.RightClickAction;
 import levistico.bconstruct.tools.actions.RightClickActions;
 import levistico.bconstruct.tools.properties.Properties;
 import levistico.bconstruct.tools.properties.Property;
 import levistico.bconstruct.utils.Utils;
-import net.minecraft.src.*;
+import net.minecraft.core.block.Block;
+import net.minecraft.core.entity.Entity;
+import net.minecraft.core.entity.EntityLiving;
+import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.item.Item;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -20,30 +29,30 @@ public class ToolStack {
     public static BTool getTool(ItemStack stack) {
         return (BTool) stack.getItem();
     }
-    public static NBTTagList getMaterialTags(@NotNull ItemStack stack) {
-        return stack.tag.getTagList(MATERIALS);
+    public static ListTag getMaterialTags(@NotNull ItemStack stack) {
+        return stack.tag.getList(MATERIALS);
     }
-    public static NBTTagCompound getBaseTags(@NotNull ItemStack stack) {
-        return stack.tag.getCompoundTag(BASE_STATS);
+    public static CompoundTag getBaseTags(@NotNull ItemStack stack) {
+        return stack.tag.getCompound(BASE_STATS);
     }
-    public static NBTTagCompound getUpgradeTags(@NotNull ItemStack stack) {
-        return stack.tag.getCompoundTag(UPGRADES);
+    public static CompoundTag getUpgradeTags(@NotNull ItemStack stack) {
+        return stack.tag.getCompound(UPGRADES);
     }
-    public static NBTTagCompound getTotalTags(@NotNull ItemStack stack) {
-        return stack.tag.getCompoundTag(TOTAL_STATS);
+    public static CompoundTag getTotalTags(@NotNull ItemStack stack) {
+        return stack.tag.getCompound(TOTAL_STATS);
     }
-    public static NBTTagCompound getPropertyTags(@NotNull NBTTagCompound underlyingTags) { //This is inside either of the 3 (base, upgrade, total)
-        return underlyingTags.getCompoundTag(PROPERTIES);
+    public static CompoundTag getPropertyTags(@NotNull CompoundTag underlyingTags) { //This is inside either of the 3 (base, upgrade, total)
+        return underlyingTags.getCompound(PROPERTIES);
     }
-    public static NBTTagCompound writeProperties(NBTTagCompound underlyingTags, Collection<Property> properties) {
-        NBTTagCompound propertiesTag = new NBTTagCompound();
-        underlyingTags.setCompoundTag(PROPERTIES, propertiesTag);
-        properties.forEach(p -> propertiesTag.setByte(p.name, (byte)p.level));
+    public static CompoundTag writeProperties(CompoundTag underlyingTags, Collection<Property> properties) {
+        CompoundTag propertiesTag = new CompoundTag();
+        underlyingTags.putCompound(PROPERTIES, propertiesTag);
+        properties.forEach(p -> propertiesTag.putByte(p.name, (byte)p.level));
         return propertiesTag;
     }
-    public static List<Property> getProperties(NBTTagCompound underlyingTags) {
-        NBTTagCompound proptags = ToolStack.getPropertyTags(underlyingTags);
-        Map<String, NBTBase> propMap = ((AccessorNBTTagCompound)proptags).getTagMap();
+    public static List<Property> getProperties(CompoundTag underlyingTags) {
+        CompoundTag proptags = ToolStack.getPropertyTags(underlyingTags);
+        Map<String, Tag<?>> propMap = proptags.getValue();
         return propMap.keySet().stream().map(s-> Properties.generate(s, proptags.getByte(s))).collect(Collectors.toList());
     }
     public static List<Property> getProperties(ItemStack stack) {
@@ -52,14 +61,14 @@ public class ToolStack {
 
     public static List<RightClickAction> getRightClickActions(ItemStack stack) {
         ArrayList<RightClickAction> actions = new ArrayList<>();
-        NBTTagList list = getTotalTags(stack).getTagList(RIGHTCLICKACTIONS);
-        Utils.steamTag(list).forEachRemaining(i -> actions.add(RightClickActions.rcactions.get(((NBTTagInt)i).intValue)));
+        ListTag list = getTotalTags(stack).getList(RIGHTCLICKACTIONS);
+        Utils.steamTag(list).forEachRemaining(i -> actions.add(RightClickActions.rcactions.get(((IntTag)i).getValue())));
         return actions;
     }
-    public static void writeRightClickActions(NBTTagCompound totalTags, List<RightClickAction> rcactions) {
-        NBTTagList list = new NBTTagList();
-        totalTags.setTag(RIGHTCLICKACTIONS, list);
-        rcactions.forEach(a -> list.setTag(new NBTTagInt(a.eRCA)));
+    public static void writeRightClickActions(CompoundTag totalTags, List<RightClickAction> rcactions) {
+        ListTag list = new ListTag();
+        totalTags.put(RIGHTCLICKACTIONS, list);
+        rcactions.forEach(a -> list.addTag(new IntTag(a.eRCA)));
     }
 
     public static boolean isToolBroken(@NotNull ItemStack itemstack) {
@@ -79,11 +88,11 @@ public class ToolStack {
     }
     public static float getReinforced(@NotNull ItemStack stack) { return getTotalTags(stack).getFloat(REINFORCED);}
     public static BToolMaterial[] getMaterials(@NotNull ItemStack stack) {
-        NBTTagList materialTags = getMaterialTags(stack);
+        ListTag materialTags = getMaterialTags(stack);
         int numMats = materialTags.tagCount();
         BToolMaterial[] materials = new BToolMaterial[numMats];
         for(Integer i : Utils.range(0, numMats)) {
-            materials[i] = BToolMaterials.matList.get(((NBTTagInt)materialTags.tagAt(i)).intValue);
+            materials[i] = BToolMaterials.matList.get(((IntTag)materialTags.tagAt(i)).getValue());
         }
         return materials;
     }
@@ -111,9 +120,9 @@ public class ToolStack {
 
     public static void earnToolExp(int i, ItemStack itemStack, EntityPlayer player) {
         BTool tool = (BTool) itemStack.getItem();
-        NBTTagCompound tags = itemStack.tag;
+        CompoundTag tags = itemStack.tag;
         int experience = tags.getInteger(EXPERIENCE) + i;
-        tags.setInteger(EXPERIENCE, experience);
+        tags.putInt(EXPERIENCE, experience);
         //check against a table of xp goals and award levels
         int newLevel = 0;
         int expToLevel = (int)(BTool.baseLevelExp * tool.expMultiplier);
@@ -127,7 +136,7 @@ public class ToolStack {
             //play ding
             //send text message
 //            player.addChatMessage(String.format("Level up! Your %s has reached level %d!", itemStack.getItemName(), j));
-            tags.setInteger(LEVEL, j);
+            tags.putInt(LEVEL, j);
             //levels in turn will award other things, like extra upgrade slots
         }
     }
@@ -147,7 +156,7 @@ public class ToolStack {
             damage = 0;
         }
         itemStack.setMetadata(damage);
-        itemStack.tag.setBoolean(BROKEN, broken);
+        itemStack.tag.putBoolean(BROKEN, broken);
     }
 
     public static Integer getProperty(ItemStack stack, String s) {

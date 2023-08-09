@@ -1,11 +1,13 @@
 package levistico.bconstruct.recipes;
 
 import levistico.bconstruct.utils.Pair;
-import levistico.bconstruct.utils.Utils;
-import net.minecraft.src.IRecipe;
-import net.minecraft.src.InventoryCrafting;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.core.crafting.recipe.IRecipe;
+import net.minecraft.core.item.Item;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.player.inventory.InventoryCrafting;
+
+;
+;
 
 public abstract class BRecipe implements IRecipe {
     public Item result;

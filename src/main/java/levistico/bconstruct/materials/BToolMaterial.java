@@ -5,8 +5,7 @@ import levistico.bconstruct.parts.PartsFlag;
 import levistico.bconstruct.tools.properties.Property;
 import levistico.bconstruct.utils.IHasTranslateKey;
 import levistico.bconstruct.utils.Utils;
-import net.minecraft.src.command.ChatColor;
-import net.minecraft.src.helper.Color;
+import net.minecraft.core.net.command.TextFormatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +20,14 @@ public final class BToolMaterial implements IHasTranslateKey {
     private int miningLevel;
     private int durability;
     private float efficiency;
-    public final ChatColor chatcolor;
+    public final TextFormatting chatcolor;
     public final int possiblePartsFlag;
 
     public List<Property> headProperties = new ArrayList<>();
     public List<Property> bindingProperties = new ArrayList<>();
     public List<Property> handleProperties = new ArrayList<>();
 
-    public final Color color;
+    public final net.minecraft.core.util.helper.Color color;
 
     public BToolMaterial(String name, String hexColor, Integer eNumber, int durability, float efficiency, int mobDamage, int miningLevel, int possiblePartsFlag) {
         this.name = name;
@@ -38,7 +37,7 @@ public final class BToolMaterial implements IHasTranslateKey {
         this.efficiency = efficiency;
         this.mobDamage = mobDamage;
         this.miningLevel = miningLevel;
-        this.chatcolor = ChatColor.cyan;
+        this.chatcolor = TextFormatting.CYAN;
         this.possiblePartsFlag = possiblePartsFlag;
         this.color = Utils.colorFromString(hexColor);
         Utils.setAt(BToolMaterials.matList, eNumber, this);

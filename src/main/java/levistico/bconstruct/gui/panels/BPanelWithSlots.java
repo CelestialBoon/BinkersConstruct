@@ -1,7 +1,7 @@
 package levistico.bconstruct.gui.panels;
 
 import levistico.bconstruct.gui.containers.GUIContainerWithPanels;
-import net.minecraft.src.Slot;
+import net.minecraft.core.player.inventory.slot.Slot;
 import org.lwjgl.input.Keyboard;
 
 import java.util.List;
@@ -28,8 +28,8 @@ public abstract class BPanelWithSlots extends BasePanel {
                 shift = control;
                 control = a;
             }
-
-            mc.playerController.itemPickUpFromInventory(guiContainer.inventorySlots.windowId, isOffscreen ? -999 : slot.id, button == 10 ? 0 : button, shift, control, mc.thePlayer);
+            //todo
+            //mc.playerController.itemPickUpFromInventory(guiContainer.inventorySlots.windowId, isOffscreen ? -999 : slot.id, button == 10 ? 0 : button, shift, control, mc.thePlayer);
         }
     }
 

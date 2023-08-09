@@ -4,9 +4,9 @@ import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.parts.PartsFlag;
 import levistico.bconstruct.tools.properties.Properties;
 import levistico.bconstruct.utils.Pair;
-import net.minecraft.src.Block;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.core.block.Block;
+import net.minecraft.core.item.Item;;;
+import net.minecraft.core.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,7 +60,7 @@ public class BToolMaterials {
     public static void InitializeMaterialMaps() {
         for (Item item : Item.itemsList) {
             if(item == null) continue;
-            String itemName = item.getItemName();
+            String itemName = item.getKey();
             if (itemName.startsWith("tile.planks.")) {
                 partBuilderItemMap.put(item, BToolMaterials.wood);
             } else if (stonePattern.matcher(itemName).find()) {
@@ -69,8 +69,8 @@ public class BToolMaterials {
 //                partBuilderBlockMap.put(block, ToolMaterials.wood);
             }
         }
-        partBuilderItemMap.put(Item.itemsList[Block.cactus.blockID], BToolMaterials.cactus);
-        partBuilderItemMap.put(Item.itemsList[Block.obsidian.blockID], BToolMaterials.obsidian);
+        partBuilderItemMap.put(Item.itemsList[Block.cactus.id], BToolMaterials.cactus);
+        partBuilderItemMap.put(Item.itemsList[Block.obsidian.id], BToolMaterials.obsidian);
 
 //        partBuilderItemMap.put(Item.itemsList[Block.blockIron.blockID], ToolMaterials.iron);
 //        partBuilderItemMap.put(Item.itemsList[Block.blockGold.blockID], ToolMaterials.gold);

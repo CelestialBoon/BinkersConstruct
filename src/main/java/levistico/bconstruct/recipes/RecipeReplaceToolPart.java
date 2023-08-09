@@ -6,8 +6,8 @@ import levistico.bconstruct.tools.BTool;
 import levistico.bconstruct.tools.ToolStack;
 import levistico.bconstruct.utils.Pair;
 import levistico.bconstruct.utils.Utils;
-import net.minecraft.src.InventoryCrafting;
-import net.minecraft.src.ItemStack;
+import net.minecraft.core.player.inventory.InventoryCrafting;
+import net.minecraft.core.item.ItemStack;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;

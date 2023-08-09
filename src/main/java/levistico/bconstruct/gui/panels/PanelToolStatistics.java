@@ -5,9 +5,8 @@ import levistico.bconstruct.gui.containers.GUIContainerWithPanels;
 import levistico.bconstruct.tools.BTool;
 import levistico.bconstruct.tools.ToolStack;
 import levistico.bconstruct.utils.Utils;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.command.ChatColor;
-import net.minecraft.src.helper.Listener;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.net.command.TextFormatting;
 
 import java.util.ArrayList;
 
@@ -30,14 +29,14 @@ public class PanelToolStatistics extends PanelText {
         detailLines.add(new TextWithTooltip(Utils.translateKey((BTool) stack.getItem()), ""));
         int maxDurability = ToolStack.getMaxDurability(stack);
         StringBuilder durabilityText = new StringBuilder();
-        durabilityText.append(ChatColor.white).append("\nDurability: ")
-                .append(ChatColor.green).append(maxDurability - stack.getMetadata())
-                .append(ChatColor.lightGray).append("/")
-                .append(ChatColor.green).append(maxDurability);
+        durabilityText.append(TextFormatting.WHITE).append("\nDurability: ")
+                .append(TextFormatting.GREEN).append(maxDurability - stack.getMetadata())
+                .append(TextFormatting.LIGHT_GRAY).append("/")
+                .append(TextFormatting.GREEN).append(maxDurability);
         detailLines.add(new TextWithTooltip( durabilityText.toString(), ""));
-        detailLines.add(new TextWithTooltip( "Attack Damage: " + ChatColor.red + ToolStack.getAttackDamage(stack), ""));
+        detailLines.add(new TextWithTooltip( "Attack Damage: " + TextFormatting.RED + ToolStack.getAttackDamage(stack), ""));
         detailLines.add(new TextWithTooltip( "Harvest Tier: " + Utils.getHarvestTier(ToolStack.getMiningLevel(stack)), ""));
-        detailLines.add(new TextWithTooltip( "Mining Speed: " + ChatColor.lightBlue + ToolStack.getMiningSpeed(stack), ""));
+        detailLines.add(new TextWithTooltip( "Mining Speed: " + TextFormatting.LIGHT_BLUE + ToolStack.getMiningSpeed(stack), ""));
         this.setLines(detailLines);
     }
 }

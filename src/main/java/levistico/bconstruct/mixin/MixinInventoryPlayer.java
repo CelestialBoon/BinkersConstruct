@@ -1,7 +1,8 @@
 package levistico.bconstruct.mixin;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.InventoryPlayer;
+import net.minecraft.core.player.inventory.InventoryPlayer;
+import net.minecraft.core.block.Block;
+import net.minecraft.core.player.inventory.InventoryPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

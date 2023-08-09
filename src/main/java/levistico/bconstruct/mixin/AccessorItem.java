@@ -1,6 +1,6 @@
 package levistico.bconstruct.mixin;
 
-import net.minecraft.src.Item;
+import net.minecraft.core.item.Item;;;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 

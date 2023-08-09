@@ -4,11 +4,11 @@ import levistico.bconstruct.materials.BToolMaterial;
 import levistico.bconstruct.materials.BToolMaterials;
 import levistico.bconstruct.parts.*;
 import levistico.bconstruct.tools.BTool;
-import net.minecraft.src.InventoryCrafting;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.core.player.inventory.InventoryCrafting;
+import net.minecraft.core.item.Item;
+import net.minecraft.core.item.ItemStack;
 import levistico.bconstruct.utils.*;
-import net.minecraft.src.material.ToolMaterial;
+import net.minecraft.core.item.material.ToolMaterial;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class BToolRecipe extends BRecipe {
             if (itemStack == null) return falseresult;
             Item item = inv.getStackInSlot(i).getItem();
             BToolMaterial mat = null;
-            if(item.itemID == Item.stick.itemID) {
+            if(item.id == Item.stick.id) {
                 item = BToolParts.rod;
                 mat = BToolMaterials.wood;
             }

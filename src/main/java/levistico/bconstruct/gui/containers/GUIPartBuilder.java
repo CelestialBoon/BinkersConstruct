@@ -3,7 +3,7 @@ package levistico.bconstruct.gui.containers;
 import levistico.bconstruct.crafting.ContainerPartBuilder;
 import levistico.bconstruct.crafting.CraftingTileEntity;
 import levistico.bconstruct.gui.panels.*;
-import net.minecraft.src.InventoryPlayer;
+import net.minecraft.core.player.inventory.InventoryPlayer;
 
 import java.util.ArrayList;
 

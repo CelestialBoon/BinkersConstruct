@@ -5,25 +5,37 @@ import levistico.bconstruct.crafting.BContainer;
 import levistico.bconstruct.gui.BSlotCustomizable;
 import levistico.bconstruct.gui.GUIUtils;
 import levistico.bconstruct.gui.panels.IPanel;
-import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.gui.texture.TextureUtils;
+import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.tools.BTool;
 import levistico.bconstruct.utils.Key;
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.*;
-import net.minecraft.src.command.ChatColor;
+import net.minecraft.client.gui.GuiContainer;
+import net.minecraft.client.gui.GuiRenderItem;
+import net.minecraft.client.render.Lighting;
+import net.minecraft.client.render.TextureFX;
+import net.minecraft.client.render.entity.ItemEntityRenderer;
+import net.minecraft.core.item.Item;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.lang.I18n;
+import net.minecraft.core.net.command.TextFormatting;
+import net.minecraft.core.player.inventory.InventoryPlayer;
+import net.minecraft.core.player.inventory.slot.Slot;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+
 import java.util.ArrayList;
 
-import static net.minecraft.shared.Minecraft.TEXTURE_ATLAS_WIDTH_TILES;
+
+import static levistico.bconstruct.gui.GUIUtils.formatDescription;
+import static net.minecraft.core.Global.TEXTURE_ATLAS_WIDTH_TILES;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.opengl.GL11.GL_LIGHTING;
 
 public abstract class GUIContainerWithPanels extends GuiContainer {
 
-    static final RenderItem itemRenderer = new RenderItem();
+    static final ItemEntityRenderer itemRenderer = new ItemEntityRenderer();
     ArrayList<IPanel> panels = new ArrayList<>();
 
     public GUIContainerWithPanels(BContainer container) {
@@ -34,7 +46,7 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
         this.drawDefaultBackground();
         GL11.glPushMatrix();
         GL11.glRotatef(120.0F, 1.0F, 0.0F, 0.0F);
-        RenderHelper.enableStandardItemLighting(); //this part somehow keeps all items and squares lit
+        Lighting.turnOff(); //this part somehow keeps all items and squares lit
         GL11.glPopMatrix();
         for(IPanel panel : panels) {
             panel.drawPanel(this.width, this.height, mouseX, mouseY);
@@ -81,13 +93,13 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
     }
 
     @Override
-    public void keyTyped(char c, int i) {
+    public void keyTyped(char c, int i, int mouseX, int mouseY) {
         if (i == Key.ESCAPE) {
             this.mc.thePlayer.closeScreen();
         } else {
             boolean captured = false;
             for(IPanel panel: panels) {
-                captured = panel.keyTyped(c, i);
+                captured = panel.keyTyped(c, i, mouseX, mouseY);
                 if(captured) break;
             }
             if(!captured && (i == Key.BACKSPACE || this.mc.gameSettings.keyInventory.isKey(i))) {
@@ -132,76 +144,69 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
             }
         }
 
-        itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, itemstack, i, j, slot.discovered ? 1.0F : 0.0F, 1.0F);
-        itemRenderer.renderItemOverlayIntoGUI(fontRenderer, mc.renderEngine, itemstack, i, j, slot.discovered);
+        itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, itemstack, i, j, 1.0F, 1.0F);
+        itemRenderer.renderItemOverlayIntoGUI(fontRenderer, mc.renderEngine, itemstack, i, j, 0);
     }
 
 
-    public void drawItemTooltip(ItemStack stack, int mouseX, int mouseY, boolean discovered, boolean isCrafting) {
+    public void drawItemTooltip(ItemStack stack, int mouseX, int mouseY, boolean isCrafting) {
 
         Minecraft mc = BConstruct.mc;
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        StringTranslate trans = StringTranslate.getInstance();
+        I18n trans = I18n.getInstance();
         StringBuilder text = new StringBuilder();
         boolean control = Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157);
         boolean shift = Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
-        if (discovered) {
 //            boolean isCrafting = mouseOverSlot instanceof SlotCrafting;
-            Item item = stack.getItem();
-            if(item instanceof BToolPart) {
-                text = GUIUtils.getToolPartTooltip(text, stack);
-            } else if(item instanceof BTool) {
-                text = GUIUtils.getToolTooltip(text, stack, control, shift);
-            } else {
-                String itemName = trans.translateKey(stack.getItemName() + ".name");
-                String itemNick = stack.getItem().getItemNickname(stack);
-                if (itemNick != null && itemNick.length() > 0 && stack.tag.getBoolean("overrideName")) {
-                    itemName = itemNick;
-                }
-
-                if (stack.tag.getBoolean("overrideColor")) {
-                    text.append(ChatColor.get(stack.getItem().getItemNameColor(stack)));
-                }
-
-                text.append(itemName);
-                boolean debug = (Boolean) mc.gameSettings.showDebugScreen.value;
-                if (debug) {
-                    text.append(" #").append(stack.itemID).append(":").append(stack.getMetadata());
-                }
-
-                if (debug) {
-                    text.append('\n').append(ChatColor.lightGray).append(stack.getItemName());
-                }
-
-                if (stack.isItemStackDamageable() && !control && (Boolean) mc.gameSettings.showItemDurability.value) {
-                    int durability = stack.getMaxDamage();
-                    int remainingUses = durability - stack.getMetadata();
-                    text.append('\n').append(ChatColor.lightGray).append(remainingUses).append(" / ").append(durability);
-                }
-
-                if (control) {
-                    text.append('\n').append(formatDescription(trans.translateKey(stack.getItemName() + ".desc"), 16));
-                }
-
-                if (isCrafting) {
-                    if (shift && !control) {
-                        text.append('\n').append(ChatColor.lightGray).append("Craft Stack");
-                    }
-
-                    if (control && !shift) {
-                        text.append('\n').append(ChatColor.lightGray).append("Craft Once");
-                    }
-
-                    if (control && shift) {
-                        text.append('\n').append(ChatColor.lightGray).append("Craft All");
-                    }
-                }
-            }
+        Item item = stack.getItem();
+        if(item instanceof BToolPart) {
+            text = GUIUtils.getToolPartTooltip(text, stack);
+        } else if(item instanceof BTool) {
+            text = GUIUtils.getToolTooltip(text, stack, control, shift);
         } else {
-            text.append("???");
+            String itemName = trans.translateKey(stack.getItemName() + ".name");
+            String itemNick = stack.getItemName();
+            if (itemNick != null && itemNick.length() > 0 && stack.tag.getBoolean("overrideName")) {
+                itemName = itemNick;
+            }
+
+            if (stack.tag.getBoolean("overrideColor")) {
+                text.append(TextFormatting.get(stack.getNameColor()));
+            }
+
+            text.append(itemName);
+            boolean debug = (Boolean) mc.gameSettings.showDebugScreen.value;
+            if (debug) {
+                text.append(" #").append(stack.itemID).append(":").append(stack.getMetadata());
+            }
+
+            if (debug) {
+                text.append('\n').append(TextFormatting.LIGHT_GRAY).append(stack.getItemName());
+            }
+
+            if (stack.isItemStackDamageable() && !control && (Boolean) mc.gameSettings.showItemDurability.value) {
+                int durability = stack.getMaxDamage();
+                int remainingUses = durability - stack.getMetadata();
+                text.append('\n').append(TextFormatting.LIGHT_GRAY).append(remainingUses).append(" / ").append(durability);
+            }
+
             if (control) {
-                text.append("\n").append(trans.translateKey("item.unknown.desc"));
+                text.append('\n').append(formatDescription(trans.translateKey(stack.getItemName() + ".desc"), 16));
+            }
+
+            if (isCrafting) {
+                if (shift && !control) {
+                    text.append('\n').append(TextFormatting.LIGHT_GRAY).append("Craft Stack");
+                }
+
+                if (control && !shift) {
+                    text.append('\n').append(TextFormatting.LIGHT_GRAY).append("Craft Once");
+                }
+
+                if (control && shift) {
+                    text.append('\n').append(TextFormatting.LIGHT_GRAY).append("Craft All");
+                }
             }
         }
 
@@ -215,7 +220,7 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
     protected void drawGuiContainerBackgroundLayer(float renderPartialTicksApparently) {}
 
     public void drawTooltipAtMouse(String text, int mouseX, int mouseY) {
-        this.drawTooltip(text, mouseX, mouseY, 8, -8, true);
+        GUIUtils.tooltip.render(text, mouseX, mouseY, 8, -8);
     }
 
     public void drawRect(int x, int y, int w, int h, int color){

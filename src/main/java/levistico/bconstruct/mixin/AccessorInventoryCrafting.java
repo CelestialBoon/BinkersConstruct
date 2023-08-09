@@ -1,7 +1,7 @@
 package levistico.bconstruct.mixin;
 
-import net.minecraft.src.Container;
-import net.minecraft.src.InventoryCrafting;
+import net.minecraft.core.player.inventory.Container;
+import net.minecraft.core.player.inventory.InventoryCrafting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
