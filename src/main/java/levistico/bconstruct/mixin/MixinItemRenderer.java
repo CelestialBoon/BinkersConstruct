@@ -27,19 +27,12 @@ import static net.minecraft.core.Global.TEXTURE_ATLAS_WIDTH_TILES;
 public class MixinItemRenderer {
     @Shadow
     private Minecraft mc;
-    @Inject(method = "ItemEntityRenderer(Lnet/minecraft/core/entity/Entity;Lnet/minecraft/core/item/ItemStack;Z)V", cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD, at = @At("HEAD"))
+    @Inject(method = "renderItem (Lnet/minecraft/core/entity/Entity;Lnet/minecraft/core/item/ItemStack;Z)V", cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD, at = @At("HEAD"))
     private void bconsctruct_renderInject(Entity entity, ItemStack itemstack, boolean handheldTransform, CallbackInfo ci) {
         if(!(itemstack.getItem() instanceof BToolPart || itemstack.getItem() instanceof BTool)) {
             return;
         }
         GL11.glPushMatrix();
-
-
-
-//        int i = itemstack.getItem().getIconIndex(itemstack);
-//        if (entity instanceof EntityLiving) {
-//            i = ((EntityLiving)entity).getItemIcon(itemstack);
-//        }
 
         float f5 = 0.0F;
         float f6 = 0.3F;

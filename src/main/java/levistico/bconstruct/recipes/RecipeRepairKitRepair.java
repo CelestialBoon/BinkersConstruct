@@ -45,7 +45,7 @@ public final class RecipeRepairKitRepair extends BRecipe {
     public int repairAmount(ItemStack toolStack, ItemStack kitStack) {
         Map<Integer, Integer> materials = ToolStack.getRepairMaterials(toolStack);
         BToolMaterial kitMaterial = null;
-        if(kitStack.id == Item.string.id) {
+        if(kitStack.itemID == Item.string.id) {
             kitMaterial = BToolMaterials.string;
         } else kitMaterial = TPRepairKit.getToolMaterial(kitStack);
         //make it dependent on the number of head parts of the same material the tool has, maybe a direct multiplier?

@@ -18,18 +18,6 @@ public abstract class BlockCraftingTable extends BlockTileEntity {
     }
 
     public abstract boolean blockActivated(World world, int x, int y, int z, EntityPlayer player);
-//    {
-//        TileEntityCrafting tileEntity = (TileEntityCrafting)world.getBlockTileEntity(x, y, z);
-//        if (world.isClientSide) {
-//        } else if(player instanceof EntityPlayerMP) {
-//            //Multiplayer
-//            ((IBinkersEntityPlayerMP)player).displayGUICraftingStation(tileEntity);
-//        } else {
-//            //Singleplayer
-//            ((IBinkersEntityPlayerSP)player).displayGUICraftingStation(tileEntity);
-//        }
-//        return true;
-//    }
 
     public void onBlockRemoval(World world, int i, int j, int k) {
         CraftingTileEntity tileentitycrafting = (CraftingTileEntity) world.getBlockTileEntity(i, j, k);

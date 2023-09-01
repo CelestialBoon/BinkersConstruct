@@ -42,10 +42,11 @@ public abstract class MixinGuiContainer extends GuiScreen {
     @Shadow
     public static String formatDescription(String description, int preferredLineLength) {return null;}*/
 
-    @Inject(method = "drawScreen(IIF)V", cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD, at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glColor4f (FFFF)V", shift = At.Shift.AFTER, by = 2))
+    @Inject(method = "drawScreen(IIF)V", cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD, at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glColor4f (FFFF)V", shift = At.Shift.AFTER))
     private void bconsctruct_drawScreenInject(int x, int y, float renderPartialTicks, CallbackInfo ci, int centerX, int centerY, Slot slot, InventoryPlayer inventoryplayer, ItemStack grabbedItem, ItemStack var9) {
+        if (inventoryplayer.getHeldItemStack() != null || slot == null || !slot.hasStack()) return;
         //here we already know the slot is good from that if before the inject
-        boolean showDescription = Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157);
+        //boolean showDescription = Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157);
         ItemStack stack = slot.getStack();
         if (stack.getItem() instanceof BToolPart) {
             String str = GUIUtils.getToolPartTooltip(new StringBuilder(),stack).toString();

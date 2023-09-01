@@ -39,7 +39,7 @@ public final class RecipeReplaceToolPart extends BRecipe {
                 BToolMaterial newMaterial = BToolPart.getToolMaterial(partStack);
                 materials [i] = newMaterial;
                 ItemStack resultStack = new ItemStack(tool);
-                tool.initializeTags(resultStack.tag, Arrays.stream(materials).collect(Collectors.toList()));
+                tool.initializeTags(resultStack.getData(), Arrays.stream(materials).collect(Collectors.toList()));
                 ToolStack.repairTool(newMaterial.getDurability(), resultStack);
                 return new Pair<>(true, resultStack);
             }

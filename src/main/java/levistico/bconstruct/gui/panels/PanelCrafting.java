@@ -77,11 +77,14 @@ public class PanelCrafting extends BPanelWithSlots {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int relativeMouseX, int relativeMouseY, int mouseButton) {
-        //todo
-        super.inventoryMouseClicked(relativeMouseX, relativeMouseY, mouseButton);
         if(textBox != null) {
             textBox.mouseClicked(relativeMouseX, relativeMouseY, mouseButton);
         }
+    }
+
+    @Override
+    protected void mouseMovedOrUp(int mouseX, int mouseY, int internalMouseX, int internalMouseY, int button) {
+        this.guiContainer.mouseMovedOrUp(mouseX, mouseY, button);
     }
 
     @Override

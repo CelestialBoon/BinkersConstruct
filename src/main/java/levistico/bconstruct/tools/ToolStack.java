@@ -33,16 +33,16 @@ public class ToolStack {
         return (BTool) stack.getItem();
     }
     public static ListTag getMaterialTags(@NotNull ItemStack stack) {
-        return stack.tag.getList(MATERIALS);
+        return stack.getData().getList(MATERIALS);
     }
     public static CompoundTag getBaseTags(@NotNull ItemStack stack) {
-        return stack.tag.getCompound(BASE_STATS);
+        return stack.getData().getCompound(BASE_STATS);
     }
     public static CompoundTag getUpgradeTags(@NotNull ItemStack stack) {
-        return stack.tag.getCompound(UPGRADES);
+        return stack.getData().getCompound(UPGRADES);
     }
     public static CompoundTag getTotalTags(@NotNull ItemStack stack) {
-        return stack.tag.getCompound(TOTAL_STATS);
+        return stack.getData().getCompound(TOTAL_STATS);
     }
     public static CompoundTag getPropertyTags(@NotNull CompoundTag underlyingTags) { //This is inside either of the 3 (base, upgrade, total)
         return underlyingTags.getCompound(PROPERTIES);
@@ -75,7 +75,7 @@ public class ToolStack {
     }
 
     public static boolean isToolBroken(@NotNull ItemStack itemstack) {
-        return itemstack.tag.getBoolean(BROKEN);
+        return itemstack.getData().getBoolean(BROKEN);
     }
     public static int getMaxDurability(@NotNull ItemStack stack) {
         return getTotalTags(stack).getInteger(DURABILITY);
@@ -123,7 +123,7 @@ public class ToolStack {
 
     public static void earnToolExp(int i, ItemStack itemStack, EntityPlayer player) {
         BTool tool = (BTool) itemStack.getItem();
-        CompoundTag tags = itemStack.tag;
+        CompoundTag tags = itemStack.getData();
         int experience = tags.getInteger(EXPERIENCE) + i;
         tags.putInt(EXPERIENCE, experience);
         //check against a table of xp goals and award levels
@@ -159,7 +159,7 @@ public class ToolStack {
             damage = 0;
         }
         itemStack.setMetadata(damage);
-        itemStack.tag.putBoolean(BROKEN, broken);
+        itemStack.getData().putBoolean(BROKEN, broken);
     }
 
     public static Integer getProperty(ItemStack stack, String s) {

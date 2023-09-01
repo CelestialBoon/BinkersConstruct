@@ -22,10 +22,7 @@ import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.item.material.ArmorMaterial;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import turniplabs.halplibe.helper.ArmorHelper;
-import turniplabs.halplibe.helper.BlockHelper;
-import turniplabs.halplibe.helper.ItemHelper;
-import turniplabs.halplibe.helper.RecipeHelper;
+import turniplabs.halplibe.helper.*;
 
 
 public final class BConstruct implements ModInitializer {
@@ -35,28 +32,95 @@ public final class BConstruct implements ModInitializer {
     public static String guiFolder;
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    public static final CraftingManager craftingManager = CraftingManager.getInstance();
+    public static int idInc = 16530;
+    public static Item blankPattern;
 
-    public static int idInc = 140;
-    public static final Item blankPattern = ItemHelper.createItem(MOD_ID, new Item(idInc++), "blankPattern", "pattern_blank.png");
-
-    public static final ArmorMaterial slimeArmorMaterial = ArmorHelper.createArmorMaterial("slime", 100,  0,0,0,200);
+    public static ArmorMaterial slimeArmorMaterial;
     public static Item slimeBoots;
     public static Item slimeSling;
 
-    public static int blockIdInc = 900;
-    public static final Block craftingStation = BlockHelper.createBlock(MOD_ID, new BlockCraftingStation(blockIdInc++), "craftingstation_top.png", "craftingstation_bottom.png", "craftingstation_side.png", BlockSounds.WOOD, 2.5f, 15f, 0.0f);
-    public static final Block partBuilder = BlockHelper.createBlock(MOD_ID, new BlockPartBuilder(blockIdInc++), "partbuilder_oak_top.png", "partbuilder_oak_bottom.png", "partbuilder_oak_side.png", BlockSounds.WOOD, 2.5f, 15f, 0.0f);
-    public static final Block toolStation = BlockHelper.createBlock(MOD_ID, new BlockToolStation(blockIdInc++), "toolstation_top.png", "toolstation_bottom.png", "toolstation_side.png", BlockSounds.WOOD, 2.5f, 15f, 0.0f);
+    public static int blockIdInc = 901;
+    public static Block craftingStation;
+    public static Block partBuilder;
+    public static Block toolStation;
 
 
     @SuppressWarnings("unchecked")
     void addRecipe(IRecipe recipe) {
-        craftingManager.getRecipeList().add(recipe);
+        CraftingManager.getInstance().getRecipeList().add(recipe);
     }
     @Override
     public void onInitialize() {
         LOGGER.info("Binkers initialized.");
+
+        //this is here to possibly fix some class loading issues, do not delete
+        try {
+            Class.forName("net.minecraft.core.block.Block");
+            Class.forName("net.minecraft.core.item.Item");
+        } catch (ClassNotFoundException ignored) {}
+
+        /*int inizioIntervallo = 1;
+        int larghezzaIntervallo =30;
+        for (int i = inizioIntervallo; i<Item.itemsList.length; i++){
+            if (Item.itemsList[i]!=null) {
+                inizioIntervallo = i + 1;
+            }
+            if (i - inizioIntervallo + 1 == larghezzaIntervallo) {
+                break;
+            }
+        }
+        LOGGER.info("Inizio intervallo blocchi: " + inizioIntervallo);
+
+        inizioIntervallo = 16384;
+        larghezzaIntervallo = 20;
+        for (int i = inizioIntervallo; i<Item.itemsList.length; i++){
+            if (Item.itemsList[i]!=null) {
+                inizioIntervallo = i + 1;
+            }
+            if (i - inizioIntervallo + 1 == larghezzaIntervallo) {
+                break;
+            }
+        }
+        LOGGER.info("Inizio intervallo oggetti: " + inizioIntervallo);*/
+
+
+        blankPattern = ItemHelper.createItem(MOD_ID, new Item(idInc++), "blankPattern", "pattern_blank.png");
+        slimeArmorMaterial = ArmorHelper.createArmorMaterial("slime", 100,  0,0,0,200);
+
+
+
+
+        craftingStation = new BlockBuilder(MOD_ID)
+                .setBlockSound(BlockSounds.WOOD)
+                .setHardness(2)
+                .setResistance(15)
+                .setLuminance(0).setTextures("craftingstation_side.png")
+                .setTopTexture("craftingstation_top.png")
+                .setBottomTexture("craftingstation_bottom.png")
+                .build(new BlockCraftingStation(blockIdInc++));
+
+        partBuilder = new BlockBuilder(MOD_ID)
+                .setBlockSound(BlockSounds.WOOD)
+                .setHardness(2)
+                .setResistance(15)
+                .setLuminance(0).setTextures("partbuilder_oak_side.png")
+                .setTopTexture("partbuilder_oak_top.png")
+                .setBottomTexture("partbuilder_oak_bottom.png")
+                .build(new BlockPartBuilder(blockIdInc++));
+
+        toolStation = new BlockBuilder(MOD_ID)
+                .setBlockSound(BlockSounds.WOOD)
+                .setHardness(2)
+                .setResistance(15)
+                .setLuminance(0).setTextures("toolstation_side.png")
+                .setTopTexture("toolstation_top.png")
+                .setBottomTexture("toolstation_bottom.png")
+                .build(new BlockToolStation(blockIdInc++));
+
+                //BlockHelper.createBlock(MOD_ID, new BlockCraftingStation(blockIdInc++), "craftingstation_top.png", "craftingstation_bottom.png", "craftingstation_side.png", BlockSounds.WOOD, 2.5f, 15f, 0.0f);
+        //partBuilder = BlockHelper.createBlock(MOD_ID, new BlockPartBuilder(blockIdInc++), "partbuilder_oak_top.png", "partbuilder_oak_bottom.png", "partbuilder_oak_side.png", BlockSounds.WOOD, 2.5f, 15f, 0.0f);
+        //toolStation = BlockHelper.createBlock(MOD_ID, new BlockToolStation(blockIdInc++), "toolstation_top.png", "toolstation_bottom.png", "toolstation_side.png", BlockSounds.WOOD, 2.5f, 15f, 0.0f);
+
         BToolMaterials.InitializeMaterialMaps();
         BToolParts.InitializeToolParts(MOD_ID);
         BTools.InitializeTools(MOD_ID);

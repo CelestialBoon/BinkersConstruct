@@ -64,7 +64,7 @@ public class BToolRecipe extends BRecipe {
             i++;
         }
         ItemStack resultStack = new ItemStack(resultTool);
-        resultTool.initializeTags(resultStack.tag, materials);
+        resultTool.initializeTags(resultStack.getData(), materials);
         return new Pair<>(true, resultStack);
     }
     public ItemStack[] onCraftResult(InventoryCrafting inv) {

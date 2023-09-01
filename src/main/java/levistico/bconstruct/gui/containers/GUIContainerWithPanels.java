@@ -46,7 +46,7 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
         this.drawDefaultBackground();
         GL11.glPushMatrix();
         GL11.glRotatef(120.0F, 1.0F, 0.0F, 0.0F);
-        Lighting.turnOff(); //this part somehow keeps all items and squares lit
+        Lighting.disable(); //this part somehow keeps all items and squares lit
         GL11.glPopMatrix();
         for(IPanel panel : panels) {
             panel.drawPanel(this.width, this.height, mouseX, mouseY);
@@ -85,23 +85,8 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
     }
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) {
-        //super.super.mouseClicked
-        /*if (button == 0) {
-            for (GuiButton guiButton : this.controlList) {
-                if (guiButton.mousePressed(this.mc, x, y)) {
-                    ((AccessorGuiScreen) this).setSelectedButton(guiButton);
-                    this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
-                    if (guiButton.listener != null) {
-                        guiButton.listener.listen(guiButton);
-                    } else {
-                        this.actionPerformed(guiButton);
-                    }
-                }
-            }
-        }*/
-
         for(IPanel panel : panels) {
-            if(panel.tryMouseClicked(this.width, this.height, mouseX, mouseY, button)) return;
+            panel.tryMouseClicked(this.width, this.height, mouseX, mouseY, button);
         }
         super.mouseClicked(mouseX, mouseY, button);
     }
@@ -183,12 +168,12 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
         } else {
             String itemName = trans.translateKey(stack.getItemName() + ".name");
             String itemNick = stack.getItemName();
-            if (itemNick != null && itemNick.length() > 0 && stack.tag.getBoolean("overrideName")) {
+            if (itemNick != null && itemNick.length() > 0 && stack.getData().getBoolean("overrideName")) {
                 itemName = itemNick;
             }
 
-            if (stack.tag.getBoolean("overrideColor")) {
-                text.append(TextFormatting.get(stack.getNameColor()));
+            if (stack.getData().getBoolean("overrideColor")) {
+                text.append(TextFormatting.get(stack.getCustomColor()));
             }
 
             text.append(itemName);
@@ -201,7 +186,7 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
                 text.append('\n').append(TextFormatting.LIGHT_GRAY).append(stack.getItemName());
             }
 
-            if (stack.isItemStackDamageable() && !control && (Boolean) mc.gameSettings.showItemDurability.value) {
+            if (stack.isItemStackDamageable() && !control) { // c'era un showitemdurability prima ma e sparito
                 int durability = stack.getMaxDamage();
                 int remainingUses = durability - stack.getMetadata();
                 text.append('\n').append(TextFormatting.LIGHT_GRAY).append(remainingUses).append(" / ").append(durability);

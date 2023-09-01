@@ -120,8 +120,8 @@ public abstract class BTool extends Item implements IHasTranslateKey {
     //////////////////////// OTHER ///////////////////
 
     public static void setCustomName(ItemStack stack, String name) {
-        stack.tag.putString(NAME, name);
-        stack.tag.putBoolean(IS_CUSTOM_NAME, true);
+        stack.getData().putString(NAME, name);
+        stack.getData().putBoolean(IS_CUSTOM_NAME, true);
     }
 
     /*public ItemStack onItemRightClick(@NotNull ItemStack itemstack, World world, EntityPlayer entityPlayer) {
@@ -142,8 +142,8 @@ public abstract class BTool extends Item implements IHasTranslateKey {
                 getTotalTags(itemstack).getInteger(MOBDAMAGE),
                 itemstack.getMetadata(),
                 getTotalTags(itemstack).getInteger(DURABILITY),
-                itemstack.tag.getInteger(EXPERIENCE),
-                itemstack.tag.getInteger(LEVEL),
+                itemstack.getData().getInteger(EXPERIENCE),
+                itemstack.getData().getInteger(LEVEL),
                 getPropertyTags(getTotalTags(itemstack)).getInteger(Properties.SILKTOUCH)));
         return itemstack;
     }*/
