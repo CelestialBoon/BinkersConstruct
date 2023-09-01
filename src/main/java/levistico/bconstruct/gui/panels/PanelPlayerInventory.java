@@ -50,11 +50,6 @@ public class PanelPlayerInventory extends BPanelWithSlots {
     }
 
     @Override
-    public boolean keyTyped(char c, int i, int mouseX, int mouseY) {
-        return false; //TODO later this can capture number hotkeys
-    }
-
-    @Override
     void drawForegroundLayer() {
 
     }

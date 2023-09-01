@@ -15,6 +15,7 @@ import net.minecraft.core.player.inventory.slot.Slot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class BContainer extends Container implements IOnCraftResult {
     public CraftingTileEntity tileEntity;
@@ -81,156 +82,62 @@ public abstract class BContainer extends Container implements IOnCraftResult {
 
     public abstract void onCraftMatrixChanged(IInventory iinventory);
 
-    public void onCraftGuiClosed(EntityPlayer entityplayer) {
-        super.onCraftGuiClosed(entityplayer);
-//        if (!this.worldObj.isClientSide) {
-//            for(int i = 0; i < 9; ++i) {
-//                ItemStack itemstack = this.craftMatrix.getStackInSlot(i);
-//                if (itemstack != null) {
-//                    entityplayer.dropPlayerItem(itemstack);
-//                }
-//            }
-//        }
+    public void onCraftGuiClosed(EntityPlayer entityPlayer) {
+        super.onCraftGuiClosed(entityPlayer);
     }
-
-//    public void quickMoveItems(int slotID, EntityPlayer player, boolean shift, boolean control) {
-//        Slot slot = (Slot)this.inventorySlots.get(slotID);
-//        if (slot != null && slot.hasStack()) {
-//            ItemStack item = slot.getStack();
-//            ItemStack originalItem = item.copy();
-//            if (slotID == 0) { //it's the result slot?
-//                int craftCount = 65536;
-//                if (control && !shift) {
-//                    craftCount = 1;
-//                }
-//
-//                if (shift && !control) {
-//                    craftCount = item.getMaxStackSize() / item.stackSize;
-//                }
-//
-//                for(int j = 0; j < craftCount; ++j) {
-//                    ItemStack craftItem = slot.getStack();
-//                    if (craftItem == null || craftItem.itemID != originalItem.itemID || craftItem.getMetadata() != originalItem.getMetadata()) {
-//                        break;
-//                    }
-//
-//                    boolean stop = false;
-//                    boolean itemsCrafted = false;
-//                    itemsCrafted = this.onStackMergeShiftClick(craftItem, 10, 46, true);
-//                    if (itemsCrafted) {
-//                        if (craftItem.stackSize > 0) {
-//                            player.dropPlayerItem(craftItem.copy());
-//                            stop = true;
-//                        }
-//                    } else {
-//                        stop = true;
-//                    }
-//
-//                    if (craftItem.stackSize == 0) {
-//                        slot.putStack((ItemStack)null);
-//                    } else {
-//                        slot.onSlotChanged();
-//                    }
-//
-//                    if (itemsCrafted) {
-//                        slot.onPickupFromSlot(originalItem);
-//                    }
-//
-//                    if (stop) {
-//                        break;
-//                    }
-//                }
-//
-//            } else {
-//                if (slotID >= 10 && slotID < 46) { // base inventory+hotbar
-//                    this.onStackMergeShiftClick(item, 1, maxSlot+1, false);
-//                } else { //from crafting slots
-//                    this.onStackMergeShiftClick(item, 10, 46, false);
-//                }
-//
-//                if (item.stackSize == 0) {
-//                    slot.putStack((ItemStack)null);
-//                } else {
-//                    slot.onSlotChanged();
-//                }
-//
-//                if (item.stackSize != originalItem.stackSize) {
-//                    slot.onPickupFromSlot(originalItem);
-//                }
-//            }
-//        }
-//    }
-
-    public boolean isUsableByPlayer(EntityPlayer entityplayer) {
-        return tileEntity.inventoryCrafting.canInteractWith(entityplayer);
+    public boolean isUsableByPlayer(EntityPlayer entityPlayer) {
+        return tileEntity.inventoryCrafting.canInteractWith(entityPlayer);
     }
 
     public void onCraftResult(ItemStack stack, EntityPlayer player) { //default crafting behaviour, to be occasionally overridden
         Utils.decreaseAllInventoryBy(tileEntity.inventoryCrafting, 1);
     }
 
-//    @Override
-//    protected boolean onStackMergeShiftClick(ItemStack itemStack, int minSlot, int maxSlot, boolean sendToLastSlot) {
-//        if (itemStack == null)
-//            return false;
-//
-//        List<Integer> emptySlots = new ArrayList<>();
-//        List<Integer> sameStackSlots = new ArrayList<>();
-//
-//        for (Integer i : Utils.range(minSlot, maxSlot)) {
-//            Slot slot = this.getSlot(i);
-//            ItemStack stack = slot.getStack();
-//            if(stack == null && slot.canPutStackInSlot(itemStack)) {
-//                emptySlots.add(i);
-//            } else if (stack != null && itemStack.canStackWith(stack) && stack.stackSize < stack.getMaxStackSize()) {
-//                sameStackSlots.add(i);
-//            }
-//        }
-//
-//        if (sameStackSlots.isEmpty() && emptySlots.isEmpty())
-//            return false;
-//
-//        ItemStack iStack;
-//        Slot iSlot;
-//        if(sendToLastSlot) {
-//            sameStackSlots = Utils.reverseList(sameStackSlots);
-//            emptySlots = Utils.reverseList(emptySlots);
-//        }
-//        for(Integer i : sameStackSlots) {
-//            iSlot = this.getSlot(i);
-//            iStack = iSlot.getStack();
-//            int a = Utils.clamp(0, iStack.getMaxStackSize() - iStack.stackSize, itemStack.stackSize);
-//            if (a > 0) {
-//                itemStack.stackSize -= a;
-//                iStack.stackSize += a;
-//                iSlot.onSlotChanged();
-//                if (itemStack.stackSize == 0) {
-//                    break;
-//                }
-//            }
-//        }
-//
-//        if (itemStack.stackSize == 0)
-//            return true;
-//
-//        for(Integer i : emptySlots) {
-//            iSlot = this.getSlot(i);
-//            iSlot.putStack(itemStack.copy());
-//            itemStack.stackSize = 0;
-//            iSlot.onSlotChanged();
-//            break;
-//        }
-//        return true;
-//    }
-
-
     @Override
-    public List<Integer> getMoveSlots(InventoryAction inventoryAction, Slot slot, int i, EntityPlayer entityPlayer) {
-        throw new RuntimeException("not implemented");
+    public List<Integer> getMoveSlots(final InventoryAction action, final Slot slot, final int target, final EntityPlayer player) {
+        if (slot.id == 0) {
+            return this.getSlots(0, 1, false);
+        }
+        if (slot.id >= 1 && slot.id < 9) {
+            return craftingSlots.stream().filter(s -> s.isActive).map(s -> s.id).collect(Collectors.toList());
+//            return this.getSlots(1, 9, false);
+        }
+        if (action == InventoryAction.MOVE_SIMILAR) {
+            if (slot.id >= 10 && slot.id <= 45) {
+                return this.getSlots(10, 36, false);
+            }
+        }
+        else {
+            if (slot.id >= 10 && slot.id <= 36) {
+                return this.getSlots(10, 27, false);
+            }
+            if (slot.id >= 37 && slot.id <= 45) {
+                return this.getSlots(37, 9, false);
+            }
+        }
+        return null;
     }
 
     @Override
-    public List<Integer> getTargetSlots(InventoryAction inventoryAction, Slot slot, int i, EntityPlayer entityPlayer) {
-        throw new RuntimeException("not implemented");
+    public List<Integer> getTargetSlots(final InventoryAction action, final Slot slot, final int target, final EntityPlayer player) {
+        if (slot.id >= 10 && slot.id <= 45) {
+            if (target == 1) {
+                return craftingSlots.stream().filter(s -> s.isActive).map(s -> s.id).collect(Collectors.toList());
+//                return this.getSlots(1, 9, false);
+            }
+            if (slot.id >= 10 && slot.id <= 36) {
+                return this.getSlots(37, 9, false);
+            }
+            if (slot.id >= 37 && slot.id <= 45) {
+                return this.getSlots(10, 27, false);
+            }
+            return null;
+        }
+        else {
+            if (slot.id == 0) {
+                return this.getSlots(10, 36, true);
+            }
+            return this.getSlots(10, 36, false);
+        }
     }
 }

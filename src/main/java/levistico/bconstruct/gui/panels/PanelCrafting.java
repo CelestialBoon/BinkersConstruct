@@ -77,6 +77,7 @@ public class PanelCrafting extends BPanelWithSlots {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int relativeMouseX, int relativeMouseY, int mouseButton) {
+        //todo
         super.inventoryMouseClicked(relativeMouseX, relativeMouseY, mouseButton);
         if(textBox != null) {
             textBox.mouseClicked(relativeMouseX, relativeMouseY, mouseButton);
@@ -84,7 +85,7 @@ public class PanelCrafting extends BPanelWithSlots {
     }
 
     @Override
-    public boolean keyTyped(char c, int i, int mouseX, int mouseY) {
+    public boolean tryKeyTyped(char c, int i, int width, int height, int mouseX, int mouseY) {
         if(textBox != null && textBox.isFocused) {
             textBox.textboxKeyTyped(c, i);
             return true;

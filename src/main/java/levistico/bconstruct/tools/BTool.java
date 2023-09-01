@@ -23,8 +23,10 @@ import net.minecraft.core.entity.EntityLiving;
 import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.item.Item;
 import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.util.helper.Side;
 import net.minecraft.core.world.World;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -122,7 +124,7 @@ public abstract class BTool extends Item implements IHasTranslateKey {
         stack.tag.putBoolean(IS_CUSTOM_NAME, true);
     }
 
-    /*public ItemStack onItemRightClick(@NotNull ItemStack itemstack, World world, EntityPlayer entityplayer) {
+    /*public ItemStack onItemRightClick(@NotNull ItemStack itemstack, World world, EntityPlayer entityPlayer) {
         StringBuilder sb = new StringBuilder("Composition: ");
 
         BToolMaterial[] materials = getMaterials(itemstack);
@@ -132,9 +134,9 @@ public abstract class BTool extends Item implements IHasTranslateKey {
             sb.append(", ");
         }
 
-        entityplayer.addChatMessage(sb.toString());
+        entityPlayer.addChatMessage(sb.toString());
 
-        entityplayer.addChatMessage(String.format("Mining level: %d, Efficiency: %.1f, Damage: %d, Durability: %d, MaxDurability: %d, Experience:%d, Level:%d, Silktouch:%d",
+        entityPlayer.addChatMessage(String.format("Mining level: %d, Efficiency: %.1f, Damage: %d, Durability: %d, MaxDurability: %d, Experience:%d, Level:%d, Silktouch:%d",
                 getTotalTags(itemstack).getInteger(MININGLEVEL),
                 getTotalTags(itemstack).getFloat(EFFICIENCY),
                 getTotalTags(itemstack).getInteger(MOBDAMAGE),
@@ -274,12 +276,12 @@ public abstract class BTool extends Item implements IHasTranslateKey {
        return ToolStack.onBlockDestroyed(itemstack, id, x,y,z, player);
     }
     @Override
-    public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int x, int y, int z, int sideHit, double heightPlaced) {
-        return ToolStack.onItemUse(itemstack, entityplayer, world, x,y,z,sideHit, heightPlaced);
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer entityPlayer, World world, int blockX, int blockY, int blockZ, Side side, double xPlaced, double yPlaced) {
+        return ToolStack.onItemUse(itemstack, entityPlayer, world, blockX, blockY, blockZ, side, xPlaced, yPlaced);
     }
     @Override
-    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        return ToolStack.onItemRightClick(itemstack, world, entityplayer);
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityPlayer) {
+        return ToolStack.onItemRightClick(itemstack, world, entityPlayer);
     }
     @Override
     public boolean useItemOnEntity(ItemStack itemstack, EntityLiving entityliving, EntityPlayer entityPlayer) {

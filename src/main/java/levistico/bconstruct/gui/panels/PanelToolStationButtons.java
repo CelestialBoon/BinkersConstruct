@@ -26,11 +26,6 @@ public class PanelToolStationButtons extends BPanelWithButtons {
     //mouseClicked is handled by super
 
     @Override
-    public boolean keyTyped(char c, int i, int mouseX, int mouseY) {
-        return false;
-    }
-
-    @Override
     void drawForegroundLayer() {
 
     }

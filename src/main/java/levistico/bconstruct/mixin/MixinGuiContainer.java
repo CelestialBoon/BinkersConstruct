@@ -6,6 +6,9 @@ import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.tools.BTool;
 import net.minecraft.client.gui.GuiContainer;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.player.inventory.InventoryPlayer;
+import net.minecraft.core.player.inventory.slot.Slot;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,33 +42,29 @@ public abstract class MixinGuiContainer extends GuiScreen {
     @Shadow
     public static String formatDescription(String description, int preferredLineLength) {return null;}*/
 
-    //TODO GL11.glColor4f inject (after 2) in MixinGuiContainer::bconsctruct_drawScreenInject
-//    @Inject(method = "drawScreen(IIF)V", cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD, at = @At(value = "INVOKE", target = "Lnet/minecraft/src/StringTranslate;getInstance()Lnet/minecraft/src/StringTranslate;"))
-//    private void bconsctruct_drawScreenInject(int x, int y, float renderPartialTicks, CallbackInfo ci, int centerX, int centerY, Slot slot, InventoryPlayer inventoryplayer) {
-//        //here we already know the slot is good from that if before the inject
-//        ItemStack stack = slot.getStack();
-//        if (stack.getItem() instanceof BToolPart) {
-//            boolean multiLine = false;
-//
-//            String str = GUIUtils.getToolPartTooltip(new StringBuilder(),stack).toString();
-//
-//            if (str.length() > 0) {
-//                this.drawTooltip(str, x, y, 8, -8, multiLine);
-//            }
-//            GL11.glEnable(GL_DEPTH_TEST);
-//            ci.cancel();
-//        } else if (stack.getItem() instanceof BTool) {
-//            //do things here
-//            boolean multiLine = true;
-//            boolean control = Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157);
-//            boolean shift = Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
-//
-//            String str = GUIUtils.getToolTooltip(new StringBuilder(), stack, control, shift).toString();
-//            if (str.length() > 0) {
-//                this.drawTooltip(str, x, y, 8, -8, multiLine);
-//            }
-//            GL11.glEnable(GL_DEPTH_TEST);
-//            ci.cancel();
-//        }
-//    }
+    @Inject(method = "drawScreen(IIF)V", cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD, at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glColor4f (FFFF)V", shift = At.Shift.AFTER, by = 2))
+    private void bconsctruct_drawScreenInject(int x, int y, float renderPartialTicks, CallbackInfo ci, int centerX, int centerY, Slot slot, InventoryPlayer inventoryplayer, ItemStack grabbedItem, ItemStack var9) {
+        //here we already know the slot is good from that if before the inject
+        boolean showDescription = Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157);
+        ItemStack stack = slot.getStack();
+        if (stack.getItem() instanceof BToolPart) {
+            String str = GUIUtils.getToolPartTooltip(new StringBuilder(),stack).toString();
+
+            if (str.length() > 0) {
+                GUIUtils.tooltip.render(str, x, y, 8, -8);
+            }
+            GL11.glEnable(GL_DEPTH_TEST);
+            ci.cancel();
+        } else if (stack.getItem() instanceof BTool) {
+            boolean control = Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157);
+            boolean shift = Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
+
+            String str = GUIUtils.getToolTooltip(new StringBuilder(), stack, control, shift).toString();
+            if (str.length() > 0) {
+                GUIUtils.tooltip.render(str, x, y, 8, -8);
+            }
+            GL11.glEnable(GL_DEPTH_TEST);
+            ci.cancel();
+        }
+    }
 }

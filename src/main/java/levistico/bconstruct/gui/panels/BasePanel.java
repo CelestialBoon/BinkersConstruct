@@ -51,16 +51,28 @@ public abstract class BasePanel implements IPanel {
         }
     }
 
-    public void tryMouseClicked(int screenWidth, int screenHeight, int mouseX, int mouseY, int button) {
+    public boolean tryMouseClicked(int screenWidth, int screenHeight, int mouseX, int mouseY, int button) {
         int topX = getTopX(screenWidth);
         int topY = getTopY(screenHeight);
         if(isMouseHere(topX, topY, mouseX, mouseY)) {
             mouseClicked(mouseX, mouseY, getInternalMouseX(screenWidth, mouseX), getInternalMouseY(screenHeight, mouseY), button);
+            return true;
         }
+        return false;
+    }
+    public boolean tryMouseMovedOrUp(int screenWidth, int screenHeight, int mouseX, int mouseY, int button) {
+        int topX = getTopX(screenWidth);
+        int topY = getTopY(screenHeight);
+        if(isMouseHere(topX, topY, mouseX, mouseY)) {
+            mouseMovedOrUp(mouseX, mouseY, getInternalMouseX(screenWidth, mouseX), getInternalMouseY(screenHeight, mouseY), button);
+            return true;
+        }
+        return false;
     }
 
     protected abstract void drawTooltip(int topX, int topY, int mouseX, int mouseY, int relativeMouseX, int relativeMouseY);
     protected abstract void mouseClicked(int mouseX, int mouseY, int relativeMouseX, int relativeMouseY, int mouseButton);
+    protected abstract void mouseMovedOrUp(int mouseX, int mouseY, int internalMouseX, int internalMouseY, int button);
 
     int getTopX(int screenWidth) {
         return (screenWidth - width)/2 + centerOffsetX;

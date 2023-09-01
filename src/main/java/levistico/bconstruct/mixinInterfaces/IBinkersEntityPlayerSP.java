@@ -1,9 +1,8 @@
 package levistico.bconstruct.mixinInterfaces;
 
 import levistico.bconstruct.crafting.CraftingTileEntity;
+import net.minecraft.client.gui.GuiScreen;
 
 public interface IBinkersEntityPlayerSP {
-    public void displayGUICraftingStation(CraftingTileEntity tileEntity);
-    public void displayGUIPartBuilder(CraftingTileEntity tileEntity);
-    public void displayGUIToolStation(CraftingTileEntity tileEntity);
+    public void displayGUIScreen(GuiScreen guiScreen);
 }

@@ -17,23 +17,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinItemStack {
 
     @Shadow()
-    public int id;
+    public int itemID;
 
     @Inject(method = "getDamageVsEntity (Lnet/minecraft/core/entity/Entity;)I", cancellable = true, at = @At("HEAD"))
     public void bconsctruct_getDamageVsEntityInject(Entity entity, CallbackInfoReturnable<Integer> cir) {
-        Item item = Item.itemsList[this.id];
+        Item item = Item.itemsList[this.itemID];
         if(item instanceof BTool) cir.setReturnValue(ToolStack.getDamageVsEntity((ItemStack)(Object)this, (BTool)item, entity));
     }
 
     @Inject(method = "canHarvestBlock (Lnet/minecraft/core/block/Block;)Z", cancellable = true, at = @At("HEAD"))
     public void bconsctruct_canHarvestBlockInject(Block block, CallbackInfoReturnable<Boolean> cir) {
-        Item item = Item.itemsList[this.id];
+        Item item = Item.itemsList[this.itemID];
         if(item instanceof BTool) cir.setReturnValue(ToolStack.canHarvestBlock((ItemStack)(Object)this, (BTool) item, block));
     }
 
     @Inject(method = "getMaxDamage ()I", cancellable = true, at = @At("HEAD"))
     public void bconsctruct_getMaxDamageInject(CallbackInfoReturnable<Integer> cir) {
-        Item item = Item.itemsList[this.id];
+        Item item = Item.itemsList[this.itemID];
         if(item instanceof BTool) cir.setReturnValue(ToolStack.getMaxDurability((ItemStack)(Object)this));
     }
 }

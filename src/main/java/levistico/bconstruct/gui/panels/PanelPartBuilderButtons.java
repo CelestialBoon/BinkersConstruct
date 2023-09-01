@@ -22,16 +22,13 @@ public class PanelPartBuilderButtons extends BPanelWithButtons {
         super.drawButtons(topX, topY, mouseRelX, mouseRelY);
     }
 
+
+
     //drawTooltip is handled by super
     //mouseClicked is handled by super
-
-    @Override
-    public boolean keyTyped(char c, int i, int mouseX, int mouseY) {
-        return false;
-    }
-
     @Override
     void drawForegroundLayer() {
 
     }
+
 }

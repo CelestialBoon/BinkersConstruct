@@ -96,11 +96,11 @@ public final class ContainerTileEntity extends TileEntity implements IInventory 
         return 64;
     }
 
-    public boolean canInteractWith(EntityPlayer entityplayer) {
+    public boolean canInteractWith(EntityPlayer entityPlayer) {
         if (this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this) {
             return false;
         } else {
-            return entityplayer.distanceToSqr((double) this.xCoord + 0.5, (double) this.yCoord + 0.5, (double) this.zCoord + 0.5) <= 64.0;
+            return entityPlayer.distanceToSqr((double) this.xCoord + 0.5, (double) this.yCoord + 0.5, (double) this.zCoord + 0.5) <= 64.0;
         }
     }
 }

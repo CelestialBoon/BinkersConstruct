@@ -15,9 +15,9 @@ public class BSlotCraftingResult extends Slot {
     private IOnCraftResult container;
     private EntityPlayer player;
 
-    public BSlotCraftingResult(IOnCraftResult container, int id, EntityPlayer entityplayer, IInventory iinventory, int x, int y) {
+    public BSlotCraftingResult(IOnCraftResult container, int id, EntityPlayer entityPlayer, IInventory iinventory, int x, int y) {
         super(iinventory, id, x, y);
-        this.player = entityplayer;
+        this.player = entityPlayer;
         this.container = container;
     }
 

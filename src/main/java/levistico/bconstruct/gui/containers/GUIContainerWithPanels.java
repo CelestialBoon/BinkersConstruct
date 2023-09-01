@@ -4,6 +4,7 @@ import levistico.bconstruct.BConstruct;
 import levistico.bconstruct.crafting.BContainer;
 import levistico.bconstruct.gui.BSlotCustomizable;
 import levistico.bconstruct.gui.GUIUtils;
+import levistico.bconstruct.gui.panels.BPanelWithSlots;
 import levistico.bconstruct.gui.panels.IPanel;
 import levistico.bconstruct.gui.texture.TextureUtils;
 import levistico.bconstruct.parts.BToolPart;
@@ -11,7 +12,6 @@ import levistico.bconstruct.tools.BTool;
 import levistico.bconstruct.utils.Key;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiContainer;
-import net.minecraft.client.gui.GuiRenderItem;
 import net.minecraft.client.render.Lighting;
 import net.minecraft.client.render.TextureFX;
 import net.minecraft.client.render.entity.ItemEntityRenderer;
@@ -71,7 +71,20 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
     }
 
     @Override
-    public void mouseClicked(int x, int y, int button) {
+    public void keyTyped(char c, int i, int mouseX, int mouseY) {
+        if (i == Key.ESCAPE) {
+            this.mc.thePlayer.closeScreen(); return;
+        }
+        for(IPanel panel: panels) {
+            if(panel.tryKeyTyped(c, i, this.width, this.height, mouseX, mouseY)) return;
+        }
+        if(i == Key.BACKSPACE || this.mc.gameSettings.keyInventory.isKey(i)) {
+            this.mc.thePlayer.closeScreen(); return;
+        }
+        super.keyTyped(c, i, mouseX, mouseY);
+    }
+    @Override
+    public void mouseClicked(int mouseX, int mouseY, int button) {
         //super.super.mouseClicked
         /*if (button == 0) {
             for (GuiButton guiButton : this.controlList) {
@@ -88,24 +101,27 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
         }*/
 
         for(IPanel panel : panels) {
-            panel.tryMouseClicked(this.width, this.height, x, y, button);
+            if(panel.tryMouseClicked(this.width, this.height, mouseX, mouseY, button)) return;
         }
+        super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
-    public void keyTyped(char c, int i, int mouseX, int mouseY) {
-        if (i == Key.ESCAPE) {
-            this.mc.thePlayer.closeScreen();
-        } else {
-            boolean captured = false;
-            for(IPanel panel: panels) {
-                captured = panel.keyTyped(c, i, mouseX, mouseY);
-                if(captured) break;
-            }
-            if(!captured && (i == Key.BACKSPACE || this.mc.gameSettings.keyInventory.isKey(i))) {
-                this.mc.thePlayer.closeScreen();
-            }
+    public void mouseMovedOrUp(int mouseX, int mouseY, int mouseButton) {
+        for(IPanel panel : panels) {
+            if(panel.tryMouseMovedOrUp(this.width, this.height, mouseX, mouseY, mouseButton)) return;
         }
+        super.mouseMovedOrUp(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
+    public Slot getSlotAtPosition(int mouseX, int mouseY) {
+        for(IPanel panel : panels) {
+            if(! (panel instanceof BPanelWithSlots)) continue;
+            Slot slot = (((BPanelWithSlots) panel).getSlotAtPosition(this.width, this.height, mouseX, mouseY));
+            if(slot != null) return slot;
+        }
+        return null;
     }
 
     public void onGuiClosed() {

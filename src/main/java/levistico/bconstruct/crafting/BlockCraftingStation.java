@@ -1,7 +1,9 @@
 package levistico.bconstruct.crafting;
 
+import levistico.bconstruct.gui.containers.GUICraftingStation;
 import levistico.bconstruct.mixinInterfaces.IBinkersEntityPlayerMP;
 import levistico.bconstruct.mixinInterfaces.IBinkersEntityPlayerSP;
+import net.minecraft.client.entity.player.EntityPlayerSP;
 import net.minecraft.core.block.material.Material;
 import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.world.World;
@@ -21,7 +23,7 @@ public final class BlockCraftingStation extends BlockCraftingTable {
             ((IBinkersEntityPlayerMP)player).displayGUICraftingStation(tileEntity);
         } else {
             //Singleplayer
-            ((IBinkersEntityPlayerSP)player).displayGUICraftingStation(tileEntity);
+            ((IBinkersEntityPlayerSP)player).displayGUIScreen(new GUICraftingStation(player.inventory, tileEntity));
         }
         return true;
     }

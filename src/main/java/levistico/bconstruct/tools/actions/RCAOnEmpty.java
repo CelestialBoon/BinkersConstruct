@@ -17,7 +17,7 @@ public class RCAOnEmpty extends RightClickAction {
         this.onItemRightClick = onItemRightClick;
     }
     @Override
-    public Optional<ItemStack> onItemRightClick(@NotNull ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        return onItemRightClick.apply(itemstack, world, entityplayer);
+    public Optional<ItemStack> onItemRightClick(@NotNull ItemStack itemstack, World world, EntityPlayer entityPlayer) {
+        return onItemRightClick.apply(itemstack, world, entityPlayer);
     }
 }

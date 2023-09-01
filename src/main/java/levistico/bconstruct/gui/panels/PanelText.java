@@ -63,6 +63,11 @@ public class PanelText extends BasePanel{
         }
     }
 
+    @Override
+    public boolean tryKeyTyped(char c, int i, int width, int height, int mouseX, int mouseY) {
+        return false;
+    }
+
     private void scroll(int dWheel) {
         if(dWheel == 0) return;
         else if (dWheel > 0) scroll += textHeight;
@@ -89,7 +94,7 @@ public class PanelText extends BasePanel{
     }
 
     @Override
-    public boolean keyTyped(char c, int i, int mouseX, int mouseY) {
-        return false; //nothing to be typed here
+    protected void mouseMovedOrUp(int mouseX, int mouseY, int internalMouseX, int internalMouseY, int button) {
+        //also nothing to click here
     }
 }

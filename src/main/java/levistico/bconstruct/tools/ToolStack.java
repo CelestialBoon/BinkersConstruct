@@ -13,11 +13,14 @@ import levistico.bconstruct.tools.properties.Properties;
 import levistico.bconstruct.tools.properties.Property;
 import levistico.bconstruct.utils.Utils;
 import net.minecraft.core.block.Block;
+import net.minecraft.core.block.entity.TileEntity;
 import net.minecraft.core.entity.Entity;
 import net.minecraft.core.entity.EntityLiving;
 import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.enums.EnumDropCause;
 import net.minecraft.core.item.Item;
 import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.util.helper.Side;
 import net.minecraft.core.world.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -182,21 +185,26 @@ public class ToolStack {
         }
         return 1.0F;
     }
-    public static void harvestBlock(ItemStack stack, Block block, World world, EntityPlayer entityplayer, int x, int y, int z, int blockMetadata) {
+    public static void harvestBlock(ItemStack stack, Block block, World world, EntityPlayer entityPlayer, int x, int y, int z, int blockMetadata, TileEntity tileEntity) {
+        //TODO here you also have to handle proper/improper tool case
         //in here basically you have to handle those special cases like shearing
-        if(ToolStack.isToolBroken(stack)) return;
-        else if(ToolStack.isSilkTouch(stack)) {
-            block.dropBlockWhenCrushed(world, x, y, z, blockMetadata);
+        if(ToolStack.isToolBroken(stack)) {
+            block.dropBlockWithCause(world, EnumDropCause.IMPROPER_TOOL, x, y, z, blockMetadata, tileEntity);
+            return;
+        } else if(ToolStack.isSilkTouch(stack)) {
+            block.dropBlockWithCause(world, EnumDropCause.SILK_TOUCH, x, y, z, blockMetadata, tileEntity);
             return;
         }
         BTool tool = (BTool) stack.getItem();
-        Optional<Supplier<Collection<Item>>> specialLoot = tool.harvestLogic.checkSpecialLoot(block);
-        if(specialLoot.isPresent()) {
-            Collection<Item> items = specialLoot.get().get();
-            for(Item item : items) {
-                world.dropItem(x, y, z, new ItemStack(item));
-            }
-        } else block.harvestBlock(world, entityplayer, x, y, z, blockMetadata);
+        if(tool.harvestAction.canHarvestBlock(stack, tool.harvestLogic, block)) {
+            Optional<Supplier<Collection<Item>>> specialLoot = tool.harvestLogic.checkSpecialLoot(block);
+            if(specialLoot.isPresent()) {
+                Collection<Item> items = specialLoot.get().get();
+                for(Item item : items) {
+                    world.dropItem(x, y, z, new ItemStack(item));
+                }
+            } else block.dropBlockWithCause(world, EnumDropCause.PROPER_TOOL, x, y, z, blockMetadata, tileEntity);
+        } else block.dropBlockWithCause(world, EnumDropCause.IMPROPER_TOOL, x, y, z, blockMetadata, tileEntity);
     }
     public static boolean onBlockDestroyed(ItemStack itemstack, int blockId, int x, int y, int z, EntityLiving player) {
         Block block = Block.blocksList[blockId];
@@ -212,10 +220,10 @@ public class ToolStack {
         return true;
     }
 
-    public static boolean onItemUse(ItemStack itemstack, EntityPlayer entityPlayer, World world, int x, int y, int z, int sideHit, double heightPlaced) {
+    public static boolean onItemUse(ItemStack itemstack, EntityPlayer entityPlayer, World world, int blockX, int blockY, int blockZ, Side side, double xPlaced, double yPlaced) {
         if(isToolBroken(itemstack)) return false;
         Optional<Integer> outcome = getRightClickActions(itemstack).stream()
-                .map(a ->a.onItemUse(itemstack, entityPlayer, world, x, y, z, sideHit, heightPlaced))
+                .map(a ->a.onItemUse(itemstack, entityPlayer, world, blockX, blockY, blockZ, side, xPlaced, yPlaced))
                 .filter(Optional::isPresent).findAny().orElse(Optional.empty());
         if(outcome.isPresent()) {
             stressTool(outcome.get(), true, 1, itemstack, entityPlayer);

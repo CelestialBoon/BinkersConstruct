@@ -20,6 +20,14 @@ public abstract class BPanelWithButtons extends BasePanel {
     public void mouseClicked(int mouseX, int mouseY, int relativeMouseX, int relativeMouseY, int mouseButton) {
         clickButtons(relativeMouseX, relativeMouseY, mouseButton);
     }
+    @Override
+    public boolean tryKeyTyped(char c, int i, int width, int height, int mouseX, int mouseY) {
+        return false;
+    }
+    @Override
+    protected void mouseMovedOrUp(int mouseX, int mouseY, int internalMouseX, int internalMouseY, int button) {
+
+    }
 
     void drawButtons(int topX, int topY, int mouseRelX, int mouseRelY) {
         for(BGuiButton button : buttons) {

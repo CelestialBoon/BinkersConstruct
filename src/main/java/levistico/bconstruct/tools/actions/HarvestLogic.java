@@ -4,21 +4,22 @@ import levistico.bconstruct.utils.Pair;
 import levistico.bconstruct.utils.Utils;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.block.material.Material;
+import net.minecraft.core.data.tag.Tag;
 import net.minecraft.core.item.Item;
-
+import net.minecraft.core.item.tool.ItemToolPickaxe;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class HarvestLogic {
-    ArrayList<Material> effectiveMaterials;
+    Tag<Block>[] effectiveTags;
     ArrayList<Pair<Material, Float>> superEffectiveMaterials = new ArrayList<>();
     ArrayList<Material> freeMaterials = new ArrayList<>();
     Function<Block, Optional<Supplier<Collection<Item>>>> specialLoot = b -> Optional.empty();
 
-    public HarvestLogic(List<Material> effectiveMaterials) {
-        this.effectiveMaterials = new ArrayList<>(effectiveMaterials);
+    public HarvestLogic(Tag<Block>... effectiveTags) {
+        this.effectiveTags = effectiveTags;
     }
     public HarvestLogic multiplyEffectiveness(Material m, float f) {
         superEffectiveMaterials.add(new Pair<>(m, f));
@@ -37,7 +38,15 @@ public class HarvestLogic {
     }
 
     public Optional<Integer> howEffectiveOn(Block block, int miningLevel) {
-        if(! effectiveMaterials.contains(block.blockMaterial)) return Optional.empty();
+        boolean canMine = false;
+        for(Tag<Block> tag : effectiveTags) {
+            if(block.hasTag(tag)) {
+                canMine = true;
+                break;
+            }
+        }
+        if(! canMine) return Optional.empty();
+
         Integer miningChallenge = Utils.orElse(ItemToolPickaxe.miningLevels.get(block), 0);
         return Optional.of(miningLevel - miningChallenge);
     }

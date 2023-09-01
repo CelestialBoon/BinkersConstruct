@@ -19,7 +19,7 @@ public class MixinRenderPlayer extends RenderLiving {
         super(modelbase, f);
     }
     @Inject(method = "setArmorModel", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(value = "INVOKE", target = "Lnet/minecraft/src/RenderPlayer;loadTexture(Ljava/lang/String;)V", shift = At.Shift.AFTER))
-    private void injected(EntityPlayer entityplayer, int i, float f, CallbackInfoReturnable<Boolean> cir, ItemStack itemstack, Item item) {
+    private void injected(EntityPlayer entityPlayer, int i, float f, CallbackInfoReturnable<Boolean> cir, ItemStack itemstack, Item item) {
 
         BConstruct.LOGGER.info("" + armorFilenamePrefix[6] + armorFilenamePrefix.length);
         String s = "/armor/" + armorFilenamePrefix[((ItemArmor)item).material.renderIndex] + "_" + (i != 2 ? 1 : 2) + ".png";

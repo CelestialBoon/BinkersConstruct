@@ -10,6 +10,7 @@ import net.minecraft.core.player.inventory.InventoryCrafting;
 import net.minecraft.core.util.helper.ChatAllowedCharacters;
 import net.minecraft.core.util.helper.Color;
 import net.minecraft.core.util.helper.MathHelper;
+import net.minecraft.core.util.helper.Side;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -84,18 +85,18 @@ public final class Utils {
         else return b;
     }
 
-    public static Vec3 getBlockToSide(int x, int y, int z, int sideHit) {
-        if (sideHit == 0) {
+    public static Vec3 getBlockToSide(int x, int y, int z, Side side) {
+        if (side.getId() == 0) {
             --y;
-        } else if (sideHit == 1) {
+        } else if (side.getId() == 1) {
             ++y;
-        } else if (sideHit == 2) {
+        } else if (side.getId() == 2) {
             --z;
-        } else if (sideHit == 3) {
+        } else if (side.getId() == 3) {
             ++z;
-        } else if (sideHit == 4) {
+        } else if (side.getId() == 4) {
             --x;
-        } else if (sideHit == 5) {
+        } else if (side.getId() == 5) {
             ++x;
         }
         return new Vec3(x, y, z);

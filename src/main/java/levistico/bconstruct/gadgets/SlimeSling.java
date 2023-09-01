@@ -13,19 +13,19 @@ public class SlimeSling extends Item {
 //        setMaxDamage(101);
     }
 
-    public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int x, int y, int z, int sideHit, double heightPlaced) {
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer entityPlayer, World world, int x, int y, int z, int sideHit, double heightPlaced) {
 
-        float yaw = entityplayer.limbYaw * Utils.degToRad;
-        float pitch = entityplayer.cameraPitch * Utils.degToRad;
+        float yaw = entityPlayer.limbYaw * Utils.degToRad;
+        float pitch = entityPlayer.cameraPitch * Utils.degToRad;
 
 //        float factor = 3.0f * itemstack.getMetadata() / 100f;
         float factor = 2f;
         float pitchSin = MathHelper.sin(pitch);
-        entityplayer.yd += factor * pitchSin;
+        entityPlayer.yd += factor * pitchSin;
 
         float yawFactor = Utils.yawFactor(pitchSin) * factor;
-        entityplayer.zd -= MathHelper.cos(yaw) * yawFactor;
-        entityplayer.xd += MathHelper.sin(yaw) * yawFactor;
+        entityPlayer.zd -= MathHelper.cos(yaw) * yawFactor;
+        entityPlayer.xd += MathHelper.sin(yaw) * yawFactor;
 //        itemstack.setMetadata(101);
         return true;
     }
