@@ -34,7 +34,7 @@ repositories {
 	ivy {
 		url = "https://github.com/Turnip-Labs"
 		patternLayout {
-			artifact "[organisation]/releases/download/v[revision]/[module]-[revision].jar"
+			artifact "[organisation]/releases/download/[revision]/[module]-[revision].jar"
 			m2compatible = true
 		}
 		metadataSources { artifact() }

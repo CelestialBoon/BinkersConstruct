@@ -93,7 +93,6 @@ public class PanelCrafting extends BPanelWithSlots {
             textBox.textboxKeyTyped(c, i);
             return true;
         }
-        {} //TODO later this can capture number hotkeys
         return false; 
     }
 

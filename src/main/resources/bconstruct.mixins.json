@@ -12,7 +12,7 @@
     "MixinEntityPlayer",
     "MixinEntityPlayerMP",
     "MixinEntityPlayerSP",
-    "MixinGuiContainer",
+    "MixinGuiTooltip",
     "MixinInventoryPlayer",
     "MixinBlock",
     "MixinItemRenderer",
