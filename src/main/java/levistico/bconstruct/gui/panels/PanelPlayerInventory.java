@@ -51,11 +51,12 @@ public class PanelPlayerInventory extends BPanelWithSlots {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int relativeMouseX, int relativeMouseY, int mouseButton) {
+        this.guiContainer.doMouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
     protected void mouseMovedOrUp(int mouseX, int mouseY, int internalMouseX, int internalMouseY, int button) {
-
+        this.guiContainer.doMouseMovedOrUp(mouseX, mouseY, button);
     }
 
     @Override

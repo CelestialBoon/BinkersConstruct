@@ -6,8 +6,6 @@ import com.mojang.nbt.ListTag;
 import levistico.bconstruct.BConstruct;
 import levistico.bconstruct.materials.BToolMaterial;
 import levistico.bconstruct.parts.BToolPart;
-import levistico.bconstruct.parts.BToolParts;
-import levistico.bconstruct.parts.EToolPart;
 import levistico.bconstruct.parts.PartsFlag;
 import levistico.bconstruct.tools.properties.*;
 import levistico.bconstruct.gui.texture.ITexturedPart;

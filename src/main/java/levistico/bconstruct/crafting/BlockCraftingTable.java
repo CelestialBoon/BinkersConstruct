@@ -13,8 +13,8 @@ import java.util.Random;
 
 public abstract class BlockCraftingTable extends BlockTileEntity {
     Random random = new Random();
-    public BlockCraftingTable(int i, Material m) {
-        super("block.craftingtable", i, m);
+    public BlockCraftingTable(String key, int i, Material m) {
+        super(key, i, m);
     }
 
     public abstract boolean blockActivated(World world, int x, int y, int z, EntityPlayer player);

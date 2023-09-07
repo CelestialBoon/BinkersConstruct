@@ -28,11 +28,11 @@ public class Properties {
             case SILKTOUCH:
                 return new Property(SILKTOUCH, Modifiers.EMPTY_1, level);
             case ECOLOGICAL:
-                return new Property(ECOLOGICAL, new ModifierEcological(), level);
+                return new Property(ECOLOGICAL, Modifiers.ECOLOGICAL, level);
             case REINFORCED:
-                return new PropertyStats(REINFORCED, Modifiers.REINFORCED, level);
+                return new PropertyStats(REINFORCED, Modifiers.STATS_REINFORCED, level);
             case DIAMOND:
-                return new PropertyStats(DIAMOND, Modifiers.DIAMOND, level);
+                return new PropertyStats(DIAMOND, Modifiers.STATS_DIAMOND, level);
             default:
                 throw new IllegalStateException("generating Property with wrong name: " + name);
         }

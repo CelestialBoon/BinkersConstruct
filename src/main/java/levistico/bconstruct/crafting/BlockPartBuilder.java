@@ -13,7 +13,7 @@ import net.minecraft.server.entity.player.EntityPlayerMP;
 public final class BlockPartBuilder extends BlockCraftingTable {
 
     public BlockPartBuilder(int i) {
-        super(i, Material.wood);
+        super("partbuilder", i, Material.wood);
     }
 
     public boolean blockActivated(World world, int x, int y, int z, EntityPlayer player) {

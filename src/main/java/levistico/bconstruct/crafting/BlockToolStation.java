@@ -12,7 +12,7 @@ import net.minecraft.server.entity.player.EntityPlayerMP;
 public final class BlockToolStation extends BlockCraftingTable {
 
     public BlockToolStation(int i) {
-        super(i, Material.wood);
+        super("toolstation", i, Material.wood);
     }
 
     //todo just inline them here bro

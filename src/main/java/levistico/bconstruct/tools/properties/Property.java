@@ -3,7 +3,6 @@ package levistico.bconstruct.tools.properties;
 import levistico.bconstruct.BConstruct;
 import levistico.bconstruct.tools.modifiers.Modifier;
 import levistico.bconstruct.utils.IHasTranslateKey;
-import levistico.bconstruct.utils.Utils;
 
 public class Property implements IHasTranslateKey {
     public final String name;

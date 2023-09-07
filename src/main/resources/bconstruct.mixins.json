@@ -20,7 +20,8 @@
     "MixinPlayerController",
     "MixinRenderEngine",
     "MixinRenderItem",
-    "MixinTileEntity"
+    "MixinTileEntity",
+    "MixinGuiContainer"
   ],
   "client": [
   ],

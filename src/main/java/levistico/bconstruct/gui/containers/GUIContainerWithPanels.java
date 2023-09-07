@@ -86,8 +86,11 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) {
         for(IPanel panel : panels) {
-            panel.tryMouseClicked(this.width, this.height, mouseX, mouseY, button);
+            if(panel.tryMouseClicked(this.width, this.height, mouseX, mouseY, button)) return;
         }
+        doMouseClicked(mouseX, mouseY, button);
+    }
+    public void doMouseClicked(int mouseX, int mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
     }
 
@@ -96,6 +99,9 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
         for(IPanel panel : panels) {
             if(panel.tryMouseMovedOrUp(this.width, this.height, mouseX, mouseY, mouseButton)) return;
         }
+        doMouseMovedOrUp(mouseX, mouseY, mouseButton);
+    }
+    public void doMouseMovedOrUp(int mouseX, int mouseY, int mouseButton) {
         super.mouseMovedOrUp(mouseX, mouseY, mouseButton);
     }
 
@@ -125,13 +131,13 @@ public abstract class GUIContainerWithPanels extends GuiContainer {
             if(bslot.textureUV != null && bslot.getStack() == null) GUIUtils.drawLargeGUITexture(i-1, j-1, bslot.textureUV.first, bslot.textureUV.second, this.zLevel);
         }
         if (isMouseOver) {
-            GL11.glDisable(GL_LIGHTING);
-            GL11.glDisable(GL_DEPTH_TEST);
+            //GL11.glDisable(GL_LIGHTING);
+            //GL11.glDisable(GL_DEPTH_TEST);
             int j1 = slot.xDisplayPosition;
             int l1 = slot.yDisplayPosition;
             this.drawGradientRect(j1, l1, j1 + 16, l1 + 16, -2130706433, -2130706433);
-            GL11.glEnable(GL_LIGHTING);
-            GL11.glEnable(GL_DEPTH_TEST);
+            //GL11.glEnable(GL_LIGHTING);
+            //GL11.glEnable(GL_DEPTH_TEST);
         }
         ItemStack itemstack = slot.getStack();
         if (itemstack == null) {

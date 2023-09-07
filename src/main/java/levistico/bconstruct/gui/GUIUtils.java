@@ -42,7 +42,7 @@ public class GUIUtils {
 
     public static StringBuilder getToolTooltip(StringBuilder text, ItemStack stack, boolean control, boolean shift) {
         BTool tool = (BTool) stack.getItem();
-        text.append(TextFormatting.get(stack.getData().getByte(ToolStack.COLOR))).append(stack.getItemName());
+        text.append(TextFormatting.get(stack.getData().getByte(ToolStack.COLOR))).append(ToolStack.getDisplayName(stack));
         if(ToolStack.isToolBroken(stack)) text.append(" (Broken)");
         text.append("\n");
         if (control) {

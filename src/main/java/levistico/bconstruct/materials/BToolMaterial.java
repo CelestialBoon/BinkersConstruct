@@ -2,6 +2,7 @@ package levistico.bconstruct.materials;
 
 import levistico.bconstruct.BConstruct;
 import levistico.bconstruct.parts.PartsFlag;
+import levistico.bconstruct.tools.properties.Properties;
 import levistico.bconstruct.tools.properties.Property;
 import levistico.bconstruct.utils.IHasTranslateKey;
 import levistico.bconstruct.utils.Utils;
@@ -43,22 +44,22 @@ public final class BToolMaterial implements IHasTranslateKey {
         Utils.setAt(BToolMaterials.matList, eNumber, this);
     }
 
-    public BToolMaterial addHeadProperty(Property p) {
-        headProperties.add(p);
+    public BToolMaterial addHeadProperty(String name, Integer level) {
+        headProperties.add(Properties.generate(name, level));
         return this;
     }
-    public BToolMaterial addBindingProperty(Property p) {
-        bindingProperties.add(p);
+    public BToolMaterial addBindingProperty(String name, Integer level) {
+        bindingProperties.add(Properties.generate(name, level));
         return this;
     }
-    public BToolMaterial addHandleProperty(Property p) {
-        handleProperties.add(p);
+    public BToolMaterial addHandleProperty(String name, Integer level) {
+        handleProperties.add(Properties.generate(name, level));
         return this;
     }
-    public BToolMaterial addAllProperty(Property p) {
-        headProperties.add(p);
-        bindingProperties.add(p);
-        handleProperties.add(p);
+    public BToolMaterial addAllProperty(String name, Integer level) {
+        headProperties.add(Properties.generate(name, level));
+        bindingProperties.add(Properties.generate(name, level));
+        handleProperties.add(Properties.generate(name, level));
         return this;
     }
     public String getName() {

@@ -1,0 +1,43 @@
+
+
+PROPRIETA':
+-Ecological
+	-Assicurarsi che un oggetto in legno la abbia
+	-Assicurarsi che funzioni
+	-Far sì che venga visualizzata nel tooltip
+	-Far sì che venga visualizzata nell'elenco proprietà della toolstation
+-Determinare quali proprietà vogliamo e i loro effetti
+-Implementare gli effetti creando adeguati modificatori
+-Creare le proprietà che si riferiscono ai modificatori del passo precedente
+-Associare le proprietà ai materiali
+-Associare le proprietà alle parti oggetto
+-Fare in modo che le proprietà vengano visualizzate nel tooltip
+-Fare in modo che le proprietà vengano visualizzate nell'elenco proprietà della toolstation
+
+
+
+
+
+
+
+COSE DA FARE GROSSE:
+- lavoro sulle proprietà
+- piena integrazione della fonderia
+
+WIP:
+-Cambiare il mixin del block per modificare l'harvest
+-Possibili cambiamenti necessari a livello di rendering
+	MixinRenderItem::doRender controlla se funziona e al caso rinnovalo
+	GL11.glColor4f inject (after 2) in MixinGuiContainer::bconsctruct_drawScreenInject
+	- risolvi problemi grafici dei container
+
+FATTO:
+-Rivedere l'inventario (sono stati aggiunti comandi per operare sull'inventario da tastiera)
+	itemPickUpFromInventory
+-Controllare se il codice multiplayer è rimasto lo stesso (spoiler: NO)
+-Rivedere tutto ciò che ha a che fare con i blocchi (per via del nuovo sistema tag)
+-Tag degli oggetti
+
+NOTE ASSORTITE:
+RenderItem -> ItemEntityRenderer
+onCraftMatrixChanged <- clickInventorySlot <- doInventoryAction <- clickInventory <- mouseClicked 

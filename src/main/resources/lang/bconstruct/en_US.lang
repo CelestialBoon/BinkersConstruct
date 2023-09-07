@@ -39,6 +39,10 @@ item.bconstruct.sword.name = Broadsword
 item.bconstruct.kama.name = Kama
 item.bconstruct.pickadze.name = Pickadze
 
-tile.bconstruct.partBuilder.name = Part Builder
-tile.bconstruct.craftingStation.name = Crafting Station
-tile.bconstruct.toolStation.name = Tool Station
+tile.bconstruct.partbuilder.name = Part Builder
+tile.bconstruct.craftingstation.name = Crafting Station
+tile.bconstruct.toolstation.name = Tool Station
+
+tile.bconstruct.partbuilder.desc = Workbench for the creation of tool parts
+tile.bconstruct.craftingstation.desc = Workbench capable of holding items
+tile.bconstruct.toolstation.desc = Workbench for crafting composite tools

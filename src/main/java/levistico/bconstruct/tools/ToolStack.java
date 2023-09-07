@@ -20,6 +20,7 @@ import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.enums.EnumDropCause;
 import net.minecraft.core.item.Item;
 import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.net.command.TextFormatting;
 import net.minecraft.core.util.helper.Side;
 import net.minecraft.core.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -277,9 +278,12 @@ public class ToolStack {
     public static final String LEVEL = "level";
     public static final String BROKEN = "broken";
 
-    public static final String IS_CUSTOM_NAME = "iscustomname";
+    public static final String IS_CUSTOM_NAME = "overrideName";
     public static final String NAME = "name";
     public static final String COLOR = "color";
 
 
+    public static String getDisplayName(ItemStack stack) {
+        return (stack.getData().getBoolean(IS_CUSTOM_NAME) ? TextFormatting.ITALIC : "") + stack.getData().getString(NAME);
+    }
 }

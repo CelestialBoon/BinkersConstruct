@@ -27,7 +27,7 @@ public class MixinEntityPlayerMP implements IBinkersEntityPlayerMP {
     public void displayGUICraftingStation(CraftingTileEntity tileEntity) {
         this.getNextWindowId();
         NetServerHandler var10000 = this.playerNetServerHandler;
-        NetServerHandler.logger.info(((EntityPlayerMP)(Object)this).username + " interacted with crafting table at (" + ((EntityPlayerMP)(Object)this).x + ", " + ((EntityPlayerMP)(Object)this).y + ", " + ((EntityPlayerMP)(Object)this).z + ")");
+        //NetServerHandler.logger.info(((EntityPlayerMP)(Object)this).username + " interacted with crafting table at (" + ((EntityPlayerMP)(Object)this).x + ", " + ((EntityPlayerMP)(Object)this).y + ", " + ((EntityPlayerMP)(Object)this).z + ")");
         this.playerNetServerHandler.sendPacket(new Packet100OpenWindow(this.currentWindowId, InventoryType.Crafting.ordinal(), tileEntity.inventoryCrafting.getInvName(), tileEntity.inventoryCrafting.getSizeInventory()));
         ((EntityPlayerMP)(Object)this).craftingInventory = new ContainerCraftingStation(((EntityPlayerMP)(Object)this).inventory, tileEntity);
         ((EntityPlayerMP)(Object)this).craftingInventory.windowId = this.currentWindowId;
@@ -38,7 +38,7 @@ public class MixinEntityPlayerMP implements IBinkersEntityPlayerMP {
     public void displayGUIPartBuilder(CraftingTileEntity tileEntity) {
         this.getNextWindowId();
         NetServerHandler var10000 = this.playerNetServerHandler;
-        NetServerHandler.logger.info(((EntityPlayerMP)(Object)this).username + " interacted with part builder at (" + ((EntityPlayerMP)(Object)this).x + ", " + ((EntityPlayerMP)(Object)this).y + ", " + ((EntityPlayerMP)(Object)this).z + ")");
+        //NetServerHandler.logger.info(((EntityPlayerMP)(Object)this).username + " interacted with part builder at (" + ((EntityPlayerMP)(Object)this).x + ", " + ((EntityPlayerMP)(Object)this).y + ", " + ((EntityPlayerMP)(Object)this).z + ")");
         this.playerNetServerHandler.sendPacket(new Packet100OpenWindow(this.currentWindowId, InventoryType.Crafting.ordinal(), tileEntity.inventoryCrafting.getInvName(), tileEntity.inventoryCrafting.getSizeInventory()));
         ((EntityPlayerMP)(Object)this).craftingInventory = new ContainerPartBuilder(((EntityPlayerMP)(Object)this).inventory, tileEntity);
         ((EntityPlayerMP)(Object)this).craftingInventory.windowId = this.currentWindowId;
@@ -49,7 +49,7 @@ public class MixinEntityPlayerMP implements IBinkersEntityPlayerMP {
     public void displayGUIToolStation(CraftingTileEntity tileEntity) {
         this.getNextWindowId();
         NetServerHandler var10000 = this.playerNetServerHandler;
-        NetServerHandler.logger.info(((EntityPlayerMP)(Object)this).username + " interacted with tool builder at (" + ((EntityPlayerMP)(Object)this).x + ", " + ((EntityPlayerMP)(Object)this).y + ", " + ((EntityPlayerMP)(Object)this).z + ")");
+        //NetServerHandler.logger.info(((EntityPlayerMP)(Object)this).username + " interacted with tool builder at (" + ((EntityPlayerMP)(Object)this).x + ", " + ((EntityPlayerMP)(Object)this).y + ", " + ((EntityPlayerMP)(Object)this).z + ")");
         this.playerNetServerHandler.sendPacket(new Packet100OpenWindow(this.currentWindowId, InventoryType.Crafting.ordinal(), tileEntity.inventoryCrafting.getInvName(), tileEntity.inventoryCrafting.getSizeInventory()));
         ((EntityPlayerMP)(Object)this).craftingInventory = new ContainerToolStation(((EntityPlayerMP)(Object)this).inventory, tileEntity);
         ((EntityPlayerMP)(Object)this).craftingInventory.windowId = this.currentWindowId;
