@@ -6,22 +6,23 @@
   "mixins": [
     "AccessorEntity",
     "AccessorGui",
+    "AccessorGuiContainer",
     "AccessorInventoryCrafting",
     "AccessorItem",
+    "MixinBlock",
     "MixinEntity",
     "MixinEntityPlayer",
     "MixinEntityPlayerMP",
     "MixinEntityPlayerSP",
+    "MixinGuiContainer",
     "MixinGuiTooltip",
     "MixinInventoryPlayer",
-    "MixinBlock",
     "MixinItemRenderer",
     "MixinItemStack",
     "MixinPlayerController",
     "MixinRenderEngine",
     "MixinRenderItem",
-    "MixinTileEntity",
-    "MixinGuiContainer"
+    "MixinTileEntity"
   ],
   "client": [
   ],

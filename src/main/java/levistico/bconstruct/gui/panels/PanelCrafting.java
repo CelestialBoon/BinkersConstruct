@@ -43,8 +43,6 @@ public class PanelCrafting extends BPanelWithSlots {
     public void drawPanel(int screenWidth, int screenHeight, int mouseX, int mouseY) {
         int topX = getTopX(screenWidth);
         int topY = getTopY(screenHeight);
-        int relativeMouseX = getInternalMouseX(screenWidth, mouseX);
-        int relativeMouseY = getInternalMouseY(screenHeight, mouseY);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         mc.renderEngine.bindTexture(TextureUtils.GUI_BASE_CRAFTING_INDEX);
         guiContainer.drawTexturedModalRect(topX, topY, textureU, textureV, this.width, this.height);
@@ -52,7 +50,7 @@ public class PanelCrafting extends BPanelWithSlots {
         wind(topX, topY);
         for(Slot slot : slots) {
             if(!(slot instanceof BSlotCustomizable) || ((BSlotCustomizable)slot).isActive) {
-                boolean isMouseOver = getIsMouseOverSlot(slot, relativeMouseX, relativeMouseY);
+                boolean isMouseOver = getIsMouseOverSlot(slot, getInternalMouseX(screenWidth, mouseX), getInternalMouseY(screenHeight, mouseY));
                 guiContainer.drawSlotInventory(slot, isMouseOver);
             }
         }

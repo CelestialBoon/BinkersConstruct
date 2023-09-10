@@ -41,3 +41,89 @@ FATTO:
 NOTE ASSORTITE:
 RenderItem -> ItemEntityRenderer
 onCraftMatrixChanged <- clickInventorySlot <- doInventoryAction <- clickInventory <- mouseClicked 
+
+slot drawing process:
+- draw backgrouund (which includes the slot images)
+- draw non-dragged items in slots
+- draw some sort of drag held item override
+- draw held stack
+- draw containerforedgroundlayer
+- super.drawscreen
+	- guibuttons.drawbutton
+- draw tooltips
+
+
+==============================================
+
+
+https://twitter.com/macil_tech/status/1697112563803459992
+I wish Minecraft min-maxing involved more building minecarts, rail networks, dangerous exploration, redstone circuits, and hopper automation. Instead it's just about building mob grinders, abducting villagers, mind-numbing strip mining, and glitched peaceful nether roof travel.
+
+there's a mod that changes stack size on everything to 16 and adds recipes for wooden rails, specifically to encourage actually fuckin using minecarts
+
+Emerald — 31/08/2023 20:26
+Yeah why are rails SO EXPENSIVE
+
+perfect trixe³ — 31/08/2023 20:26
+because everyone would freak out about how "unbalanced" it would be if you could actually use minecarts for things
+anyway, I think the other major reason minecarts don't see much use is that there's not really a sustained source of ore at any location
+if you find an ore pocket, either you'll deplete it then and there or you literally don't care about that ore type
+so there's no reason to build actual logistics networks, because the time it takes to lay out a rail line is literally not worth it
+it takes longer to build the railway than it takes to mine out a cave
+this is, incidentally, exactly why I like mods like Factory0 Resources and Bedrock Ores, which add ore veins that can be mined for an extended period of time
+because the time it takes to mine out a Bedrock Ores vein or a Factory0 Resources pocket is much longer than the time it takes to set up logistics to that area
+
+Mystes — 31/08/2023 20:43
+apart from making rails cheaper, there would be need of a reason for laying down a worn, fast trail to a fixed place, yeah. Which would mean that it would need to be an important place, and in minecraft that means resources. So instead of the vanilla resources that either generate wherever (mobs), that require weird hacks to be extracted (mobs, villagers) or that are sparse and require just strip mining (ores) one would need resources that are strongly localized, with official straightforward support for extraction, and that are concentrated and possibly even self-renewing, so to encourage laying down communication routes. Possibly even enabling transporting by rail as the most efficient way of lugging these resources around 
+It would be cool to take a page from factorio with extractors, belt, hoppers, and rail systems, but I'm not sure mc's codebase could hold all this excitement
+
+CULT PONY — 31/08/2023 20:45
+should be like factorio
+Iron Ore patches are rare
+but they can yield millions of ores
+also give efficient and fast loaders and unloaders for minecarts
+
+Mystes — 31/08/2023 20:46
+yeah, it's minecraft, or you can just use magic to explain shit, just make a magical source of something that required proper automated extraction and transportation
+
+CULT PONY — 31/08/2023 20:46
+like craft redstone, pressure plate and a dropper or something to get an automatic cart loader or emptier
+
+Mystes — 31/08/2023 20:47
+yeah absolutely, make redstone, minecarts and resources work more nicely together
+
+Kazumi — 31/08/2023 20:47
+Stack hopper minecarts
+Or did you put minecart over several overlapping hoppers
+
+Mystes — 31/08/2023 20:48
+and once you have these more localized important resources you can just surround them with a dungeon or some shit
+put some exploration/combat in the loop
+
+CULT PONY — 31/08/2023 20:48
+the issue with the existing hoppers is that they require tons of setup to automate
+give people accumulators and whatnot
+steal from factorio, they make automation easy
+
+Mystes — 31/08/2023 20:48
+yasssss
+
+CULT PONY — 31/08/2023 20:48
+look
+what I'm saying is we need 3D Minetorio
+
+Hithroc — 31/08/2023 20:49
+Minecraft is not that kind of game and is never going to be
+Modded though is another story 
+
+Mystes — 31/08/2023 20:49
+we can rebuild it, we have the technology
+
+Hithroc — 31/08/2023 20:49
+Also Factorio was largely inspired by buildcraft
+Or I guess ic+bc because those two were pretty much always paired together back in the day
+
+Emerald — 31/08/2023 20:59
+GTNH really should've made minecarts more like factorio trains
+
+DruidCraft, where 

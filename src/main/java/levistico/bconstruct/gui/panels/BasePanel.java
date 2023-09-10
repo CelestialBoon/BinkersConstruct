@@ -26,10 +26,8 @@ public abstract class BasePanel implements IPanel {
         GL11.glPushMatrix();
         GL11.glTranslatef(topX, topY, 0.0F);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glEnable(GUIUtils.GL_BLOCK_ITEM_MAGIC_NUMBER);
     }
     void unwind() {
-        GL11.glDisable(GUIUtils.GL_BLOCK_ITEM_MAGIC_NUMBER);
         drawForegroundLayer();
         GL11.glPopMatrix();
     }
