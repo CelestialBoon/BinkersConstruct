@@ -54,7 +54,7 @@ slot drawing process:
 
 
 ==============================================
-
+seed:1585444089986525180
 
 https://twitter.com/macil_tech/status/1697112563803459992
 I wish Minecraft min-maxing involved more building minecarts, rail networks, dangerous exploration, redstone circuits, and hopper automation. Instead it's just about building mob grinders, abducting villagers, mind-numbing strip mining, and glitched peaceful nether roof travel.

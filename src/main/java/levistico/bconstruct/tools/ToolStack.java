@@ -278,7 +278,7 @@ public class ToolStack {
     public static final String LEVEL = "level";
     public static final String BROKEN = "broken";
 
-    public static final String IS_CUSTOM_NAME = "overrideName";
+    public static final String IS_CUSTOM_NAME = "customName";
     public static final String NAME = "name";
     public static final String COLOR = "color";
 

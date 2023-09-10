@@ -7,14 +7,14 @@ item.bconstruct.slimeBoots.desc = Bouncy!
 item.bconstruct.slimeSling.name = Slimesling
 item.bconstruct.slimeSling.desc = Aim, fire, launch yourself!
 
-toolpart.bconstruct.rod.name = Tool Rod
-toolpart.bconstruct.binding.name = Binding
-toolpart.bconstruct.pickaxeHead.name = Pickaxe Head
-toolpart.bconstruct.axeHead.name = Axe Head
-toolpart.bconstruct.shovelHead.name = Shovel Head
-toolpart.bconstruct.largeGuard.name = Large Guard
-toolpart.bconstruct.blade.name = Blade
-toolpart.bconstruct.repairKit.name = Repair Kit
+item.bconstruct.rod.name = Tool Rod
+item.bconstruct.binding.name = Binding
+item.bconstruct.pickaxeHead.name = Pickaxe Head
+item.bconstruct.axeHead.name = Axe Head
+item.bconstruct.shovelHead.name = Shovel Head
+item.bconstruct.largeGuard.name = Large Guard
+item.bconstruct.blade.name = Blade
+item.bconstruct.repairKit.name = Repair Kit
 
 material.bconstruct.anything.name = Any Material
 material.bconstruct.wood.name = Wood
@@ -46,3 +46,8 @@ tile.bconstruct.toolstation.name = Tool Station
 tile.bconstruct.partbuilder.desc = Workbench for the creation of tool parts
 tile.bconstruct.craftingstation.desc = Workbench capable of holding items
 tile.bconstruct.toolstation.desc = Workbench for crafting composite tools
+
+mininglevel.0 = Wood
+mininglevel.1 = Stone
+mininglevel.2 = Iron
+mininglevel.3 = Diamond

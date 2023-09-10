@@ -6,6 +6,7 @@ import net.minecraft.core.item.Item;
 import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.lang.I18n;
 import net.minecraft.core.net.ChatLine;
+import net.minecraft.core.net.command.TextFormatting;
 import net.minecraft.core.player.inventory.InventoryCrafting;
 import net.minecraft.core.util.helper.ChatAllowedCharacters;
 import net.minecraft.core.util.helper.Color;
@@ -40,9 +41,13 @@ public final class Utils {
         return null;
     }
 
-    public static String translateKey(IHasTranslateKey thing) {
-        return I18n.getInstance().translateKey(thing.getTranslateKey() + ".name");
+    public static String translateKey(Item item) {
+        return I18n.getInstance().translateKey(item.getKey() + ".name");
     }
+    public static String translateKey(IHasTranslateKey item) {
+        return I18n.getInstance().translateKey(item.getTranslateKey() + ".name");
+    }
+
 
     public static <T> T[] concatTwoArrays(T[] a1, T[] a2) {
         T[] result = Arrays.copyOf(a1, a1.length + a2.length);
@@ -197,11 +202,12 @@ public final class Utils {
 
 
     public static String getHarvestTier(int miningLevel) {
+        String material = I18n.getInstance().translateKey("mininglevel."+miningLevel);
         switch (miningLevel) {
-//            case 0: return "" + TextFormatting.BROWN + "Wood";
-//            case 1: return "" + TextFormatting.GRAY + "Stone";
-//            case 2: return "" + TextFormatting.LIGHT_GRAY + "Iron";
-//            case 3: return "" + TextFormatting.CYAN + "Diamond";
+            case 0: return "" + TextFormatting.BROWN + material;
+            case 1: return "" + TextFormatting.GRAY + material;
+            case 2: return "" + TextFormatting.LIGHT_GRAY + material;
+            case 3: return "" + TextFormatting.CYAN + material;
         }
         return null;
     }

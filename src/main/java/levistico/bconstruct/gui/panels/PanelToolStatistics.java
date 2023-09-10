@@ -29,7 +29,7 @@ public class PanelToolStatistics extends PanelText {
         detailLines.add(new TextWithTooltip(Utils.translateKey((BTool) stack.getItem()), ""));
         int maxDurability = ToolStack.getMaxDurability(stack);
         StringBuilder durabilityText = new StringBuilder();
-        durabilityText.append(TextFormatting.WHITE).append("\nDurability: ")
+        durabilityText.append(TextFormatting.WHITE).append("Durability: ")
                 .append(TextFormatting.GREEN).append(maxDurability - stack.getMetadata())
                 .append(TextFormatting.LIGHT_GRAY).append("/")
                 .append(TextFormatting.GREEN).append(maxDurability);

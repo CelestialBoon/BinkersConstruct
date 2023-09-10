@@ -10,13 +10,14 @@ import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.player.inventory.IInventory;
 import net.minecraft.core.player.inventory.InventoryCrafting;
 import net.minecraft.core.player.inventory.slot.Slot;
+import net.minecraft.core.player.inventory.slot.SlotCrafting;
 
-public class BSlotCraftingResult extends Slot {
+public class BSlotCraftingResult extends SlotCrafting {
     private IOnCraftResult container;
     private EntityPlayer player;
 
-    public BSlotCraftingResult(IOnCraftResult container, int id, EntityPlayer entityPlayer, IInventory iinventory, int x, int y) {
-        super(iinventory, id, x, y);
+    public BSlotCraftingResult(IOnCraftResult container, int id, EntityPlayer entityPlayer, IInventory craftResult, int x, int y) {
+        super(entityPlayer, null, craftResult, id, x, y);
         this.player = entityPlayer;
         this.container = container;
     }
@@ -25,6 +26,7 @@ public class BSlotCraftingResult extends Slot {
         return false;
     }
 
+    @Override
     public void onPickupFromSlot(final ItemStack itemstack) {
         itemstack.onCrafting(this.player.world, this.player);
         if (itemstack.itemID == Block.workbench.id) {

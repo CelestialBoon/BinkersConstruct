@@ -1,11 +1,15 @@
 package levistico.bconstruct.mixin;
 
+import com.mojang.nbt.CompoundTag;
+import levistico.bconstruct.parts.BToolPart;
 import levistico.bconstruct.tools.BTool;
 import levistico.bconstruct.tools.ToolStack;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.entity.Entity;
 import net.minecraft.core.item.Item;;;
 import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.lang.I18n;
+import net.minecraft.core.net.command.TextFormatting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,6 +22,17 @@ public class MixinItemStack {
 
     @Shadow()
     public int itemID;
+
+    @Shadow()
+    private CompoundTag tag;
+
+    @Inject(method="getDisplayName ()Ljava/lang/String;", cancellable = true, at = @At("HEAD"))
+    public void bconstruct_getDisplayNameInect(CallbackInfoReturnable<String> cir) {
+        Item item = Item.itemsList[itemID];
+        if (item instanceof BTool || item instanceof BToolPart){
+            cir.setReturnValue(ToolStack.getDisplayName((ItemStack)(Object)this));
+        }
+    }
 
     @Inject(method = "getDamageVsEntity (Lnet/minecraft/core/entity/Entity;)I", cancellable = true, at = @At("HEAD"))
     public void bconsctruct_getDamageVsEntityInject(Entity entity, CallbackInfoReturnable<Integer> cir) {

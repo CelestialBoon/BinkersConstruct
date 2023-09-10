@@ -13,7 +13,6 @@ import levistico.bconstruct.tools.actions.*;
 import levistico.bconstruct.tools.properties.Properties;
 import levistico.bconstruct.tools.stats.EToolStat;
 import levistico.bconstruct.tools.stats.StatBoosts;
-import levistico.bconstruct.utils.IHasTranslateKey;
 import levistico.bconstruct.utils.Pair;
 import levistico.bconstruct.utils.Utils;
 import net.minecraft.core.block.Block;
@@ -21,6 +20,7 @@ import net.minecraft.core.entity.EntityLiving;
 import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.item.Item;
 import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.lang.I18n;
 import net.minecraft.core.util.helper.Side;
 import net.minecraft.core.world.World;
 
@@ -38,7 +38,7 @@ import static levistico.bconstruct.tools.ToolStack.*;
 
 //TODO tool should be stressed more for improper actions (eg. hitting mobs with pickaxe)
 
-public abstract class BTool extends Item implements IHasTranslateKey {
+public abstract class BTool extends Item {
 
     /*
     BTOOL REWORK
@@ -66,7 +66,6 @@ public abstract class BTool extends Item implements IHasTranslateKey {
     right click actions
      */
 
-    public final String translationKey;
     public final String name;
     public int baseDamageBonus = 2;
     public float durabilityMultiplier = 1f;
@@ -93,7 +92,6 @@ public abstract class BTool extends Item implements IHasTranslateKey {
     protected BTool(int id, String name, HarvestLogic harvestLogic, Boolean isWarTool, Pair<Integer, Integer> baseTextureUV) {
         super(id);
         this.name = name;
-        this.translationKey = String.format("item.%s.%s", BConstruct.MOD_ID, name);
         this.harvestLogic = harvestLogic;
         this.isWarTool = isWarTool;
         this.baseTextureUV = baseTextureUV;
@@ -145,9 +143,6 @@ public abstract class BTool extends Item implements IHasTranslateKey {
                 getPropertyTags(getTotalTags(itemstack)).getInteger(Properties.SILKTOUCH)));
         return itemstack;
     }*/
-    public String getTranslateKey() {
-        return translationKey;
-    }
     public int getPartFlag(int i) {
         return composition.get(i).partFlag;
     }
@@ -181,6 +176,7 @@ public abstract class BTool extends Item implements IHasTranslateKey {
         }
 
         ///////////////////////NAME/////////////////////////
+        rootTags.putBoolean("overrideName", true);
         if(! rootTags.getBoolean(IS_CUSTOM_NAME)) {
             rootTags.putString(NAME, String.format("%s %s", StringUtils.join(setHeadMaterials.stream().map(Utils::translateKey).collect(Collectors.toList()), '-'), Utils.translateKey(this)));
         }

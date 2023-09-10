@@ -38,7 +38,7 @@ public final class ContainerPartBuilder extends BContainerWithRecipe {
         resizeCraftingSlots(2);
 
         BSlotCustomizable cslot = craftingSlots.get(0);
-        cslot.tooltipString = I18n.getInstance().translateKey(BConstruct.blankPattern.getKey() + ".name");
+        cslot.tooltipString = Utils.translateKey(BConstruct.blankPattern);
         cslot.acceptsOnly = AcceptRule.acceptsOnlyIds(BConstruct.blankPattern.id);
         cslot.textureUV = new Pair<>(0,12);
 
